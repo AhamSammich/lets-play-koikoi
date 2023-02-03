@@ -43,11 +43,13 @@ onBeforeUpdate(() => {
     display: flex;
     flex-wrap: wrap;
     max-width: 180px;
+    min-height: 50px;
     gap: 0.1rem;
 
     & > * {
         width: 30px;
         height: 45px;
+        margin-bottom: -1rem;
     }
 }
 </style>

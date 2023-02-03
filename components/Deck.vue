@@ -91,7 +91,7 @@ onMounted(() => {
 });
 
 onUpdated(async () => {
-  if (props.aiDraw === true) {
+  if (props.aiDraw === true && props.drawCard === true) {
     emits("draw", draw());
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
@@ -103,7 +103,7 @@ onUpdated(async () => {
     class="bg-red-600"
     @click="$emit('draw', draw())"
     :data-text="drawCard ? 'Draw a card!' : ''"
-    :style="`${(drawCard && !aiDraw) ? '' : 'pointer-events: none;'}`"
+    :style="`${aiDraw || !drawCard ? 'pointer-events: none;' : ''}`"
   ></div>
 </template>
 

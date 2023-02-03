@@ -50,20 +50,19 @@ function checkForBrights(cardArr: string[]): string {
 
 function checkForYaku(cardArr: string[]) {}
 
-export function removeCardFromSet(cardArr: string[], cardName: string): string[] {
+export function removeSetFromArr(removeSet: Set<string>, fromArr: string[]): string[] {
   // Returns new array without the given card
-  if (!cardArr.includes(cardName)) return cardArr;
-  return cardArr.filter((card) => card != cardName);
+  return fromArr.filter((card) => !removeSet.has(card));
 }
 
-export function pickCardFromSet(cardArr: string[]): string {
+export function pickCardFromArr(cardArr: string[]): string {
   // Returns a random card from the given array
   let len = cardArr.length;
   let index = Math.floor(Math.random() * len);
   return cardArr[index];
 }
 
-export function matchCardInSet(cardName: string, cardArr: string[]): string[] {
+export function matchCardInArr(cardName: string, cardArr: string[]): string[] {
   // Returns new array of cards in given array that match the given card's suit/flower
   return cardArr.filter((aCard) => aCard.startsWith(flower(cardName)));
 }

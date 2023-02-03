@@ -23,7 +23,7 @@ function checkForMatch(cardName: string) {
         :class="`${player ? 'p-card' : 'f-card'}`"
       >
         <!-- Get selected card details and check table for match -->
-        <Card :name="card" @card-select="(cardName: string) => checkForMatch(cardName)" />
+        <Card :name="card" :hide="player.includes('2')" @card-select="(cardName: string) => checkForMatch(cardName)" />
       </div>
     </template>
   </div>
@@ -36,6 +36,7 @@ function checkForMatch(cardName: string) {
     margin-bottom: -3rem;
   }
 }
+
 
 .hand {
   container-type: inline-size;

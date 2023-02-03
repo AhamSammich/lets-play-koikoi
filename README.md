@@ -12,6 +12,11 @@
   - [ ] Full set on deal
 - [x] Track active player
 - [x] Track selected card
+- [ ] Call Koi-Koi
+- [ ] End game
+- [ ] Yaku determination
+  - [ ] Track progress
+  - [ ] Scoring
 
 ### Match Sequence
 - Select card from hand

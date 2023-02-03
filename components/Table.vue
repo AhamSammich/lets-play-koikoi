@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import { matchCardInSet, removeCardFromSet } from "~~/assets/scripts/match";
+import {
+  matchCardInArr,
+  removeSetFromArr,
+} from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "collect", "next", "deck-draw"]);
 
@@ -32,7 +35,8 @@ function revealCard(cardName: string) {
 function checkForDraw() {
   selectedCard = "";
   draw.value = !draw.value;
-  console.log(`${draw.value ? "Drawing from deck..." : "Next player..."}`);
+
+  console.log(`${draw.value}`);
   if (draw.value === true) return;
 
   // emits("next");
@@ -46,7 +50,7 @@ function aiFindMatch() {
   let matchedCard = "";
   for (let card of handTwo.value) {
     aiCard = card;
-    let matches = matchCardInSet(card, field.value);
+    let matches = matchCardInArr(card, field.value);
     if (matches.length) {
       let index = Math.floor(Math.random() * matches.length);
       matchedCard = matches[index];
@@ -68,7 +72,7 @@ function aiSelectMatch(cardName: string, cardMatch: string) {
 
 function getMatch(cardName: string): void {
   selectedCard = cardName;
-  let matches = matchCardInSet(cardName, field.value);
+  let matches = matchCardInArr(cardName, field.value);
   if (matches.length === 0) {
     noMatch(cardName);
     return;
@@ -105,20 +109,19 @@ async function handleMatch(cardName: string) {
   let hand = draw.value ? field : activeHand;
   let matchedCards = new Set([selectedCard, cardName]);
 
-  // Remove matched card from field
-  field.value = await new Promise((resolve) => {
-    setTimeout(
-      () => resolve(field.value.filter((card) => !matchedCards.has(card))),
-      500
-    );
-  });
-  // Remove selected card from hand
-  hand.value = await new Promise((resolve) => {
-    setTimeout(() => resolve(hand.value.filter((card) => !matchedCards.has(card))), 500);
-  });
+  [field.value, hand.value] = await Promise.all<Promise<string[]>[]>([
+    // Remove matched card from field
+    new Promise((resolve) => {
+      setTimeout(() => resolve(removeSetFromArr(matchedCards, field.value)), 500);
+    }),
+    // Remove selected card from hand
+    new Promise((resolve) => {
+      setTimeout(() => resolve(removeSetFromArr(matchedCards, hand.value)), 500);
+    }),
+  ]);
 
   // emits("collect", matchedCards);
-  // await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
   activeHand === handOne
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
@@ -128,6 +131,20 @@ async function handleMatch(cardName: string) {
 
 <template>
   <div id="tabletop">
+    <!-- TOP ROW -->
+    <div id="p2-hand" class="flex-none justify-center items-center">
+      <Hand
+        :is-active="activeHand === handTwo"
+        player="p2"
+        :cards="handTwo"
+        @check-match="(cardName: string) => getMatch(cardName)"
+      />
+    </div>
+    <div id="p2-collection" class="collection">
+      <Collection player="p2" :cards="collection2" />
+    </div>
+
+    <!-- CENTER ROW -->
     <div id="deck" class="flex justify-center items-center">
       <Deck
         :draw-card="draw"
@@ -136,18 +153,11 @@ async function handleMatch(cardName: string) {
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
     </div>
-
     <div id="field">
       <Hand :isActive="false" player="" :cards="field" />
     </div>
-    <div id="match">
-      <MatchSelect
-        :cards="match"
-        :show-modal="match.length > 0"
-        @match-select="(cardName) => handleMatch(cardName)"
-      />
-    </div>
 
+    <!-- BOTTOM ROW -->
     <div id="p1-hand" class="flex-none justify-center items-center w-full">
       <Hand
         :is-active="activeHand === handOne"
@@ -160,16 +170,13 @@ async function handleMatch(cardName: string) {
       <Collection player="p1" :cards="collection1" />
     </div>
 
-    <div id="p2-hand" class="flex-none justify-center items-center">
-      <Hand
-        :is-active="activeHand === handTwo"
-        player="p2"
-        :cards="handTwo"
-        @check-match="(cardName: string) => getMatch(cardName)"
+    <!-- MODAL -->
+    <div id="match">
+      <MatchSelect
+        :cards="match"
+        :show-modal="match.length > 0"
+        @match-select="(cardName) => handleMatch(cardName)"
       />
-    </div>
-    <div id="p2-collection" class="collection">
-      <Collection player="p2" :cards="collection2" />
     </div>
   </div>
 </template>
@@ -219,21 +226,19 @@ async function handleMatch(cardName: string) {
 
 .collection {
   position: absolute;
-  margin: 0.5rem;
-  /* scale: 0.5; */
+  margin: 1rem 0.5rem;
   pointer-events: none;
 
   &#p1-collection {
     right: 0;
-    bottom: 0;
+    bottom: 1rem;
   }
-  
+
   &#p2-collection {
     left: 0;
     top: 0;
   }
 }
-
 
 .hidden {
   display: none;

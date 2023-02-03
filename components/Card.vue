@@ -3,6 +3,7 @@ import { addDetails } from "~~/assets/scripts/match";
 
 const props = defineProps<{
   name: string;
+  hide?: boolean;
 }>();
 
 const emits = defineEmits(["card-select"]);
@@ -14,12 +15,14 @@ function handleClick(e: Event) {
 }
 
 function setImage() {
-  return `background-image: url(cards/${props.name}.png)`;
+  return props.hide
+    ? 'background: red;' 
+    : `background-image: url(cards/${props.name}.png)`;
 }
 </script>
 
 <template>
-  <div class="card" :style="setImage()" @click="handleClick"></div>
+  <div :class="{ card: true, hide: hide }" :style="setImage()" @click="handleClick"></div>
 </template>
 
 <style lang="postcss">
@@ -30,11 +33,16 @@ function setImage() {
   background-repeat: no-repeat;
   outline: 1px solid #111;
   border-radius: 0.2rem;
-  transition: transform 0.5s 0.2s;
+  transition: transform 0.3s 0.1s;
 
   &:hover {
     cursor: pointer;
     transform: translate3d(0, -30%, 0);
   }
+}
+
+.hide {
+  background-image: none;
+  background-color: red;
 }
 </style>
