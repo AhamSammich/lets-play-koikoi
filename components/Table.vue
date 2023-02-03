@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import { matchCardInArr, removeSetFromArr } from "~~/assets/scripts/match";
+import { getCardsInYaku, matchCardInArr, removeSetFromArr } from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "deck-draw"]);
 
@@ -12,6 +12,9 @@ const draw: Ref<boolean> = ref(false);
 
 const collection1: Ref<string[]> = ref([]);
 const collection2: Ref<string[]> = ref([]);
+const yaku1: Ref<string[]> = ref([]);
+const yaku2: Ref<string[]> = ref([]);
+const newYaku: Ref<string[]> = ref([]);
 
 let selectedCard: string;
 let activeHand = handOne;
@@ -124,12 +127,19 @@ async function handleMatch(cards: string[]) {
     }),
   ]);
 
-  // emits("collect", matchedCards);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   activeHand === handOne
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
   checkForDraw();
+}
+
+function showYaku(yakuName: string, player: string) {
+  newYaku.value = [yakuName, ...getCardsInYaku(yakuName, collection1.value)];
+}
+
+function continueGame(bool: boolean) {
+  newYaku.value = []
+  if (!bool) return;
 }
 </script>
 
@@ -175,7 +185,7 @@ async function handleMatch(cards: string[]) {
       />
     </div>
     <div id="p1-collection" class="collection">
-      <Collection player="p1" :cards="collection1" />
+      <Collection player="p1" :cards="collection1" @new-yaku="(yakuName, player) => showYaku(yakuName, player)"/>
     </div>
 
     <!-- MODAL -->
@@ -186,6 +196,16 @@ async function handleMatch(cards: string[]) {
         @match-select="(cardArr: string[]) => handleMatch(cardArr)"
       />
     </div>
+    <template v-if="newYaku.length">
+      <div id="yaku-modal">
+        <NewYaku
+          :cards="newYaku.slice(1)"
+          :yaku="newYaku[0]"
+          :show-modal="!!newYaku.length"
+          @koi-koi="(bool) => continueGame(bool)"
+        />
+      </div>
+    </template>
   </div>
 </template>
 

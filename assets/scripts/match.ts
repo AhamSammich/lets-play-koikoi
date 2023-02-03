@@ -20,7 +20,7 @@ const isAnimal: CheckCardType = (cardName) =>
 const isRibbon: CheckCardType = (cardName) => /-no-tan/.test(cardName);
 const isPlain: CheckCardType = (cardName) => /-no-kasu/.test(cardName);
 
-export const getFlower = (cardName: string): string => cardName.split("-")[0];
+export const getFlower = (cardName: string): string => cardName?.split("-")[0];
 
 // Emit card details when element is clicked
 export function addDetails(cardName: string): Card {
@@ -37,7 +37,7 @@ export function addDetails(cardName: string): Card {
 
 function checkForBrights(cardArr: string[]): string {
   let rainMan = cardArr.includes("yanagi-ni-ono-no-toufuu");
-  let numBrights = cardArr.filter((card) => isBright(card)).length;
+  let numBrights = cardArr.filter(card => isBright(card)).length;
   if (numBrights === 5) return "gokou";
   if (numBrights === 4 && rainMan) return "ame-shikou";
   if (numBrights === 4) return "shikou";
@@ -46,17 +46,17 @@ function checkForBrights(cardArr: string[]): string {
 }
 
 function checkForAnimals(cardArr: string[]): string {
-  let animals = cardArr.filter((card) => isAnimal(card)).length;
+  let animals = cardArr.filter(card => isAnimal(card)).length;
   return animals >= 5 ? "tane-zaku" : "";
 }
 
 function checkForRibbons(cardArr: string[]): string {
-  let ribbons = cardArr.filter((card) => isRibbon(card)).length;
+  let ribbons = cardArr.filter(card => isRibbon(card)).length;
   return ribbons >= 5 ? "tan-zaku" : "";
 }
 
 function checkForPlains(cardArr: string[]): string {
-  let plains = cardArr.filter((card) => isPlain(card)).length;
+  let plains = cardArr.filter(card => isPlain(card)).length;
   return plains >= 10 ? "kasu" : "";
 }
 
@@ -72,8 +72,17 @@ export function checkForYaku(cardArr: string[]): string[] {
   let special = checkForSpecial(cardArr);
   let yaku = [checkForBrights, checkForAnimals, checkForRibbons, checkForPlains]
     .map((check) => check(cardArr))
-    .filter((result) => result);
+    .filter(result => result);
   return [...yaku, ...special];
+}
+
+export function getCardsInYaku(yakuName: string, cardArr: string[]): string[] {
+  if (SPECIAL_YAKU[yakuName]) return SPECIAL_YAKU[yakuName];
+  if (yakuName.includes("kou")) return cardArr.filter(isBright);
+  if (yakuName === "tan-zaku") return cardArr.filter(isRibbon);
+  if (yakuName === "tane-zaku") return cardArr.filter(isAnimal);
+  if (yakuName === "kasu") return cardArr.filter(isPlain);
+  return [];
 }
 
 export function removeSetFromArr(
