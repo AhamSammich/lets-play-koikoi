@@ -18,13 +18,13 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 .field {
-  width: 100%;
-  height: inherit;
+  max-height: 250px;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.2rem;
+  overflow: visible;
   pointer-events: none;
 }
 </style>

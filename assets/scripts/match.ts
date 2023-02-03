@@ -1,13 +1,9 @@
-const SPECIAL_YAKU: Record<string, Set<string>> = {
-  "ino-shika-chou": new Set([
-    "hagi-ni-inoshishi",
-    "botan-ni-chou",
-    "momiji-ni-shika",
-  ]),
-  "hanami-zake": new Set(["sakura-ni-maku", "kiku-ni-sakazuki"]),
-  "tsukimi-zake": new Set(["susuki-ni-tsuki", "kiku-ni-sakazuki"]),
-  "aka-tan": new Set(["matsu-no-tan", "ume-no-tan", "sakura-no-tan"]),
-  "ao-tan": new Set(["botan-no-tan", "kiku-ni-sakazuki", "momiji-no-tan"]),
+const SPECIAL_YAKU: Record<string, string[]> = {
+  "ino-shika-chou": ["hagi-ni-inoshishi", "botan-ni-chou", "momiji-ni-shika"],
+  "hanami-zake": ["sakura-ni-maku", "kiku-ni-sakazuki"],
+  "tsukimi-zake": ["susuki-ni-tsuki", "kiku-ni-sakazuki"],
+  "aka-tan": ["matsu-no-tan", "ume-no-tan", "sakura-no-tan"],
+  "ao-tan": ["botan-no-tan", "kiku-no-tan", "momiji-no-tan"],
 };
 
 const BRIGHTS = [
@@ -40,13 +36,44 @@ export function addDetails(cardName: string): Card {
 }
 
 function checkForBrights(cardArr: string[]): string {
+  let rainMan = cardArr.includes("yanagi-ni-ono-no-toufuu");
   let numBrights = cardArr.filter((card) => isBright(card)).length;
   if (numBrights === 5) return "gokou";
-  if (numBrights === 4 && cardArr.includes("yanagi-ni-ono-no-toufuu"))
-    return "ame-shikou";
+  if (numBrights === 4 && rainMan) return "ame-shikou";
   if (numBrights === 4) return "shikou";
-  if (numBrights === 3) return "sankou";
+  if (numBrights === 3 && !rainMan) return "sankou";
   return "";
+}
+
+function checkForAnimals(cardArr: string[]): string {
+  let animals = cardArr.filter((card) => isAnimal(card)).length;
+  return animals >= 5 ? "tane-zaku" : "";
+}
+
+function checkForRibbons(cardArr: string[]): string {
+  let ribbons = cardArr.filter((card) => isRibbon(card)).length;
+  return ribbons >= 5 ? "tan-zaku" : "";
+}
+
+function checkForPlains(cardArr: string[]): string {
+  let plains = cardArr.filter((card) => isPlain(card)).length;
+  return plains >= 10 ? "kasu" : "";
+}
+
+function checkForSpecial(cardArr: string[]): string[] {
+  let collection = new Set(cardArr);
+  let completedYaku: string[] = Object.keys(SPECIAL_YAKU).filter((yaku) =>
+    SPECIAL_YAKU[yaku].every((card) => collection.has(card))
+  );
+  return completedYaku;
+}
+
+export function checkForYaku(cardArr: string[]): string[] {
+  let special = checkForSpecial(cardArr);
+  let yaku = [checkForBrights, checkForAnimals, checkForRibbons, checkForPlains]
+    .map((check) => check(cardArr))
+    .filter((result) => result);
+  return [...yaku, ...special];
 }
 
 export function removeSetFromArr(

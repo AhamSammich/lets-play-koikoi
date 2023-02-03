@@ -2,7 +2,7 @@
 import { Ref } from "vue";
 import { matchCardInArr, removeSetFromArr } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "collect", "next", "deck-draw"]);
+const emits = defineEmits(["match-select", "deck-draw"]);
 
 const handOne: Ref<string[]> = ref([]);
 const handTwo: Ref<string[]> = ref([]);
@@ -31,8 +31,6 @@ function revealCard(cardName: string) {
 function checkForDraw() {
   selectedCard = "";
   draw.value = !draw.value;
-
-  console.log(`${draw.value}`);
   if (draw.value === true) return;
   activeHand = activeHand === handOne ? handTwo : handOne;
   console.log(`It's Player${activeHand === handOne ? "1" : "2"}'s turn...`);
@@ -164,7 +162,11 @@ async function handleMatch(cards: string[]) {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div id="p1-hand" class="flex-none justify-center items-center w-full">
+    <div
+      id="p1-hand"
+      class="flex-none justify-center items-center w-full"
+      :data-msg="`${activeHand === handOne && !draw ? 'Play a card' : ''}`"
+    >
       <Hand
         :is-active="activeHand === handOne"
         player="p1"
@@ -203,7 +205,6 @@ async function handleMatch(cards: string[]) {
 
   & > * {
     display: flex;
-    justify-content: center;
     align-items: center;
   }
 }
@@ -216,6 +217,19 @@ async function handleMatch(cards: string[]) {
   grid-area: p1;
   margin-left: 1rem;
   scale: 0.9;
+  position: relative;
+
+  &::before {
+    content: attr(data-msg);
+    display: block;
+    position: absolute;
+    bottom: 80%;
+    right: 50%;
+    padding: 1rem;
+    color: #eee;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
 }
 
 #p2-hand {
@@ -228,6 +242,7 @@ async function handleMatch(cards: string[]) {
 #field {
   grid-area: field;
   min-width: 320px;
+  justify-self: flex-start;
 }
 
 .collection {

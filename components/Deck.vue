@@ -102,7 +102,7 @@ onUpdated(async () => {
   <div
     class="bg-red-600"
     @click="$emit('draw', draw())"
-    :data-text="drawCard ? 'Draw a card!' : ''"
+    :data-text="drawCard ? aiDraw ? 'Drawing card...' : 'Draw a card!' : ''"
     :style="`${aiDraw || !drawCard ? 'pointer-events: none;' : ''}`"
   ></div>
 </template>
@@ -116,14 +116,15 @@ div {
   border-radius: 0.2rem;
   position: relative;
 
-  &::before {
+  &::after {
     content: attr(data-text);
     color: #eee;
     font-weight: bold;
-    margin: 0.5rem;
+    margin-top: 5rem;
     display: block;
+    white-space: nowrap;
     position: absolute;
-    bottom: 100%;
+    top: 100%;
     left: 0;
     z-index: 3;
   }

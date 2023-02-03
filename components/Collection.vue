@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { sortCardsByType } from '~~/assets/scripts/match';
+import { checkForYaku, sortCardsByType } from '~~/assets/scripts/match';
 
 const props = defineProps<{
     player: string
@@ -10,6 +10,10 @@ let sortedCards = sortCardsByType(props.cards);
 
 onBeforeUpdate(() => {
     sortedCards = sortCardsByType(props.cards);
+})
+
+onUpdated(() => {
+    console.log(`${props.player}: %c${checkForYaku(props.cards)}`,'color: lightgreen');
 })
 </script>
 
