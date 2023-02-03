@@ -3,21 +3,22 @@
 ## PROJECT UNDER CONSTRUCTION
 
 ### To-do
-- [x] Create Card component
-- [ ] Create matching algorithm
-  - [x] First match
-  - [x] Multiple matches
-  - [x] Second match
-  - [ ] Triplet on table
-  - [ ] Full set on deal
+MATCHING ALGORITHM
+- [x] First match
+- [x] Multiple matches
+- [x] Second match
+- [x] Triplet on table
+- [x] Yaku determination
+- [ ] Highlight possible match
+
+GAME STATE
 - [x] Track active player
 - [x] Track selected card
-- [ ] Call Koi-Koi
+- [x] Call Koi-Koi
+- [ ] Start game
 - [ ] End game
-- [ ] Yaku determination
-  - [ ] Track progress
-  - [ ] Scoring
 
-### Match Sequence
-- Select card from hand
-- 
+END GAME
+- [ ] Reset
+- [ ] Track progress
+- [ ] Scoring
