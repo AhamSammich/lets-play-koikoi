@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { addDetails } from "~~/assets/scripts/match";
-
 const props = defineProps<{
   name: string;
   hide?: boolean;
@@ -9,8 +7,6 @@ const props = defineProps<{
 const emits = defineEmits(["card-select"]);
 
 function handleClick(e: Event) {
-  // let card = <HTMLElement> e.target;
-  // card.classList.add("selected");
   emits("card-select", props.name);
 }
 

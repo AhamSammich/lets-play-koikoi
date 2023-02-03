@@ -24,13 +24,13 @@ const isAnimal: CheckCardType = (cardName) =>
 const isRibbon: CheckCardType = (cardName) => /-no-tan/.test(cardName);
 const isPlain: CheckCardType = (cardName) => /-no-kasu/.test(cardName);
 
-const flower = (cardName: string): string => cardName.split("-")[0];
+export const getFlower = (cardName: string): string => cardName.split("-")[0];
 
 // Emit card details when element is clicked
 export function addDetails(cardName: string): Card {
   let card = <Card>{};
   card[cardName] = {
-    flower: flower(cardName),
+    flower: getFlower(cardName),
     isBright: isBright(cardName),
     isAnimal: isAnimal(cardName),
     isRibbon: isRibbon(cardName),
@@ -40,15 +40,19 @@ export function addDetails(cardName: string): Card {
 }
 
 function checkForBrights(cardArr: string[]): string {
-  let numBrights = cardArr.filter(card => isBright(card)).length;
+  let numBrights = cardArr.filter((card) => isBright(card)).length;
   if (numBrights === 5) return "gokou";
-  if (numBrights === 4 && cardArr.includes("yanagi-ni-ono-no-toufuu")) return "ame-shikou";
+  if (numBrights === 4 && cardArr.includes("yanagi-ni-ono-no-toufuu"))
+    return "ame-shikou";
   if (numBrights === 4) return "shikou";
   if (numBrights === 3) return "sankou";
   return "";
 }
 
-export function removeSetFromArr(removeSet: Set<string>, fromArr: string[]): string[] {
+export function removeSetFromArr(
+  removeSet: Set<string>,
+  fromArr: string[]
+): string[] {
   // Returns new array without the given card
   return fromArr.filter((card) => !removeSet.has(card));
 }
@@ -62,14 +66,14 @@ export function pickCardFromArr(cardArr: string[]): string {
 
 export function matchCardInArr(cardName: string, cardArr: string[]): string[] {
   // Returns new array of cards in given array that match the given card's suit/flower
-  return cardArr.filter((aCard) => aCard.startsWith(flower(cardName)));
+  return cardArr.filter((aCard) => aCard.startsWith(getFlower(cardName)));
 }
 
 export function sortCardsByType(cardArr: string[]): Record<string, string[]> {
   return {
-    'brights': cardArr?.filter(isBright) || [],
-    'animals': cardArr?.filter(isAnimal) || [],
-    'ribbons': cardArr?.filter(isRibbon) || [],
-    'plains': cardArr?.filter(isPlain) || []
-  }
+    brights: cardArr?.filter(isBright) || [],
+    animals: cardArr?.filter(isAnimal) || [],
+    ribbons: cardArr?.filter(isRibbon) || [],
+    plains: cardArr?.filter(isPlain) || [],
+  };
 }

@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import {
-  matchCardInArr,
-  removeSetFromArr,
-} from "~~/assets/scripts/match";
+import { matchCardInArr, removeSetFromArr } from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "collect", "next", "deck-draw"]);
 
@@ -20,7 +17,6 @@ let selectedCard: string;
 let activeHand = handOne;
 
 function dealFirstHands(cards: string[]): void {
-  // TODO: Ensure hand does not exceed 8
   handOne.value.push(...cards.slice(0, 8));
   handTwo.value.push(...cards.slice(8, 16));
   field.value.push(...cards.slice(16));
@@ -38,8 +34,6 @@ function checkForDraw() {
 
   console.log(`${draw.value}`);
   if (draw.value === true) return;
-
-  // emits("next");
   activeHand = activeHand === handOne ? handTwo : handOne;
   console.log(`It's Player${activeHand === handOne ? "1" : "2"}'s turn...`);
   if (activeHand === handTwo) aiFindMatch();
@@ -85,7 +79,7 @@ function getMatch(cardName: string): void {
   // All 3 cards of the same suit are on the field
   if (matches.length === 3) {
     // Add all cards to collection
-    handleMatch(matches)
+    handleMatch(matches);
   }
   // AI player has 2 possible matches from the deck draw
   if (draw.value && activeHand === handTwo) {
@@ -133,7 +127,7 @@ async function handleMatch(cards: string[]) {
   ]);
 
   // emits("collect", matchedCards);
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   activeHand === handOne
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
@@ -166,7 +160,7 @@ async function handleMatch(cards: string[]) {
       />
     </div>
     <div id="field">
-      <Hand :isActive="false" player="" :cards="field" />
+      <Field :cards="field" />
     </div>
 
     <!-- BOTTOM ROW -->
