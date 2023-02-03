@@ -48,8 +48,6 @@ function checkForBrights(cardArr: string[]): string {
   return "";
 }
 
-function checkForYaku(cardArr: string[]) {}
-
 export function removeSetFromArr(removeSet: Set<string>, fromArr: string[]): string[] {
   // Returns new array without the given card
   return fromArr.filter((card) => !removeSet.has(card));

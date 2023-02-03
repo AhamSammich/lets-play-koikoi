@@ -47,27 +47,31 @@ function checkForDraw() {
 
 function aiFindMatch() {
   let aiCard = "";
-  let matchedCard = "";
+  let matchedCards: string[] = [];
   for (let card of handTwo.value) {
     aiCard = card;
-    let matches = matchCardInArr(card, field.value);
-    if (matches.length) {
-      let index = Math.floor(Math.random() * matches.length);
-      matchedCard = matches[index];
-      console.log(`%cPlayer 2 matched ${aiCard} with ${matchedCard}`, "color: yellow;");
+    matchedCards = matchCardInArr(card, field.value);
+    if (matchedCards.length) {
+      console.log(`%cPlayer 2 matched ${aiCard} with ${matchedCards}`, "color: yellow;");
       break;
     }
   }
-  aiSelectMatch(aiCard, matchedCard);
+  aiSelectMatch(aiCard, matchedCards);
 }
 
-function aiSelectMatch(cardName: string, cardMatch: string) {
-  if (!cardMatch) {
+function aiSelectMatch(cardName: string, matchedCards: string[]) {
+  if (matchedCards.length === 0) {
     noMatch(cardName);
     return;
   }
   selectedCard = cardName;
-  handleMatch(cardMatch);
+  if (matchedCards.length === 3) {
+    // Collect all 3 matched cards from the field
+    handleMatch(matchedCards);
+    return;
+  }
+  // Select the first of 2 matches
+  handleMatch(matchedCards.slice(0, 1));
 }
 
 function getMatch(cardName: string): void {
@@ -78,10 +82,18 @@ function getMatch(cardName: string): void {
     return;
   }
   console.log(`Matched ${selectedCard} with: ${matches.join(", ")}.`);
+  // All 3 cards of the same suit are on the field
+  if (matches.length === 3) {
+    // Add all cards to collection
+    handleMatch(matches)
+  }
+  // AI player has 2 possible matches from the deck draw
   if (draw.value && activeHand === handTwo) {
-    handleMatch(matches[0]);
+    // Select the first match
+    handleMatch(matches.slice(0, 1));
     return;
   }
+  // Open modal to allow player to choose between 2 matches
   showMatch(matches);
 }
 
@@ -97,17 +109,17 @@ function noMatch(cardName: string) {
 
 function showMatch(cards: string[]): void {
   if (cards.length === 1) {
-    handleMatch(cards[0]);
+    handleMatch(cards);
     return;
   }
   match.value.push(...cards);
 }
 
-async function handleMatch(cardName: string) {
+async function handleMatch(cards: string[]) {
   // Clear matches and hide modal
   match.value.splice(0);
   let hand = draw.value ? field : activeHand;
-  let matchedCards = new Set([selectedCard, cardName]);
+  let matchedCards = new Set([selectedCard, ...cards]);
 
   [field.value, hand.value] = await Promise.all<Promise<string[]>[]>([
     // Remove matched card from field
@@ -175,7 +187,7 @@ async function handleMatch(cardName: string) {
       <MatchSelect
         :cards="match"
         :show-modal="match.length > 0"
-        @match-select="(cardName) => handleMatch(cardName)"
+        @match-select="(cardArr: string[]) => handleMatch(cardArr)"
       />
     </div>
   </div>
