@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import {
-checkForWinOrVoid,
+  checkForWinOrVoid,
   getCardsInYaku,
   matchCardInArr,
   removeSetFromArr,
+  TEST_HAND,
 } from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "deck-draw"]);
@@ -24,47 +25,50 @@ const newYaku: Ref<MultiDict> = ref({});
 const winningYaku: Ref<Dict> = ref({});
 const winner = ref("");
 
-const scoreboard: Record<string, number> = { 'p1': 0, 'p2': 0}
+const scoreboard: Record<string, number> = { p1: 0, p2: 0 };
 let selectedCard: string;
 let activeHand = hand1;
 let WAIT = false;
 let calledKoiKoi = "";
 
 async function resetRefs() {
-  [
-    hand1,
-    hand2,
-    field,
-    match,
-    collection1,
-    collection2,
-  ].forEach(refVar => refVar.value = []);
-  [
-    yaku1,
-    yaku2,
-    newYaku,
-    winningYaku
-  ].forEach(refVar => refVar.value = {});
+  [hand1, hand2, field, match, collection1, collection2].forEach(
+    (refVar) => (refVar.value = [])
+  );
+  [yaku1, yaku2, newYaku, winningYaku].forEach((refVar) => (refVar.value = {}));
   winner.value = "";
 }
 
 async function newGame(score?: number) {
   if (score && winner.value) scoreboard[winner.value] += score;
+  activeHand = !winner.value || winner.value === "p1" ? hand1 : hand2;
   await resetRefs();
-  draw.value = null;  // Triggers deck reshuffle
   selectedCard = "";
-  activeHand = hand1;
-  WAIT = false;
   calledKoiKoi = "";
+  WAIT = false;
+  draw.value = null; // Triggers deck reshuffle
+}
+
+async function checkForInstantYaku(hand: Ref<string[]>): Promise<void> {
+  if (WAIT) return;
+  let yaku = checkForWinOrVoid(hand.value);
+  if (yaku === null) return;
+  if (yaku && hand === field) {
+    newGame();
+    return;
+  }
+  if (yaku) {
+    winningYaku.value[yaku] = hand.value;
+    winner.value = hand === hand1 ? "p1" : "p2";
+    return;
+  }
 }
 
 function dealFirstHands(cards: string[]): void {
   hand1.value = cards.slice(0, 8);
   hand2.value = cards.slice(8, 16);
   field.value = cards.slice(16);
-  [
-    hand1.value, hand2.value, field.value
-  ].forEach(checkForWinOrVoid);
+  [hand1, hand2, field].forEach(checkForInstantYaku);
   draw.value = false;
   console.log(scoreboard);
 }
@@ -176,7 +180,6 @@ async function handleMatch(cards: string[]) {
   activeHand === hand1
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   checkForDraw();
 }
 
@@ -185,7 +188,7 @@ async function showYaku(yakuNames: string[], player: string) {
   let [yakuList, collection] =
     player === "p1" ? [yaku1, collection1] : [yaku2, collection2];
   let newList: Record<string, string[]> = {};
-  yakuNames.forEach(yakuName => {
+  yakuNames.forEach((yakuName) => {
     // Save yaku for later scoring
     newList[yakuName] = getCardsInYaku(yakuName, collection.value);
   });
@@ -194,7 +197,6 @@ async function showYaku(yakuNames: string[], player: string) {
 }
 
 async function continueGame(bool: boolean, player: string) {
-  // newYaku.value = [];
   newYaku.value = {};
   if (!bool) {
     let yakuList = (player === "p1" ? yaku1 : yaku2).value;
@@ -281,7 +283,7 @@ async function continueGame(bool: boolean, player: string) {
       </div>
     </template>
 
-    <template v-if="winner">
+    <template v-if="winner && winningYaku">
       <div id="end-screen">
         <ScoreSheet
           :player="winner"
