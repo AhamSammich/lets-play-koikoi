@@ -30,6 +30,7 @@ function setImage() {
   outline: 1px solid #111;
   border-radius: 0.2rem;
   transition: transform 0.3s 0.1s;
+  animation: dropIn 0.5s;
 
   &:hover {
     cursor: pointer;
@@ -40,5 +41,16 @@ function setImage() {
 .hide {
   background-image: none;
   background-color: red;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: scale(1.5) translate3d(0, -10%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>

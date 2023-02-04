@@ -8,11 +8,11 @@ import {
 
 const emits = defineEmits(["match-select", "deck-draw"]);
 
-const handOne: Ref<string[]> = ref([]);
-const handTwo: Ref<string[]> = ref([]);
+const hand1: Ref<string[]> = ref([]);
+const hand2: Ref<string[]> = ref([]);
 const field: Ref<string[]> = ref([]);
 const match: Ref<string[]> = ref([]);
-const draw = ref(false);
+const draw: Ref<boolean | null> = ref(false);
 
 const collection1: Ref<string[]> = ref([]);
 const collection2: Ref<string[]> = ref([]);
@@ -23,15 +23,46 @@ const newYaku: Ref<MultiDict> = ref({});
 const winningYaku: Ref<Dict> = ref({});
 const winner = ref("");
 
+const scoreboard: Record<string, number> = { 'p1': 0, 'p2': 0}
 let selectedCard: string;
-let activeHand = handOne;
+let activeHand = hand1;
 let WAIT = false;
 let calledKoiKoi = "";
 
+async function resetRefs() {
+  [
+    hand1,
+    hand2,
+    field,
+    match,
+    collection1,
+    collection2,
+  ].forEach(refVar => refVar.value = []);
+  [
+    yaku1,
+    yaku2,
+    newYaku,
+    winningYaku
+  ].forEach(refVar => refVar.value = {});
+  winner.value = "";
+}
+
+async function newGame(score?: number) {
+  if (score && winner.value) scoreboard[winner.value] += score;
+  await resetRefs();
+  draw.value = null;  // Triggers deck reshuffle
+  selectedCard = "";
+  activeHand = hand1;
+  WAIT = false;
+  calledKoiKoi = "";
+}
+
 function dealFirstHands(cards: string[]): void {
-  handOne.value.push(...cards.slice(0, 8));
-  handTwo.value.push(...cards.slice(8, 16));
-  field.value.push(...cards.slice(16));
+  hand1.value = cards.slice(0, 8);
+  hand2.value = cards.slice(8, 16);
+  field.value = cards.slice(16);
+  draw.value = false;
+  console.log(scoreboard);
 }
 
 function revealCard(cardName: string) {
@@ -45,15 +76,15 @@ function checkForDraw() {
   selectedCard = "";
   draw.value = !draw.value;
   if (draw.value === true) return;
-  activeHand = activeHand === handOne ? handTwo : handOne;
-  console.log(`It's Player${activeHand === handOne ? "1" : "2"}'s turn...`);
-  if (activeHand === handTwo) aiFindMatch();
+  activeHand = activeHand === hand1 ? hand2 : hand1;
+  console.log(`It's Player${activeHand === hand1 ? "1" : "2"}'s turn...`);
+  if (activeHand === hand2) aiFindMatch();
 }
 
 function aiFindMatch() {
   let aiCard = "";
   let matchedCards: string[] = [];
-  for (let card of handTwo.value) {
+  for (let card of hand2.value) {
     aiCard = card;
     matchedCards = matchCardInArr(card, field.value);
     if (matchedCards.length) {
@@ -94,7 +125,7 @@ function getMatch(cardName: string): void {
     return;
   }
   // AI player has 2 possible matches from the deck draw
-  if (draw.value && activeHand === handTwo) {
+  if (draw.value && activeHand === hand2) {
     // Select the first match
     handleMatch(matches.slice(0, 1));
     return;
@@ -138,10 +169,10 @@ async function handleMatch(cards: string[]) {
     }),
   ]);
 
-  activeHand === handOne
+  activeHand === hand1
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   checkForDraw();
 }
 
@@ -178,9 +209,9 @@ async function continueGame(bool: boolean, player: string) {
     <!-- TOP ROW -->
     <div id="p2-hand" class="flex-none justify-center items-center">
       <Hand
-        :is-active="activeHand === handTwo"
+        :is-active="activeHand === hand2"
         player="p2"
-        :cards="handTwo"
+        :cards="hand2"
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
@@ -196,7 +227,7 @@ async function continueGame(bool: boolean, player: string) {
     <div id="deck" class="flex justify-center items-center">
       <Deck
         :draw-card="draw"
-        :ai-draw="activeHand === handTwo"
+        :ai-draw="activeHand === hand2"
         @draw="(cardName: string) => revealCard(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
@@ -209,12 +240,12 @@ async function continueGame(bool: boolean, player: string) {
     <div
       id="p1-hand"
       class="flex-none justify-center items-center w-full"
-      :data-msg="`${activeHand === handOne && !draw ? 'Play a card' : ''}`"
+      :data-msg="`${activeHand === hand1 && !draw ? 'Play a card' : ''}`"
     >
       <Hand
-        :is-active="activeHand === handOne"
+        :is-active="activeHand === hand1"
         player="p1"
-        :cards="handOne"
+        :cards="hand1"
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
@@ -251,8 +282,9 @@ async function continueGame(bool: boolean, player: string) {
         <ScoreSheet
           :player="winner"
           :yakuList="winningYaku"
-          :koikoi="winner != calledKoiKoi"
+          :koikoi="!!calledKoiKoi && winner != calledKoiKoi"
           :show-modal="!!winner"
+          @reset="(score: number) => newGame(score)"
         />
       </div>
     </template>

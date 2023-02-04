@@ -47,5 +47,15 @@ function checkForMatch(cardName: string) {
   justify-content: flex-start;
   align-items: center;
   gap: 0.2rem;
+  animation: fanOut 3s;
+}
+
+@keyframes fanOut {
+  from {
+    gap: 3rem;
+  }
+  to {
+    gap: 0.2rem;
+  }
 }
 </style>

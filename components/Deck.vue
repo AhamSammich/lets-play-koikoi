@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
-  drawCard: boolean;
+  drawCard: boolean | null;
   aiDraw?: boolean;
 }>();
 const emits = defineEmits(["deal", "draw"]);
 
-let allCards = [
+const allCards = [
   "matsu-ni-tsuru",
   "matsu-no-tan",
   "matsu-no-kasu-1",
@@ -69,7 +69,7 @@ function dealHands(): string[] {
   return dealtCards;
 }
 
-function shuffle(cards: string[]): string[] {
+async function shuffle(cards: string[]): Promise<string[]> {
   let numberOfCards = () => cards.length;
   let shuffledDeck = [];
 
@@ -82,15 +82,16 @@ function shuffle(cards: string[]): string[] {
   return shuffledDeck;
 }
 
-onBeforeMount(() => {
-  remainingCards = shuffle(allCards);
-});
-
-onMounted(() => {
+onMounted(async () => {
+  remainingCards = await shuffle([...allCards]);
   emits("deal", dealHands());
 });
 
 onUpdated(async () => {
+  if (props.drawCard == null) {
+    remainingCards = await shuffle([...allCards]);
+    emits("deal", dealHands());
+  }
   if (props.aiDraw === true && props.drawCard === true) {
     emits("draw", draw());
     await new Promise(resolve => setTimeout(resolve, 1000));

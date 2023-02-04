@@ -3,24 +3,29 @@
 ## PROJECT UNDER CONSTRUCTION
 
 ### To-do
-MATCHING ALGORITHM
-- [x] First match
-- [x] Multiple matches
-- [x] Second match
-- [x] Triplet on table
-- [x] Yaku determination
-  - [x] FIX: Handle simultaneous yaku
-  - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
-- [ ] Highlight possible match
+- MATCHING ALGORITHM
+  - [x] First match
+  - [x] Multiple matches
+  - [x] Second match
+  - [x] Triplet on table
+  - [x] Yaku determination
+    - [x] FIX: Handle simultaneous yaku
+    - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
 
 GAME STATE
 - [x] Track active player
 - [x] Track selected card
 - [x] Call Koi-Koi
-- [ ] Start game
+- [ ] Start screen
 - [ ] End game
+- [x] Reset
+- [x] Track scoring
 
-END GAME
-- [ ] Reset
-- [ ] Track progress
-- [x] Scoring
+UI
+- [ ] Round number
+- [ ] Scoreboard
+- [ ] Highlight possible match
+- [ ] Yaku progress
+- [ ] How To Play
+  - [ ] Create route
+  - [ ] Yaku cheatsheat

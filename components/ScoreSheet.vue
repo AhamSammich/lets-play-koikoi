@@ -8,8 +8,12 @@ const props = defineProps<{
   koikoi: boolean;
 }>();
 
-const emits = defineEmits([""]);
+const emits = defineEmits(["reset", "next"]);
 let score: number;
+
+function resetGame() {
+  emits("reset", score);
+}
 
 onBeforeMount(() => score = getYakuScore(props.yakuList, props.koikoi));
 </script>
@@ -30,8 +34,8 @@ onBeforeMount(() => score = getYakuScore(props.yakuList, props.koikoi));
       </template>
     </div>
     <div class="btn-bar">
-      <button @click="">END GAME</button>
-      <button @click="">NEXT ROUND</button>
+      <!-- <button @click="">END GAME</button> -->
+      <button @click="resetGame()">NEXT ROUND</button>
     </div>
   </div>
 </template>
