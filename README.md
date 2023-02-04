@@ -2,7 +2,7 @@
 
 ## PROJECT UNDER CONSTRUCTION
 
-### To-do
+### TO-DO
 - MATCHING ALGORITHM
   - [x] First match
   - [x] Multiple matches
