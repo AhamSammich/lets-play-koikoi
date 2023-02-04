@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Ref } from "vue";
 import { checkForYaku, sortCardsByType, getCardsInYaku } from "~~/assets/scripts/match";
 
 const props = defineProps<{
@@ -12,21 +11,19 @@ const emits = defineEmits(["new-yaku"]);
 const yakuList = new Map();
 let sortedCards = sortCardsByType(props.cards);
 
-function registerYaku(yakuName: string) {
-  yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards));
-  emits("new-yaku", yakuName, props.player);
+function registerYaku(yakuArr: string[]) {
+  yakuArr.forEach(yakuName => yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards)));
+  emits("new-yaku", yakuArr, props.player);
 }
-
-function addBonus() {}
 
 onBeforeUpdate(() => {
   sortedCards = sortCardsByType(props.cards);
 });
 
 onUpdated(() => {
-  let yaku = checkForYaku(props.cards);
-  yaku = yaku.filter(yakuName => yakuName && !yakuList.has(yakuName))
-  if (yaku.length) registerYaku(yaku[0]);
+  let yakuArr = checkForYaku(props.cards);
+  yakuArr = yakuArr.filter(yakuName => yakuName && !yakuList.has(yakuName))
+  if (yakuArr.length) registerYaku(yakuArr);
 });
 </script>
 

@@ -2,8 +2,7 @@
 const props = defineProps<{
   showModal: boolean;
   player: string;
-  yaku: string
-  cards: string[];
+  yakuList: Dict;
 }>();
 
 const emits = defineEmits(["koi-koi"]);
@@ -19,16 +18,18 @@ function endGame() {
 
 <template>
   <div :class="{modal: true, hidden: !showModal}">
-    <h1>{{ yaku }}</h1>
-    <div id="new-yaku">
-      <template v-for="card in cards">
-        <div>
-          <Card
-            :name="card"
-          />
-        </div>
-      </template>
-    </div>
+    <template v-for="yaku in Object.keys(yakuList)" :key="yaku">
+      <h1>{{ yaku }}</h1>
+      <div class="new-yaku">
+        <template v-for="card in yakuList[yaku]">
+          <div>
+            <Card
+              :name="card"
+            />
+          </div>
+        </template>
+      </div>
+    </template>
     <div class="btn-bar">
         <button @click="callKoiKoi()">KOI KOI!</button>
         <button @click="endGame()">END ROUND</button>
@@ -37,7 +38,7 @@ function endGame() {
 </template>
 
 <style scoped lang="postcss">
-#new-yaku {
+.new-yaku {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

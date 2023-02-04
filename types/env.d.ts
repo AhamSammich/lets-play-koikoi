@@ -10,8 +10,6 @@ type CardDetails = {
 
 type Card = Record<string, CardDetails>;
 
-type YakuData = {
-  player?: string;
-  yakuName: string;
-  yakuCards: string[];
-};
+type Dict = Record<string, string[]>;
+
+type MultiDict = Record<string, string | Dict>;

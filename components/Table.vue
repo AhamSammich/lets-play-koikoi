@@ -16,11 +16,11 @@ const draw = ref(false);
 
 const collection1: Ref<string[]> = ref([]);
 const collection2: Ref<string[]> = ref([]);
-const yaku1: Ref<Record<string, string[]>> = ref({});
-const yaku2: Ref<Record<string, string[]>> = ref({});
-const newYaku: Ref<string[]> = ref([]);
+const yaku1: Ref<Dict> = ref({});
+const yaku2: Ref<Dict> = ref({});
+const newYaku: Ref<MultiDict> = ref({});
 
-const winningYaku: Ref<Record<string, string[]>> = ref({});
+const winningYaku: Ref<Dict> = ref({});
 const winner = ref("");
 
 let selectedCard: string;
@@ -145,17 +145,22 @@ async function handleMatch(cards: string[]) {
   checkForDraw();
 }
 
-async function showYaku(yakuName: string, player: string) {
+async function showYaku(yakuNames: string[], player: string) {
   WAIT = true;
   let [yakuList, collection] =
     player === "p1" ? [yaku1, collection1] : [yaku2, collection2];
-  let yakuCards = getCardsInYaku(yakuName, collection.value);
-  yakuList.value[yakuName] = yakuCards;
-  newYaku.value = [player, yakuName, ...yakuCards];
+  let newList: Record<string, string[]> = {};
+  yakuNames.forEach(yakuName => {
+    // Save yaku for later scoring
+    newList[yakuName] = getCardsInYaku(yakuName, collection.value);
+  });
+  for (let yakuName in newList) yakuList.value[yakuName] = newList[yakuName];
+  newYaku.value = { player, newList };
 }
 
 async function continueGame(bool: boolean, player: string) {
-  newYaku.value = [];
+  // newYaku.value = [];
+  newYaku.value = {};
   if (!bool) {
     let yakuList = (player === "p1" ? yaku1 : yaku2).value;
     winningYaku.value = yakuList;
@@ -183,7 +188,7 @@ async function continueGame(bool: boolean, player: string) {
       <Collection
         player="p2"
         :cards="collection2"
-        @new-yaku="async (yakuName, player) => await showYaku(yakuName, player)"
+        @new-yaku="async (yakuArr, player) => await showYaku(yakuArr, player)"
       />
     </div>
 
@@ -217,7 +222,7 @@ async function continueGame(bool: boolean, player: string) {
       <Collection
         player="p1"
         :cards="collection1"
-        @new-yaku="async (yakuName, player) => await showYaku(yakuName, player)"
+        @new-yaku="async (yakuArr, player) => await showYaku(yakuArr, player)"
       />
     </div>
 
@@ -230,13 +235,12 @@ async function continueGame(bool: boolean, player: string) {
       />
     </div>
 
-    <template v-if="newYaku.length">
+    <template v-if="Object.keys(newYaku).length">
       <div id="yaku-modal">
         <NewYaku
-          :player="newYaku[0]"
-          :yaku="newYaku[1]"
-          :cards="newYaku.slice(2)"
-          :show-modal="!!newYaku.length"
+          :player="<string>newYaku.player"
+          :yakuList="<Dict>newYaku.newList"
+          :show-modal="!!Object.keys(newYaku).length"
           @koi-koi="async (bool, player) => await continueGame(bool, player)"
         />
       </div>

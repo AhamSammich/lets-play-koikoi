@@ -9,7 +9,8 @@ MATCHING ALGORITHM
 - [x] Second match
 - [x] Triplet on table
 - [x] Yaku determination
-  - [ ] FIX: Handle simultaneous yaku
+  - [x] FIX: Handle simultaneous yaku
+  - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
 - [ ] Highlight possible match
 
 GAME STATE

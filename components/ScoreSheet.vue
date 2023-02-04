@@ -4,7 +4,7 @@ import { getYakuScore } from "~~/assets/scripts/match";
 const props = defineProps<{
   showModal: boolean;
   player: string;
-  yakuList: Record<string, string[]>;
+  yakuList: Dict;
   koikoi: boolean;
 }>();
 
