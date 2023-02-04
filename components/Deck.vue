@@ -126,7 +126,6 @@ div {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 3;
   }
 }
 </style>

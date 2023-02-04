@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import { getCardsInYaku, matchCardInArr, removeSetFromArr } from "~~/assets/scripts/match";
+import {
+  getCardsInYaku,
+  matchCardInArr,
+  removeSetFromArr,
+} from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "deck-draw"]);
 
@@ -12,12 +16,16 @@ const draw: Ref<boolean> = ref(false);
 
 const collection1: Ref<string[]> = ref([]);
 const collection2: Ref<string[]> = ref([]);
-const yaku1: Ref<string[]> = ref([]);
-const yaku2: Ref<string[]> = ref([]);
+const yaku1: Ref<Record<string, string[]>> = ref({});
+const yaku2: Ref<Record<string, string[]>> = ref({});
 const newYaku: Ref<string[]> = ref([]);
+
+const winningYaku: Ref<Record<string, string[]>> = ref({});
+const winner: Ref<string> = ref("");
 
 let selectedCard: string;
 let activeHand = handOne;
+let WAIT = false;
 
 function dealFirstHands(cards: string[]): void {
   handOne.value.push(...cards.slice(0, 8));
@@ -32,6 +40,7 @@ function revealCard(cardName: string) {
 }
 
 function checkForDraw() {
+  if (WAIT) return;
   selectedCard = "";
   draw.value = !draw.value;
   if (draw.value === true) return;
@@ -130,16 +139,35 @@ async function handleMatch(cards: string[]) {
   activeHand === handOne
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
+  await new Promise(resolve => setTimeout(resolve, 1000));
   checkForDraw();
 }
 
-function showYaku(yakuName: string, player: string) {
-  newYaku.value = [yakuName, ...getCardsInYaku(yakuName, collection1.value)];
+async function showYaku(yakuName: string, player: string) {
+  WAIT = true;
+  let [yakuList, collection] =
+    player === "p1" ? [yaku1, collection1] : [yaku2, collection2];
+  let yakuCards = getCardsInYaku(yakuName, collection.value);
+  yakuList.value[yakuName] = yakuCards;
+  newYaku.value = [player, yakuName, ...yakuCards];
 }
 
-function continueGame(bool: boolean) {
-  newYaku.value = []
-  if (!bool) return;
+async function continueGame(bool: boolean, player: string) {
+  newYaku.value = [];
+  if (!bool) {
+    let yakuList = (player === "p1" ? yaku1 : yaku2).value;
+    winningYaku.value = yakuList;
+    winner.value = player;
+    console.log(WAIT, winner.value, winningYaku.value)
+    return;
+  }
+  WAIT = false;
+}
+
+async function runTable() {
+  while (true) {
+
+  }
 }
 </script>
 
@@ -155,7 +183,11 @@ function continueGame(bool: boolean) {
       />
     </div>
     <div id="p2-collection" class="collection">
-      <Collection player="p2" :cards="collection2" />
+      <Collection
+        player="p2"
+        :cards="collection2"
+        @new-yaku="async (yakuName, player) => await showYaku(yakuName, player)"
+      />
     </div>
 
     <!-- CENTER ROW -->
@@ -185,7 +217,11 @@ function continueGame(bool: boolean) {
       />
     </div>
     <div id="p1-collection" class="collection">
-      <Collection player="p1" :cards="collection1" @new-yaku="(yakuName, player) => showYaku(yakuName, player)"/>
+      <Collection
+        player="p1"
+        :cards="collection1"
+        @new-yaku="async (yakuName, player) => await showYaku(yakuName, player)"
+      />
     </div>
 
     <!-- MODAL -->
@@ -193,17 +229,25 @@ function continueGame(bool: boolean) {
       <MatchSelect
         :cards="match"
         :show-modal="match.length > 0"
-        @match-select="(cardArr: string[]) => handleMatch(cardArr)"
+        @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
       />
     </div>
+
     <template v-if="newYaku.length">
       <div id="yaku-modal">
         <NewYaku
-          :cards="newYaku.slice(1)"
-          :yaku="newYaku[0]"
+          :player="newYaku[0]"
+          :yaku="newYaku[1]"
+          :cards="newYaku.slice(2)"
           :show-modal="!!newYaku.length"
-          @koi-koi="(bool) => continueGame(bool)"
+          @koi-koi="async (bool, player) => await continueGame(bool, player)"
         />
+      </div>
+    </template>
+
+    <template v-if="winner">
+      <div id="end-screen">
+        <ScoreSheet :player="winner" :yakuList="winningYaku" :show-modal="!!winner" />
       </div>
     </template>
   </div>

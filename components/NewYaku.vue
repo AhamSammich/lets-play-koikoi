@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   showModal: boolean;
+  player: string;
   yaku: string
   cards: string[];
 }>();
@@ -8,11 +9,11 @@ const props = defineProps<{
 const emits = defineEmits(["koi-koi"]);
 
 function callKoiKoi() {
-    emits('koi-koi', true);
+    emits('koi-koi', true, props.player);
 }
 
 function endGame() {
-    emits('koi-koi', false);
+    emits('koi-koi', false, props.player);
 }
 </script>
 
