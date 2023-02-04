@@ -57,15 +57,23 @@ const allCards = [
 ];
 
 let remainingCards: string[];
+let progressBar: HTMLElement;
+
+function updateProgress(numberLeft: number) {
+  let percent = Math.floor(numberLeft / 48 * 100);
+  progressBar?.style.setProperty("transform", `scaleY(${percent}%)`);
+}
 
 function draw(): string {
   let drawnCard = remainingCards.shift();
+  updateProgress(remainingCards.length);
   console.log(`%cCards remaining: ${remainingCards.length}`, "color: red;");
   return drawnCard || "";
 }
 
 function dealHands(): string[] {
   let dealtCards = remainingCards.splice(0, 24);
+  updateProgress(remainingCards.length);
   return dealtCards;
 }
 
@@ -83,6 +91,7 @@ async function shuffle(cards: string[]): Promise<string[]> {
 }
 
 onMounted(async () => {
+  progressBar = <HTMLElement>document.getElementById('deck-progress');
   remainingCards = await shuffle([...allCards]);
   emits("deal", dealHands());
 });
@@ -100,8 +109,9 @@ onUpdated(async () => {
 </script>
 
 <template>
+  <div id="deck-progress"></div>
   <div
-    class="bg-red-600"
+    class="deck bg-red-600"
     @click="$emit('draw', draw())"
     :data-text="drawCard ? aiDraw ? 'Drawing card...' : 'Draw a card!' : ''"
     :style="`${aiDraw || !drawCard ? 'pointer-events: none;' : ''}`"
@@ -109,7 +119,23 @@ onUpdated(async () => {
 </template>
 
 <style scoped lang="postcss">
-div {
+#deck-progress {
+  float: left;
+  margin-right: 0.5rem;
+  width: 0.25rem;
+  height: 113px;
+  background: linear-gradient(
+    45deg,
+    goldenrod,
+    palegoldenrod
+  );
+  outline: 0.5px solid #111;
+  transform-origin: bottom;
+  transition: transform 0.5s;
+  border-radius: 0.2rem;
+}
+
+.deck {
   width: 75px;
   height: 113px;
   cursor: grab;
