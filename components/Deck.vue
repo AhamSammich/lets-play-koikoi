@@ -49,7 +49,7 @@ const allCards = [
   "yanagi-ni-ono-no-toufuu",
   "yanagi-ni-tsubame",
   "yanagi-no-tan",
-  "yanagi-no-kasu-1",
+  "yanagi-no-kasu",
   "kiri-ni-ho-oh",
   "kiri-no-kasu-1",
   "kiri-no-kasu-2",
