@@ -50,6 +50,23 @@ export function addDetails(cardName: string): Card {
   return card;
 }
 
+export function checkForWinOrVoid(cardArr: string[]): string | null {
+  // Check array for 4 of same suit/flower or 4 pairs
+  // Returns name of found winning/voiding condition
+  // Returns null if neither found
+  let flowerArr = cardArr.map(getFlower);
+  let flowerCount = new Map();
+  for (let flower of flowerArr) {
+    if (flowerCount.has(flower)) {
+      flowerCount.set(flower, flowerCount.get(flower) + 1);
+    } else {
+      flowerCount.set(flower, 1);
+    }
+  }
+  console.log(flowerCount);
+  return null;
+}
+
 export function getYakuScore(yakuList: Record<string, string[]>, koikoi: boolean): number {
   let total = 0;
   for (let yaku in yakuList) {

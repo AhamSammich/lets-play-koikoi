@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import {
+checkForWinOrVoid,
   getCardsInYaku,
   matchCardInArr,
   removeSetFromArr,
@@ -61,6 +62,9 @@ function dealFirstHands(cards: string[]): void {
   hand1.value = cards.slice(0, 8);
   hand2.value = cards.slice(8, 16);
   field.value = cards.slice(16);
+  [
+    hand1.value, hand2.value, field.value
+  ].forEach(checkForWinOrVoid);
   draw.value = false;
   console.log(scoreboard);
 }

@@ -11,6 +11,7 @@
   - [x] Yaku determination
     - [x] FIX: Handle simultaneous yaku
     - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
+  - [ ] Check for instant win(hand)/re-deal(field) (full suit or 4 pairs)
 
 GAME STATE
 - [x] Track active player
