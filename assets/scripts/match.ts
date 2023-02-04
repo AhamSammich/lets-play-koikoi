@@ -14,6 +14,21 @@ const BRIGHTS = [
   "kiri-ni-ho-oh",
 ];
 
+const POINTS: Record<string, number> = {
+  'gokou': 15,
+  'shikou': 8,
+  'ame-shikou': 7,
+  'sankou': 5,
+  'ino-shika-chou': 5,
+  'ao-tan': 5,
+  'aka-tan': 5,
+  'hanami-zake': 5,
+  'tsukimi-zake': 5,
+  'tane-zaku': 5,
+  'tan-zaku': 5,
+  'kasu': 1
+}
+
 const isBright: CheckCardType = (cardName) => BRIGHTS.includes(cardName);
 const isAnimal: CheckCardType = (cardName) =>
   !isBright(cardName) && /-ni-/.test(cardName);
@@ -33,6 +48,19 @@ export function addDetails(cardName: string): Card {
     isPlain: isPlain(cardName),
   };
   return card;
+}
+
+export function getYakuScore(yakuList: Record<string, string[]>, koikoi: boolean): number {
+  let total = 0;
+  for (let yaku in yakuList) {
+    total += POINTS[yaku];
+    if (yaku === 'tan-zaku' || yaku === 'tane-zaku') total += (yakuList[yaku].length - 5);
+    if (yaku === 'kasu') total += (yakuList[yaku].length - 10);
+  }
+  console.log(Object.keys(yakuList), total + " points");
+  if (total >= 7) total *= 2;
+  if (koikoi) total *= 2;
+  return total;
 }
 
 function checkForBrights(cardArr: string[]): string {

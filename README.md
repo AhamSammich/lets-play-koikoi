@@ -9,6 +9,7 @@ MATCHING ALGORITHM
 - [x] Second match
 - [x] Triplet on table
 - [x] Yaku determination
+  - [ ] FIX: Handle simultaneous yaku
 - [ ] Highlight possible match
 
 GAME STATE
@@ -21,4 +22,4 @@ GAME STATE
 END GAME
 - [ ] Reset
 - [ ] Track progress
-- [ ] Scoring
+- [x] Scoring

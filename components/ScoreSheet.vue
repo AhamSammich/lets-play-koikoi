@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { getYakuScore } from "~~/assets/scripts/match";
+
 const props = defineProps<{
   showModal: boolean;
   player: string;
   yakuList: Record<string, string[]>;
+  koikoi: boolean;
 }>();
 
 const emits = defineEmits([""]);
+let score: number;
+
+onBeforeMount(() => score = getYakuScore(props.yakuList, props.koikoi));
 </script>
 
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
-    <h1>{{ player }}</h1>
+    <h1>{{ player }}: <span id="points">{{ score }} points</span></h1>
     <div id="scoresheet">
       <template v-for="yaku in Object.keys(yakuList)" :key=yaku>
         <h2>{{ yaku }}</h2>
@@ -37,8 +43,14 @@ const emits = defineEmits([""]);
     gap: 0.5rem;
     justify-content: center;
     align-items: flex-start;
+    align-self: flex-start;
 
 }
+
+#points {
+    font-size: 44px;
+}
+
 .yaku {
   display: flex;
   justify-content: flex-start;

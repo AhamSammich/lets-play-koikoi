@@ -12,7 +12,7 @@ const handOne: Ref<string[]> = ref([]);
 const handTwo: Ref<string[]> = ref([]);
 const field: Ref<string[]> = ref([]);
 const match: Ref<string[]> = ref([]);
-const draw: Ref<boolean> = ref(false);
+const draw = ref(false);
 
 const collection1: Ref<string[]> = ref([]);
 const collection2: Ref<string[]> = ref([]);
@@ -21,11 +21,12 @@ const yaku2: Ref<Record<string, string[]>> = ref({});
 const newYaku: Ref<string[]> = ref([]);
 
 const winningYaku: Ref<Record<string, string[]>> = ref({});
-const winner: Ref<string> = ref("");
+const winner = ref("");
 
 let selectedCard: string;
 let activeHand = handOne;
 let WAIT = false;
+let calledKoiKoi = "";
 
 function dealFirstHands(cards: string[]): void {
   handOne.value.push(...cards.slice(0, 8));
@@ -90,6 +91,7 @@ function getMatch(cardName: string): void {
   if (matches.length === 3) {
     // Add all cards to collection
     handleMatch(matches);
+    return;
   }
   // AI player has 2 possible matches from the deck draw
   if (draw.value && activeHand === handTwo) {
@@ -139,7 +141,7 @@ async function handleMatch(cards: string[]) {
   activeHand === handOne
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   checkForDraw();
 }
 
@@ -158,16 +160,11 @@ async function continueGame(bool: boolean, player: string) {
     let yakuList = (player === "p1" ? yaku1 : yaku2).value;
     winningYaku.value = yakuList;
     winner.value = player;
-    console.log(WAIT, winner.value, winningYaku.value)
     return;
   }
+  calledKoiKoi = player;
   WAIT = false;
-}
-
-async function runTable() {
-  while (true) {
-
-  }
+  checkForDraw();
 }
 </script>
 
@@ -247,7 +244,12 @@ async function runTable() {
 
     <template v-if="winner">
       <div id="end-screen">
-        <ScoreSheet :player="winner" :yakuList="winningYaku" :show-modal="!!winner" />
+        <ScoreSheet
+          :player="winner"
+          :yakuList="winningYaku"
+          :koikoi="winner != calledKoiKoi"
+          :show-modal="!!winner"
+        />
       </div>
     </template>
   </div>
