@@ -5,7 +5,6 @@ import {
   getCardsInYaku,
   matchCardInArr,
   removeSetFromArr,
-  TEST_HAND,
 } from "~~/assets/scripts/match";
 
 const emits = defineEmits(["match-select", "deck-draw"]);
@@ -71,6 +70,7 @@ function dealFirstHands(cards: string[]): void {
   [hand1, hand2, field].forEach(checkForInstantYaku);
   draw.value = false;
   console.log(scoreboard);
+  if (activeHand === hand2) aiFindMatch();
 }
 
 function revealCard(cardName: string) {
@@ -180,6 +180,7 @@ async function handleMatch(cards: string[]) {
   activeHand === hand1
     ? (collection1.value = [...collection1.value, ...matchedCards])
     : (collection2.value = [...collection2.value, ...matchedCards]);
+  await new Promise(resolve => setTimeout(resolve, 1000));
   checkForDraw();
 }
 

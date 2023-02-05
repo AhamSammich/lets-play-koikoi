@@ -64,6 +64,20 @@ function endGame() {
   translate: -50% -50%;
   color: white;
   font-size: x-large;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      45deg,
+      goldenrod,
+      palegoldenrod
+    );
+  }
 }
 
 h1 {

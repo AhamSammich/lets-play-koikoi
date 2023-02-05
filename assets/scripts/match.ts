@@ -18,36 +18,17 @@ const POINTS: Record<string, number> = {
   gokou: 15,
   shikou: 8,
   "ame-shikou": 7,
-  sankou: 5,
+  sankou: 6,
   "ino-shika-chou": 5,
   "ao-tan": 5,
   "aka-tan": 5,
   "hanami-zake": 5,
   "tsukimi-zake": 5,
-  "tane-zaku": 5,
-  "tan-zaku": 5,
+  "tane-zaku": 1,
+  "tan-zaku": 1,
   kasu: 1,
   teshi: 6,
   kuttsuki: 6,
-};
-
-export const TEST_HAND = {
-  TESHI: [
-    "matsu-ni-tsuru",
-    "matsu-no-tan",
-    "matsu-no-kasu-1",
-    "matsu-no-kasu-2",
-  ],
-  KUTTSUKI: [
-    "matsu-ni-tsuru",
-    "matsu-no-tan",
-    "susuki-no-kasu-1",
-    "susuki-no-kasu-2",
-    "momiji-no-kasu-1",
-    "momiji-no-kasu-2",
-    "kiri-no-kasu-1",
-    "kiri-no-kasu-2",
-  ],
 };
 
 const isBright: CheckCardType = (cardName) => BRIGHTS.includes(cardName);
@@ -84,11 +65,24 @@ export function checkForWinOrVoid(cardArr: string[]): string | null {
       flowerCount.set(flower, 1);
     }
   }
-  console.log(flowerCount);
   if ([...flowerCount.values()].every((count) => count === 2))
     return "kuttsuki";
   if ([...flowerCount.values()].some((count) => count === 4)) return "teshi";
   return null;
+}
+
+export function processYakuList(yakuList: Dict): Dict {
+  let yakuArr = Object.keys(yakuList);
+  if (yakuArr.filter(yakuName => yakuName.endsWith("kou")).length < 2) return yakuList;
+
+  if (yakuArr.includes("gokou")) {
+    ["ame-shikou", "shikou", "sankou"].forEach(yaku => delete yakuList[yaku]);
+  } else if (yakuArr.includes("shikou")) {
+    ["ame-shikou", "sankou"].forEach(yaku => delete yakuList[yaku]);
+  } else if (yakuArr.includes("ame-shikou")) {
+    delete yakuList["sankou"];
+  }
+  return yakuList;
 }
 
 export function getYakuScore(
@@ -97,10 +91,16 @@ export function getYakuScore(
 ): number {
   let total = 0;
   for (let yaku in yakuList) {
-    total += POINTS[yaku];
-    if (yaku === "tan-zaku" || yaku === "tane-zaku")
-      total += yakuList[yaku].length - 5;
-    if (yaku === "kasu") total += yakuList[yaku].length - 10;
+    let points = POINTS[yaku];
+    switch (yaku) {
+      case "tan-zaku" || "tane-zaku":
+        points += yakuList[yaku].length - 5;
+        break;
+      case "kasu":
+        points += yakuList[yaku].length - 10;
+        break;
+    }
+    total += points;
   }
   console.log(Object.keys(yakuList), total + " points");
   if (total >= 7) total *= 2;

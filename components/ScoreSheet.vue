@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getYakuScore } from "~~/assets/scripts/match";
+import { getYakuScore, processYakuList } from "~~/assets/scripts/match";
 
 const props = defineProps<{
   showModal: boolean;
@@ -10,22 +10,26 @@ const props = defineProps<{
 
 const emits = defineEmits(["reset", "next"]);
 let score: number;
+let finalList: Dict;
 
 function resetGame() {
   emits("reset", score);
 }
 
-onBeforeMount(() => score = getYakuScore(props.yakuList, props.koikoi));
+onBeforeMount(() => {
+  finalList = processYakuList(props.yakuList);
+  score = getYakuScore(finalList, props.koikoi)
+});
 </script>
 
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
     <h1>{{ player }}: <span id="points">{{ score }} points</span></h1>
     <div id="scoresheet">
-      <template v-for="yaku in Object.keys(yakuList)" :key=yaku>
+      <template v-for="yaku in Object.keys(finalList)" :key=yaku>
         <h2>{{ yaku }}</h2>
         <div class="yaku">
-          <template v-for="card in yakuList[yaku]">
+          <template v-for="card in finalList[yaku]">
             <div class="card">
               <Card :name="card" />
             </div>
@@ -86,6 +90,20 @@ onBeforeMount(() => score = getYakuScore(props.yakuList, props.koikoi));
   translate: -50% -50%;
   color: white;
   font-size: x-large;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      45deg,
+      goldenrod,
+      palegoldenrod
+    );
+  }
 }
 
 h1,
