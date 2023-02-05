@@ -47,6 +47,7 @@ function checkForMatch(cardName: string) {
   justify-content: flex-start;
   align-items: center;
   gap: 0.2rem;
+  transform: scale(0.9);
   animation: fanOut 2s;
 }
 

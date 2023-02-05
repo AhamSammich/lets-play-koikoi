@@ -250,7 +250,7 @@ async function continueGame(bool: boolean, player: string) {
       :data-msg="`${activeHand === hand1 && !draw ? 'Play a card' : ''}`"
     >
       <Hand
-        :is-active="activeHand === hand1"
+        :is-active="activeHand === hand1 && !draw"
         player="p1"
         :cards="hand1"
         @check-match="(cardName: string) => getMatch(cardName)"
@@ -325,27 +325,24 @@ async function continueGame(bool: boolean, player: string) {
 #p1-hand {
   grid-area: p1;
   margin-left: 1rem;
-  scale: 0.9;
   position: relative;
 
   &::before {
     content: attr(data-msg);
     display: block;
     position: absolute;
-    bottom: 80%;
+    bottom: 75%;
     right: 50%;
-    padding: 1rem;
     color: #eee;
     font-weight: bold;
-    text-transform: uppercase;
   }
 }
 
 #p2-hand {
   grid-area: p2;
   margin-left: 1rem;
-  scale: 0.9;
-  rotate: 180deg;
+  transform: rotate(180deg);
+  pointer-events: none;
 }
 
 #field {

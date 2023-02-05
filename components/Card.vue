@@ -9,24 +9,21 @@ const emits = defineEmits(["card-select"]);
 function handleClick(e: Event) {
   emits("card-select", props.name);
 }
-
-function setImage() {
-  return props.hide
-    ? 'background: red;' 
-    : `background-image: url(cards/${props.name}.png)`;
-}
 </script>
 
 <template>
-  <div :class="{ card: true, hide: hide }" :style="setImage()" @click="handleClick"></div>
+  <template v-if="hide">
+    <div class="card bg-red-600" @click="handleClick"></div>
+  </template>
+  <template v-else>
+    <img class="card" :src="`cards/${props.name}.png`" @click="handleClick" />
+  </template>
 </template>
 
 <style lang="postcss">
 .card {
   width: 75px;
   height: 113px;
-  background-size: contain;
-  background-repeat: no-repeat;
   outline: 1px solid #111;
   border-radius: 0.2rem;
   transition: transform 0.3s 0.1s;
@@ -36,11 +33,6 @@ function setImage() {
     cursor: pointer;
     transform: translate3d(0, -30%, 0);
   }
-}
-
-.hide {
-  background-image: none;
-  background-color: red;
 }
 
 @keyframes dropIn {
