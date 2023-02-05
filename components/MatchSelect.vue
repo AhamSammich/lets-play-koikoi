@@ -9,7 +9,7 @@ const emits = defineEmits(["match-select"]);
 </script>
 
 <template>
-  <div :class="{modal: true, hidden: !showModal}">
+  <div :class="{ modal: true, hidden: !showModal }">
     <template v-if="matchSrc">
       <div id="match-src">
         <Card :name="matchSrc" />
@@ -32,10 +32,10 @@ const emits = defineEmits(["match-select"]);
 
 <style scoped lang="postcss">
 #choose-match {
-    width: 300px;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 #match-src {

@@ -17,7 +17,7 @@
   - [x] Track active player
   - [x] Track selected card
   - [x] Call Koi-Koi
-    - [ ] FIX: AI Koi-Koi decision
+    - [x] FIX: AI Koi-Koi decision
   - [ ] Start screen
   - [ ] End game
   - [x] Reset

@@ -30,8 +30,8 @@ let activeHand = hand1;
 let WAIT = false;
 let calledKoiKoi = "";
 
-async function sleep(ms=1000) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+async function sleep(ms = 1000) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function resetRefs() {
@@ -79,13 +79,13 @@ function dealFirstHands(cards: string[]): void {
 
 async function setSelectedCard(cardName: string): Promise<void> {
   selectedCard.value = cardName;
-  await sleep(200);
+  await sleep(300);
 }
 
 async function revealCard(cardName: string) {
   selectedCard.value = cardName;
   console.log(`Revealed ${selectedCard.value} from the deck.`);
-  await sleep(200);
+  await sleep(300);
   getMatch(cardName);
 }
 
@@ -94,6 +94,10 @@ function checkForDraw() {
   selectedCard.value = "";
   draw.value = !draw.value;
   if (draw.value === true) return;
+  if (activeHand.value.length === 0) {
+    newGame();
+    return;
+  }
   activeHand = activeHand === hand1 ? hand2 : hand1;
   console.log(`It's Player${activeHand === hand1 ? "1" : "2"}'s turn...`);
   if (activeHand === hand2) aiFindMatch();
@@ -188,11 +192,17 @@ async function handleMatch(cards: string[]) {
     }),
   ]);
 
-  let collected = await collectCards(matchedCards, activeHand === hand1 ? collection1 : collection2);
+  let collected = await collectCards(
+    matchedCards,
+    activeHand === hand1 ? collection1 : collection2
+  );
   if (collected) checkForDraw();
 }
 
-async function collectCards(cardSet: Set<string>, collection: Ref<string[]>): Promise<boolean> {
+async function collectCards(
+  cardSet: Set<string>,
+  collection: Ref<string[]>
+): Promise<boolean> {
   try {
     collection.value = [...collection.value, ...cardSet];
   } catch (err) {
@@ -201,7 +211,7 @@ async function collectCards(cardSet: Set<string>, collection: Ref<string[]>): Pr
     return false;
   }
   selectedCard.value = "";
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
   return true;
 }
 
@@ -219,7 +229,7 @@ async function showYaku(yakuNames: string[], player: string) {
 }
 
 async function continueGame(bool: boolean, player: string) {
-  if (player === 'p2') {
+  if (player === "p2") {
     let chance = Math.floor(Math.random() * 100);
     let factor = hand2.value.length * 10;
     bool = chance < factor;
@@ -313,9 +323,10 @@ async function continueGame(bool: boolean, player: string) {
     <template v-if="Object.keys(newYaku).length">
       <div id="yaku-modal">
         <NewYaku
+          :show-modal="!!Object.keys(newYaku).length"
           :player="<string>newYaku.player"
           :yakuList="<Dict>newYaku.newList"
-          :show-modal="!!Object.keys(newYaku).length"
+          :koikoi-allowed="!!(activeHand.length || draw)"
           @koi-koi="async (bool, player) => await continueGame(bool, player)"
         />
       </div>

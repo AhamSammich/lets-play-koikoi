@@ -12,7 +12,9 @@ const yakuList = new Map();
 let sortedCards = sortCardsByType(props.cards);
 
 function registerYaku(yakuArr: string[]) {
-  yakuArr.forEach(yakuName => yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards)));
+  yakuArr.forEach((yakuName) =>
+    yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards))
+  );
   emits("new-yaku", yakuArr, props.player);
 }
 
@@ -22,7 +24,7 @@ onBeforeUpdate(() => {
 
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
-  yakuArr = yakuArr.filter(yakuName => yakuName && !yakuList.has(yakuName))
+  yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
   console.log(yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
 });

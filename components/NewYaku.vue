@@ -3,43 +3,44 @@ const props = defineProps<{
   showModal: boolean;
   player: string;
   yakuList: Dict;
+  koikoiAllowed: boolean;  // Hide Koi Koi button if no cards in hand
 }>();
 
 const emits = defineEmits(["koi-koi"]);
 
 function callKoiKoi() {
-    emits('koi-koi', true, props.player);
+  emits("koi-koi", true, props.player);
 }
 
 function endGame() {
-    emits('koi-koi', false, props.player);
+  emits("koi-koi", false, props.player);
 }
 
 onMounted(async () => {
-  if (props.player === 'p1') return;
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  if (props.player === "p1") return;
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   endGame();
-})
+});
 </script>
 
 <template>
-  <div :class="{modal: true, hidden: !showModal}">
+  <div :class="{ modal: true, hidden: !showModal }">
     <template v-for="yaku in Object.keys(yakuList)" :key="yaku">
       <h1>{{ yaku }}</h1>
       <div class="new-yaku">
         <template v-for="card in yakuList[yaku]">
           <div>
-            <Card
-              :name="card"
-            />
+            <Card :name="card" />
           </div>
         </template>
       </div>
     </template>
     <template v-if="player === 'p1'">
       <div class="btn-bar">
+        <template v-if="koikoiAllowed">
           <button @click="callKoiKoi()">KOI KOI!</button>
-          <button @click="endGame()">END ROUND</button>
+        </template>
+        <button @click="endGame()">END ROUND</button>
       </div>
     </template>
   </div>
@@ -47,12 +48,12 @@ onMounted(async () => {
 
 <style scoped lang="postcss">
 .new-yaku {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    max-width: 400px;
-    gap: 0.2rem;
-    pointer-events: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 400px;
+  gap: 0.2rem;
+  pointer-events: none;
 }
 
 .modal {
@@ -80,39 +81,35 @@ onMounted(async () => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      45deg,
-      goldenrod,
-      palegoldenrod
-    );
+    background: linear-gradient(45deg, goldenrod, palegoldenrod);
   }
 }
 
 h1 {
-    font-weight: bold;
-    font-size: larger;
-    text-transform: uppercase;
+  font-weight: bold;
+  font-size: larger;
+  text-transform: uppercase;
 }
 
 .btn-bar {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    justify-content: space-around;
-    pointer-events: all;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: all;
 
-    & button {
-        outline: 1px solid yellow;
-        border-radius: 0.2rem;
-        background: firebrick;
-        padding: 0.5em 1em;
-        font-weight: bold;
-        font-size: smaller;
+  & button {
+    outline: 1px solid yellow;
+    border-radius: 0.2rem;
+    background: firebrick;
+    padding: 0.5em 1em;
+    font-weight: bold;
+    font-size: smaller;
 
-        &:hover {
-            transform: translate3d(0, -5%, 0);
-        }
+    &:hover {
+      transform: translate3d(0, -5%, 0);
     }
+  }
 }
 
 .hidden {

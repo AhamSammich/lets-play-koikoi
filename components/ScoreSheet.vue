@@ -18,15 +18,18 @@ function resetGame() {
 
 onBeforeMount(() => {
   finalList = processYakuList(props.yakuList);
-  score = getYakuScore(finalList, props.koikoi)
+  score = getYakuScore(finalList, props.koikoi);
 });
 </script>
 
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
-    <h1>{{ player }}: <span id="points">{{ score + `${score === 1 ? ' point' : ' points'}` }}</span></h1>
+    <h1>
+      {{ player }}:
+      <span id="points">{{ score + `${score === 1 ? " point" : " points"}` }}</span>
+    </h1>
     <div id="scoresheet">
-      <template v-for="yaku in Object.keys(finalList)" :key=yaku>
+      <template v-for="yaku in Object.keys(finalList)" :key="yaku">
         <h2>{{ yaku }}</h2>
         <div class="yaku">
           <template v-for="card in finalList[yaku]">
@@ -46,17 +49,16 @@ onBeforeMount(() => {
 
 <style scoped lang="postcss">
 #scoresheet {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: center;
-    align-items: flex-start;
-    align-self: flex-start;
-
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: flex-start;
 }
 
 #points {
-    font-size: 44px;
+  font-size: 44px;
 }
 
 .yaku {
@@ -69,8 +71,8 @@ onBeforeMount(() => {
 }
 
 .card {
-    max-width: 50px;
-    max-height: 75px;
+  max-width: 50px;
+  max-height: 75px;
 }
 
 .modal {
@@ -98,11 +100,7 @@ onBeforeMount(() => {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      45deg,
-      goldenrod,
-      palegoldenrod
-    );
+    background: linear-gradient(45deg, goldenrod, palegoldenrod);
   }
 }
 
