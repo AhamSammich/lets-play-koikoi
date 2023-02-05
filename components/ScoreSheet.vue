@@ -3,13 +3,13 @@ import { getYakuScore, processYakuList } from "~~/assets/scripts/match";
 
 const props = defineProps<{
   showModal: boolean;
-  player: string;
-  yakuList: Dict;
+  player: string | null;
+  yakuList: Dict | null;
   koikoi: boolean;
 }>();
 
 const emits = defineEmits(["reset", "next"]);
-let score: number;
+let score = 0;
 let finalList: Dict;
 
 function resetGame() {
@@ -17,6 +17,7 @@ function resetGame() {
 }
 
 onBeforeMount(() => {
+  if (props.yakuList === null) return;
   finalList = processYakuList(props.yakuList);
   score = getYakuScore(finalList, props.koikoi);
 });
@@ -25,21 +26,23 @@ onBeforeMount(() => {
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
     <h1>
-      {{ player }}:
-      <span id="points">{{ score + `${score === 1 ? " point" : " points"}` }}</span>
+      {{ player || "draw" }}
     </h1>
-    <div id="scoresheet">
-      <template v-for="yaku in Object.keys(finalList)" :key="yaku">
-        <h2>{{ yaku }}</h2>
-        <div class="yaku">
-          <template v-for="card in finalList[yaku]">
-            <div class="card">
-              <Card :name="card" />
-            </div>
-          </template>
-        </div>
-      </template>
-    </div>
+    <h2 id="points">{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
+    <template v-if="player && yakuList">
+      <div id="scoresheet">
+        <template v-for="yaku in Object.keys(finalList)" :key="yaku">
+          <h2>{{ yaku }}</h2>
+          <div class="yaku">
+            <template v-for="card in finalList[yaku]">
+              <div class="card">
+                <Card :name="card" />
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+    </template>
     <div class="btn-bar">
       <!-- <button @click="">END GAME</button> -->
       <button @click="resetGame()">NEXT ROUND</button>

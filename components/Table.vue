@@ -21,8 +21,8 @@ const yaku1: Ref<Dict> = ref({});
 const yaku2: Ref<Dict> = ref({});
 const newYaku: Ref<MultiDict> = ref({});
 
-const winningYaku: Ref<Dict> = ref({});
-const winner = ref("");
+const winningYaku: Ref<Dict | null> = ref({});
+const winner: Ref<string | null> = ref("");
 
 const scoreboard: Record<string, number> = { p1: 0, p2: 0 };
 const selectedCard = ref("");
@@ -61,7 +61,7 @@ async function checkForInstantYaku(hand: Ref<string[]>): Promise<void> {
     return;
   }
   if (yaku) {
-    winningYaku.value[yaku] = hand.value;
+    if (winningYaku.value) winningYaku.value[yaku] = hand.value;
     winner.value = hand === hand1 ? "p1" : "p2";
     return;
   }
@@ -95,7 +95,8 @@ function checkForDraw() {
   draw.value = !draw.value;
   if (draw.value === true) return;
   if (activeHand.value.length === 0) {
-    newGame();
+    winningYaku.value = null;
+    winner.value = null;
     return;
   }
   activeHand = activeHand === hand1 ? hand2 : hand1;
@@ -332,13 +333,13 @@ async function continueGame(bool: boolean, player: string) {
       </div>
     </template>
 
-    <template v-if="winner && winningYaku">
+    <template v-if="winner !== '' && (winningYaku || winningYaku === null)">
       <div id="end-screen">
         <ScoreSheet
           :player="winner"
           :yakuList="winningYaku"
           :koikoi="!!calledKoiKoi && winner != calledKoiKoi"
-          :show-modal="!!winner"
+          :show-modal="winner !== ''"
           @reset="(score: number) => newGame(score)"
         />
       </div>

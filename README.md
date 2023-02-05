@@ -19,7 +19,7 @@
   - [x] Call Koi-Koi
     - [x] FIX: AI Koi-Koi decision
   - [ ] Start screen
-  - [ ] End game
+  - [x] End round
   - [x] Reset
   - [x] Track scoring
 
