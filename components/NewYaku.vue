@@ -14,6 +14,12 @@ function callKoiKoi() {
 function endGame() {
     emits('koi-koi', false, props.player);
 }
+
+onMounted(async () => {
+  if (props.player === 'p1') return;
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  endGame();
+})
 </script>
 
 <template>
@@ -30,10 +36,12 @@ function endGame() {
         </template>
       </div>
     </template>
-    <div class="btn-bar">
-        <button @click="callKoiKoi()">KOI KOI!</button>
-        <button @click="endGame()">END ROUND</button>
-    </div>
+    <template v-if="player === 'p1'">
+      <div class="btn-bar">
+          <button @click="callKoiKoi()">KOI KOI!</button>
+          <button @click="endGame()">END ROUND</button>
+      </div>
+    </template>
   </div>
 </template>
 

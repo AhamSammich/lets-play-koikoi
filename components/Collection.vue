@@ -23,6 +23,7 @@ onBeforeUpdate(() => {
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
   yakuArr = yakuArr.filter(yakuName => yakuName && !yakuList.has(yakuName))
+  console.log(yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
 });
 </script>

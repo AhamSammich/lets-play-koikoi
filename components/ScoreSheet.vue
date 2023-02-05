@@ -24,7 +24,7 @@ onBeforeMount(() => {
 
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
-    <h1>{{ player }}: <span id="points">{{ score }} points</span></h1>
+    <h1>{{ player }}: <span id="points">{{ score + `${score === 1 ? ' point' : ' points'}` }}</span></h1>
     <div id="scoresheet">
       <template v-for="yaku in Object.keys(finalList)" :key=yaku>
         <h2>{{ yaku }}</h2>
