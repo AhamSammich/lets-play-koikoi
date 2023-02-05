@@ -15,8 +15,9 @@ const field: Ref<string[]> = ref([]);
 const match: Ref<string[]> = ref([]);
 const draw: Ref<boolean | null> = ref(false);
 
-const collection1: Ref<string[]> = ref([]);
-const collection2: Ref<string[]> = ref([]);
+const collection: Record<string, string[]> = reactive({ p1: <string[]>[], p2: <string[]>[] })
+// const collection1: Ref<string[]> = ref([]);
+// const collection2: Ref<string[]> = ref([]);
 const yaku1: Ref<Dict> = ref({});
 const yaku2: Ref<Dict> = ref({});
 const newYaku: Ref<MultiDict> = ref({});
@@ -26,6 +27,8 @@ const winner = ref("");
 
 const scoreboard: Record<string, number> = { p1: 0, p2: 0 };
 const selectedCard = ref("");
+const useActiveP = useState('activeP', () => "p1");
+
 let activeHand = hand1;
 let WAIT = false;
 let calledKoiKoi = "";
@@ -35,11 +38,14 @@ async function sleep(ms = 1000) {
 }
 
 async function resetRefs() {
-  [hand1, hand2, field, match, collection1, collection2].forEach(
+  [hand1, hand2, field, match,].forEach(
     (refVar) => (refVar.value = [])
   );
   [yaku1, yaku2, newYaku, winningYaku].forEach((refVar) => (refVar.value = {}));
+  collection.p1 = [];
+  collection.p2 = [];
   winner.value = "";
+  return;
 }
 
 async function newGame(score?: number) {
@@ -50,6 +56,7 @@ async function newGame(score?: number) {
   calledKoiKoi = "";
   WAIT = false;
   draw.value = null; // Triggers deck reshuffle
+  return;
 }
 
 async function checkForInstantYaku(hand: Ref<string[]>): Promise<void> {
@@ -80,6 +87,7 @@ function dealFirstHands(cards: string[]): void {
 async function setSelectedCard(cardName: string): Promise<void> {
   selectedCard.value = cardName;
   await sleep(300);
+  return;
 }
 
 async function revealCard(cardName: string) {
@@ -87,6 +95,7 @@ async function revealCard(cardName: string) {
   console.log(`Revealed ${selectedCard.value} from the deck.`);
   await sleep(300);
   getMatch(cardName);
+  return;
 }
 
 function checkForDraw() {
@@ -130,6 +139,7 @@ async function aiSelectMatch(cardName: string, matchedCards: string[]) {
   }
   // Select the first of 2 matches
   handleMatch(matchedCards.slice(0, 1));
+  return;
 }
 
 async function getMatch(cardName: string): Promise<void> {
@@ -154,6 +164,7 @@ async function getMatch(cardName: string): Promise<void> {
   }
   // Open modal to allow player to choose between 2 matches
   showMatch(matches);
+  return;
 }
 
 function noMatch(cardName: string) {
@@ -194,17 +205,18 @@ async function handleMatch(cards: string[]) {
 
   let collected = await collectCards(
     matchedCards,
-    activeHand === hand1 ? collection1 : collection2
+    activeHand === hand1 ? 'p1' : 'p2'
   );
   if (collected) checkForDraw();
+  return;
 }
 
 async function collectCards(
   cardSet: Set<string>,
-  collection: Ref<string[]>
+  player: string
 ): Promise<boolean> {
   try {
-    collection.value = [...collection.value, ...cardSet];
+    collection[player] = [...collection[player], ...cardSet];
   } catch (err) {
     console.error(err);
     WAIT = true;
@@ -217,15 +229,16 @@ async function collectCards(
 
 async function showYaku(yakuNames: string[], player: string) {
   WAIT = true;
-  let [yakuList, collection] =
-    player === "p1" ? [yaku1, collection1] : [yaku2, collection2];
+  let [yakuList, coll] =
+    player === "p1" ? [yaku1, collection.p1] : [yaku2, collection.p2];
   let newList: Record<string, string[]> = {};
   yakuNames.forEach((yakuName) => {
     // Save yaku for later scoring
-    newList[yakuName] = getCardsInYaku(yakuName, collection.value);
+    newList[yakuName] = getCardsInYaku(yakuName, coll);
   });
   for (let yakuName in newList) yakuList.value[yakuName] = newList[yakuName];
   newYaku.value = { player, newList };
+  return;
 }
 
 async function continueGame(bool: boolean, player: string) {
@@ -266,7 +279,7 @@ async function continueGame(bool: boolean, player: string) {
     <div id="p2-collection" class="collection">
       <Collection
         player="p2"
-        :cards="collection2"
+        :cards="collection.p2"
         @new-yaku="async (yakuArr, player) => await showYaku(yakuArr, player)"
       />
     </div>
@@ -305,7 +318,7 @@ async function continueGame(bool: boolean, player: string) {
     <div id="p1-collection" class="collection">
       <Collection
         player="p1"
-        :cards="collection1"
+        :cards="collection.p1"
         @new-yaku="async (yakuArr, player) => await showYaku(yakuArr, player)"
       />
     </div>
@@ -374,7 +387,7 @@ async function continueGame(bool: boolean, player: string) {
   position: absolute;
   top: 50%;
   left: 0;
-  z-index: 2;
+  z-index: 0;
   pointer-events: none;
   animation: pickUp 0.5s 1s;
 }
