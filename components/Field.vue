@@ -26,5 +26,9 @@ const props = defineProps<{
   gap: 0.2rem;
   overflow: visible;
   pointer-events: none;
+
+  @media (orientation: landscape) {
+    flex-direction: row;
+  }
 }
 </style>

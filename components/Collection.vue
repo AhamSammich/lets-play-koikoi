@@ -33,7 +33,7 @@ onUpdated(() => {
 </script>
 
 <template>
-  <div :id="`${player}-collected`">
+  <div :id="`${player}-collected`" class="collected">
     <div :id="`${player}-brights`" class="subset">
       <template v-for="card in sortedCards['brights']" :key="card">
         <Card :name="card" />
@@ -58,6 +58,17 @@ onUpdated(() => {
 </template>
 
 <style scoped lang="postcss">
+.collected {
+  --card-w: 28px;
+  --card-h: calc(var(--card-w)*1.5);
+  /* width: inherit;
+  height: inherit; */
+  display: grid;
+  grid-template-columns: repeat(2, calc(5.5*var(--card-w)));
+  grid-template-rows: repeat(2, calc(1*var(--card-h)));
+  gap: 0.2rem;
+}
+
 .subset {
   display: flex;
   flex-wrap: wrap;
@@ -66,8 +77,8 @@ onUpdated(() => {
   gap: 0.1rem;
 
   & > * {
-    width: 30px;
-    height: 45px;
+    width: var(--card-w);
+    height: var(--card-h);
     margin-bottom: -1rem;
   }
 }

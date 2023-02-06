@@ -33,3 +33,4 @@
     - [ ] Yaku cheatsheat
   - [ ] Game log
   - [ ] Display action messages
+  - [ ] Mobile layout

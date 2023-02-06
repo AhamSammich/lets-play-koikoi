@@ -355,7 +355,7 @@ async function continueGame(bool: boolean, player: string) {
   overflow: hidden;
   display: grid;
   grid-template-columns: 100px 1fr;
-  grid-template-rows: minmax(100px, 200px) 1fr minmax(100px, 200px);
+  grid-template-rows: minmax(75px, 200px) 1fr minmax(75px, 200px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -382,7 +382,7 @@ async function continueGame(bool: boolean, player: string) {
 
 #p1-hand {
   grid-area: p1;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
   position: relative;
 
   &::before {
@@ -398,15 +398,15 @@ async function continueGame(bool: boolean, player: string) {
 
 #p2-hand {
   grid-area: p2;
-  margin-left: 1rem;
-  transform: rotate(180deg);
+  /* margin-right: 1rem; */
+  transform: translate3d(5%, -30%, 0) rotate(180deg);
   pointer-events: none;
 }
 
 #p2-reveal {
   position: absolute;
   top: 20%;
-  left: 50%;
+  right: 20%;
   animation: pickUp 0.5s 1s;
 }
 
@@ -424,6 +424,9 @@ async function continueGame(bool: boolean, player: string) {
   grid-area: field;
   min-width: 320px;
   justify-self: flex-start;
+  @media (width < 500px) or (height < 400px) {
+    transform: scale(0.75);
+  }
 }
 
 .collection {
@@ -433,12 +436,25 @@ async function continueGame(bool: boolean, player: string) {
 
   &#p1-collection {
     right: 0;
-    bottom: 1rem;
+    bottom: 0;
   }
 
   &#p2-collection {
     left: 0;
     top: 0;
+  }
+
+  @media (orientation: portrait) {
+
+    &#p1-collection {
+      right: 0;
+      bottom: 20%;
+    }
+
+    &#p2-collection {
+      left: 0;
+      top: 10%;
+    }
   }
 }
 
