@@ -25,8 +25,8 @@
   - [x] Track scoring
 
 - UI
-  - [ ] Round number
-  - [ ] Scoreboard
+  - [x] Round number
+  - [x] Scoreboard
   - [ ] Highlight possible match
   - [ ] Yaku progress
   - [ ] How To Play
@@ -35,3 +35,4 @@
   - [ ] Game log
   - [ ] Display action messages
   - [x] Mobile layout
+    - [ ] FIX: Overflow
