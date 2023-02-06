@@ -51,68 +51,13 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  width: 100vw;
   max-width: 400px;
-  gap: 0.2rem;
   pointer-events: none;
-}
 
-.modal {
-  background: hsl(0 0% 13% / 0.9);
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  color: white;
-  font-size: x-large;
-  overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    width: 0.2rem;
-    background: transparent;
+  & > * {
+    width: 20%;
+    aspect-ratio: 1 / 1.5;
   }
-
-  &::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, goldenrod, palegoldenrod);
-  }
-}
-
-h1 {
-  font-weight: bold;
-  font-size: larger;
-  text-transform: uppercase;
-}
-
-.btn-bar {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: space-around;
-  pointer-events: all;
-
-  & button {
-    outline: 1px solid yellow;
-    border-radius: 0.2rem;
-    background: firebrick;
-    padding: 0.5em 1em;
-    font-weight: bold;
-    font-size: smaller;
-
-    &:hover {
-      transform: translate3d(0, -5%, 0);
-    }
-  }
-}
-
-.hidden {
-  display: none;
 }
 </style>

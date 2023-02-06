@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useScore1, useScore2 } from "~~/components/composables/game";
 import { Ref } from "vue";
 import {
   checkForWinOrVoid,
@@ -7,7 +8,7 @@ import {
   removeSetFromArr,
 } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "deck-draw"]);
+const emits = defineEmits(["match-select", "deck-draw", "next-round"]);
 
 const hand1: Ref<string[]> = ref([]);
 const hand2: Ref<string[]> = ref([]);
@@ -22,10 +23,10 @@ const yaku1: Ref<Dict> = ref({});
 const yaku2: Ref<Dict> = ref({});
 const newYaku: Ref<MultiDict> = ref({});
 
-const winningYaku: Ref<Dict> = ref({});
-const winner = ref("");
+const winningYaku: Ref<Dict | null> = ref({});
+const winner: Ref<string | null> = ref("");
 
-const scoreboard: Record<string, number> = { p1: 0, p2: 0 };
+const scoreboard: Record<string, Ref<number>> = { p1: useScore1(), p2: useScore2() };
 const selectedCard = ref("");
 const useActiveP = useState('activeP', () => "p1");
 
@@ -49,8 +50,9 @@ async function resetRefs() {
 }
 
 async function newGame(score?: number) {
-  if (score && winner.value) scoreboard[winner.value] += score;
+  if (score && winner.value) scoreboard[winner.value].value += score;
   activeHand = !winner.value || winner.value === "p1" ? hand1 : hand2;
+  emits("next-round");
   await resetRefs();
   selectedCard.value = "";
   calledKoiKoi = "";
@@ -68,7 +70,7 @@ async function checkForInstantYaku(hand: Ref<string[]>): Promise<void> {
     return;
   }
   if (yaku) {
-    winningYaku.value[yaku] = hand.value;
+    if (winningYaku.value) winningYaku.value[yaku] = hand.value;
     winner.value = hand === hand1 ? "p1" : "p2";
     return;
   }
@@ -80,7 +82,6 @@ function dealFirstHands(cards: string[]): void {
   field.value = cards.slice(16);
   [hand1, hand2, field].forEach(checkForInstantYaku);
   draw.value = false;
-  console.log(scoreboard);
   if (activeHand === hand2) aiFindMatch();
 }
 
@@ -104,7 +105,8 @@ function checkForDraw() {
   draw.value = !draw.value;
   if (draw.value === true) return;
   if (activeHand.value.length === 0) {
-    newGame();
+    winningYaku.value = null;
+    winner.value = null;
     return;
   }
   activeHand = activeHand === hand1 ? hand2 : hand1;
@@ -190,7 +192,6 @@ async function handleMatch(cards: string[]) {
   match.value.splice(0);
   let hand = draw.value ? field : activeHand;
   let matchedCards = new Set([selectedCard.value, ...cards]);
-  // let matchedCards = new Set([...cards]);
 
   [field.value, hand.value] = await Promise.all<Promise<string[]>[]>([
     // Remove matched card from field
@@ -263,7 +264,7 @@ async function continueGame(bool: boolean, player: string) {
 <template>
   <div id="tabletop">
     <!-- TOP ROW -->
-    <div id="p2-hand" class="flex-none justify-center items-center">
+    <div id="p2-hand" class="">
       <Hand
         :is-active="activeHand === hand2"
         player="p2"
@@ -305,7 +306,7 @@ async function continueGame(bool: boolean, player: string) {
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
-      class="flex-none justify-center items-center w-full"
+      class="flex-none justify-center items-center w-full ml-4"
       :data-msg="`${activeHand === hand1 && !draw ? 'Play a card' : ''}`"
     >
       <Hand
@@ -345,13 +346,13 @@ async function continueGame(bool: boolean, player: string) {
       </div>
     </template>
 
-    <template v-if="winner && winningYaku">
+    <template v-if="winner !== '' && (winningYaku || winningYaku === null)">
       <div id="end-screen">
         <ScoreSheet
           :player="winner"
           :yakuList="winningYaku"
           :koikoi="!!calledKoiKoi && winner != calledKoiKoi"
-          :show-modal="!!winner"
+          :show-modal="winner !== ''"
           @reset="(score: number) => newGame(score)"
         />
       </div>
@@ -361,13 +362,15 @@ async function continueGame(bool: boolean, player: string) {
 
 <style lang="postcss">
 #tabletop {
+  width: 100vw;
   width: 100dvw;
+  height: 100vh;
   height: 100dvh;
   background-color: rgb(22 101 52);
   overflow: hidden;
   display: grid;
   grid-template-columns: 100px 1fr;
-  grid-template-rows: minmax(100px, 200px) 1fr minmax(100px, 200px);
+  grid-template-rows: minmax(75px, 200px) 1fr minmax(75px, 200px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -385,16 +388,14 @@ async function continueGame(bool: boolean, player: string) {
 
 #reveal {
   position: absolute;
-  top: 50%;
-  left: 0;
-  z-index: 0;
+  top: 40%;
+  left: 25px;
   pointer-events: none;
   animation: pickUp 0.5s 1s;
 }
 
 #p1-hand {
   grid-area: p1;
-  margin-left: 1rem;
   position: relative;
 
   &::before {
@@ -410,15 +411,23 @@ async function continueGame(bool: boolean, player: string) {
 
 #p2-hand {
   grid-area: p2;
-  margin-left: 1rem;
-  transform: rotate(180deg);
   pointer-events: none;
+  position: relative;
+  margin-right: 1rem;
+
+  & > * {
+    position: absolute;
+    right: 0;
+    top: -50px;
+    transform-origin: bottom;
+    rotate: 180deg;
+  }
 }
 
 #p2-reveal {
   position: absolute;
   top: 20%;
-  left: 50%;
+  right: 10%;
   animation: pickUp 0.5s 1s;
 }
 
@@ -434,8 +443,13 @@ async function continueGame(bool: boolean, player: string) {
 
 #field {
   grid-area: field;
-  min-width: 320px;
+  min-width: 350px;
   justify-self: flex-start;
+  margin-left: 25px;
+  transform-origin: left;
+  @media (width < 500px) or (height < 400px) {
+    scale: 0.75;
+  }
 }
 
 .collection {
@@ -445,12 +459,74 @@ async function continueGame(bool: boolean, player: string) {
 
   &#p1-collection {
     right: 0;
-    bottom: 1rem;
+    bottom: 0;
   }
 
   &#p2-collection {
     left: 0;
     top: 0;
+  }
+
+  @media (orientation: portrait) {
+    &#p1-collection {
+      right: 0;
+      bottom: 15%;
+    }
+
+    &#p2-collection {
+      left: 0;
+      top: 10%;
+    }
+  }
+}
+
+.modal {
+  background: hsl(0 0% 13% / 0.9);
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  color: white;
+  font-size: x-large;
+
+  & .btn-bar {
+    width: 360px;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: all;
+
+    & button {
+      outline: 1px solid yellow;
+      border-radius: 0.2rem;
+      background: firebrick;
+      padding: 0.5em 1em;
+      font-weight: bold;
+      font-size: smaller;
+
+      &:hover {
+        transform: translate3d(0, -5%, 0);
+      }
+    }
+  }
+
+  & h1,
+  & h2 {
+    font-weight: bold;
+    font-size: larger;
+    text-transform: uppercase;
+  }
+
+  & h2 {
+    font-size: inherit;
   }
 }
 

@@ -19,19 +19,19 @@ function registerYaku(yakuArr: string[]) {
 }
 
 onBeforeUpdate(() => {
+  if (props.cards.length === 0) yakuList.clear();
   sortedCards = sortCardsByType(props.cards);
 });
 
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
   yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
-  console.log(yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
 });
 </script>
 
 <template>
-  <div :id="`${player}-collected`">
+  <div :id="`${player}-collected`" class="collected">
     <div :id="`${player}-brights`" class="subset">
       <template v-for="card in sortedCards['brights']" :key="card">
         <Card :name="card" />
@@ -56,17 +56,29 @@ onUpdated(() => {
 </template>
 
 <style scoped lang="postcss">
+.collected {
+  --card-w: 28px;
+  --card-h: calc(var(--card-w)*1.5);
+  display: grid;
+  grid-template-columns: repeat(2, calc(5.5*var(--card-w)));
+  grid-template-rows: repeat(2, calc(1.4*var(--card-h)));
+  gap: 0.2rem;
+}
+
 .subset {
   display: flex;
   flex-wrap: wrap;
   max-width: 180px;
   min-height: 50px;
-  gap: 0.1rem;
+  /* gap: 0.1rem; */
+  overflow: hidden;
 
   & > * {
-    width: 30px;
-    height: 45px;
-    margin-bottom: -1rem;
+    width: var(--card-w);
+    height: var(--card-h);
+  }
+  & > *:nth-child(n+6) {
+    margin-top: calc(-0.6 * var(--card-h));
   }
 }
 </style>

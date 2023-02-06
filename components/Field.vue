@@ -18,13 +18,25 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 .field {
-  max-height: 250px;
+  max-width: 350px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 0.2rem;
   overflow: visible;
   pointer-events: none;
+
+  @media (orientation: portrait) {
+    flex-direction: row;
+
+    & :nth-child(5) {
+      margin-left: 10%;
+    }
+
+    & :nth-child(n+5) {
+      margin-top: -10%;
+    }
+  }
 }
 </style>

@@ -22,8 +22,8 @@ function handleClick(e: Event) {
 
 <style lang="postcss">
 .card {
-  width: 75px;
-  height: 113px;
+  width: clamp(75px, 1vw, 40px);
+  aspect-ratio: 2 / 3;
   outline: 1px solid #111;
   border-radius: 0.2rem;
   transition: transform 0.3s 0.1s;
