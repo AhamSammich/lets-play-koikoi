@@ -15,7 +15,6 @@ function registerYaku(yakuArr: string[]) {
   yakuArr.forEach((yakuName) =>
     yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards))
   );
-  console.dir(yakuList);
   emits("new-yaku", yakuArr, props.player);
 }
 
@@ -27,7 +26,6 @@ onBeforeUpdate(() => {
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
   yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
-  console.log(`%c${props.player.toUpperCase()} found: `, 'color: pink', yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
 });
 </script>

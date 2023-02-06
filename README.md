@@ -11,6 +11,7 @@
   - [x] Yaku determination
     - [x] FIX: Handle simultaneous yaku
     - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
+    - [ ] FIX: Check for yaku after deck draw
   - [x] Check for instant win(hand)/re-deal(field) (full suit or 4 pairs)
 
 - GAME STATE
@@ -33,4 +34,4 @@
     - [ ] Yaku cheatsheat
   - [ ] Game log
   - [ ] Display action messages
-  - [ ] Mobile layout
+  - [x] Mobile layout

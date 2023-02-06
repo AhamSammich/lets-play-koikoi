@@ -18,7 +18,7 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 .field {
-  /* max-height: 250px; */
+  max-width: 350px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
