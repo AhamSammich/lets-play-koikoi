@@ -51,8 +51,13 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  width: 100vw;
   max-width: 400px;
-  gap: 0.2rem;
   pointer-events: none;
+
+  & > * {
+    width: 20%;
+    aspect-ratio: 1 / 1.5;
+  }
 }
 </style>

@@ -32,7 +32,7 @@ function checkForMatch(cardName: string) {
 <style lang="postcss">
 @container (width < 900px) {
   .p-card {
-    margin-right: -2rem;
+    margin-right: -1.5rem;
     margin-bottom: -3rem;
   }
 }
@@ -47,7 +47,8 @@ function checkForMatch(cardName: string) {
   justify-content: flex-start;
   align-items: center;
   gap: 0.2rem;
-  transform: scale(0.9);
+  transform-origin: left;
+  scale: 0.8;
   animation: fanOut 2s;
 }
 

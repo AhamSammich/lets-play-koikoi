@@ -251,7 +251,7 @@ async function continueGame(bool: boolean, player: string) {
 <template>
   <div id="tabletop">
     <!-- TOP ROW -->
-    <div id="p2-hand" class="flex-none justify-center items-center">
+    <div id="p2-hand" class="">
       <Hand
         :is-active="activeHand === hand2"
         player="p2"
@@ -293,7 +293,7 @@ async function continueGame(bool: boolean, player: string) {
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
-      class="flex-none justify-center items-center w-full"
+      class="flex-none justify-center items-center w-full ml-4"
       :data-msg="`${activeHand === hand1 && !draw ? 'Play a card' : ''}`"
     >
       <Hand
@@ -349,7 +349,9 @@ async function continueGame(bool: boolean, player: string) {
 
 <style lang="postcss">
 #tabletop {
+  width: 100vw;
   width: 100dvw;
+  height: 100vh;
   height: 100dvh;
   background-color: rgb(22 101 52);
   overflow: hidden;
@@ -381,7 +383,6 @@ async function continueGame(bool: boolean, player: string) {
 
 #p1-hand {
   grid-area: p1;
-  /* margin-left: 1rem; */
   position: relative;
 
   &::before {
@@ -397,15 +398,23 @@ async function continueGame(bool: boolean, player: string) {
 
 #p2-hand {
   grid-area: p2;
-  /* margin-right: 1rem; */
-  transform: translate3d(5%, -30%, 0) rotate(180deg);
   pointer-events: none;
+  position: relative;
+  margin-right: 1rem;
+
+  & > * {
+    position: absolute;
+    right: 0;
+    top: -50px;
+    transform-origin: bottom;
+    rotate: 180deg;
+  }
 }
 
 #p2-reveal {
   position: absolute;
   top: 20%;
-  right: 20%;
+  right: 10%;
   animation: pickUp 0.5s 1s;
 }
 
@@ -421,12 +430,12 @@ async function continueGame(bool: boolean, player: string) {
 
 #field {
   grid-area: field;
-  min-width: 320px;
+  min-width: 350px;
   justify-self: flex-start;
   margin-left: 25px;
   transform-origin: left;
   @media (width < 500px) or (height < 400px) {
-    transform: scale(0.75);
+    scale: 0.75;
   }
 }
 
@@ -449,7 +458,7 @@ async function continueGame(bool: boolean, player: string) {
 
     &#p1-collection {
       right: 0;
-      bottom: 20%;
+      bottom: 15%;
     }
 
     &#p2-collection {
@@ -461,7 +470,7 @@ async function continueGame(bool: boolean, player: string) {
 
 .modal {
   background: hsl(0 0% 13% / 0.9);
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   height: 100dvh;
   padding: 2rem;
@@ -478,8 +487,7 @@ async function continueGame(bool: boolean, player: string) {
   font-size: x-large;
 
   & .btn-bar {
-    width: 100%;
-    max-width: 400px;
+    width: 360px;
     display: flex;
     justify-content: space-around;
     pointer-events: all;
