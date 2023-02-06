@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useScore1, useScore2 } from "~~/components/composables/game";
 import { Ref } from "vue";
 import {
   checkForWinOrVoid,
@@ -7,7 +8,7 @@ import {
   removeSetFromArr,
 } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "deck-draw"]);
+const emits = defineEmits(["match-select", "deck-draw", "next-round"]);
 
 const hand1: Ref<string[]> = ref([]);
 const hand2: Ref<string[]> = ref([]);
@@ -24,7 +25,7 @@ const newYaku: Ref<MultiDict> = ref({});
 const winningYaku: Ref<Dict | null> = ref({});
 const winner: Ref<string | null> = ref("");
 
-const scoreboard: Record<string, number> = { p1: 0, p2: 0 };
+const scoreboard: Record<string, Ref<number>> = { p1: useScore1(), p2: useScore2() };
 const selectedCard = ref("");
 let activeHand = hand1;
 let WAIT = false;
@@ -43,8 +44,9 @@ async function resetRefs() {
 }
 
 async function newGame(score?: number) {
-  if (score && winner.value) scoreboard[winner.value] += score;
+  if (score && winner.value) scoreboard[winner.value].value += score;
   activeHand = !winner.value || winner.value === "p1" ? hand1 : hand2;
+  emits("next-round");
   await resetRefs();
   selectedCard.value = "";
   calledKoiKoi = "";
@@ -73,7 +75,6 @@ function dealFirstHands(cards: string[]): void {
   field.value = cards.slice(16);
   [hand1, hand2, field].forEach(checkForInstantYaku);
   draw.value = false;
-  console.log(scoreboard);
   if (activeHand === hand2) aiFindMatch();
 }
 
@@ -180,7 +181,6 @@ async function handleMatch(cards: string[]) {
   match.value.splice(0);
   let hand = draw.value ? field : activeHand;
   let matchedCards = new Set([selectedCard.value, ...cards]);
-  // let matchedCards = new Set([...cards]);
 
   [field.value, hand.value] = await Promise.all<Promise<string[]>[]>([
     // Remove matched card from field
@@ -455,7 +455,6 @@ async function continueGame(bool: boolean, player: string) {
   }
 
   @media (orientation: portrait) {
-
     &#p1-collection {
       right: 0;
       bottom: 15%;
