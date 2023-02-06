@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useScore1, useScore2 } from "~~/components/composables/game";
+import { useActiveP, useScore1, useScore2 } from "~~/components/composables/game";
 import { Ref } from "vue";
 import {
   checkForWinOrVoid,
@@ -10,15 +10,14 @@ import {
 
 const emits = defineEmits(["match-select", "deck-draw", "next-round"]);
 
-const hand1: Ref<string[]> = ref([]);
-const hand2: Ref<string[]> = ref([]);
-const field: Ref<string[]> = ref([]);
+const hand: Record<string, Ref<string[]>> = { p1: ref([]), p2: ref([]), field: ref([]) };
 const match: Ref<string[]> = ref([]);
 const draw: Ref<boolean | null> = ref(false);
 
-const collection: Record<string, string[]> = reactive({ p1: <string[]>[], p2: <string[]>[] })
-// const collection1: Ref<string[]> = ref([]);
-// const collection2: Ref<string[]> = ref([]);
+const collection: Record<string, string[]> = reactive({
+  p1: <string[]>[],
+  p2: <string[]>[],
+});
 const yaku1: Ref<Dict> = ref({});
 const yaku2: Ref<Dict> = ref({});
 const newYaku: Ref<MultiDict> = ref({});
@@ -28,9 +27,9 @@ const winner: Ref<string | null> = ref("");
 
 const scoreboard: Record<string, Ref<number>> = { p1: useScore1(), p2: useScore2() };
 const selectedCard = ref("");
-const useActiveP = useState('activeP', () => "p1");
+const activeP = useActiveP();
 
-let activeHand = hand1;
+const activeHand = () => hand[activeP.value];
 let WAIT = false;
 let calledKoiKoi = "";
 
@@ -39,9 +38,7 @@ async function sleep(ms = 1000) {
 }
 
 async function resetRefs() {
-  [hand1, hand2, field, match,].forEach(
-    (refVar) => (refVar.value = [])
-  );
+  [hand.p1, hand.p2, hand.field, match].forEach((refVar) => (refVar.value = []));
   [yaku1, yaku2, newYaku, winningYaku].forEach((refVar) => (refVar.value = {}));
   collection.p1 = [];
   collection.p2 = [];
@@ -51,7 +48,7 @@ async function resetRefs() {
 
 async function newGame(score?: number) {
   if (score && winner.value) scoreboard[winner.value].value += score;
-  activeHand = !winner.value || winner.value === "p1" ? hand1 : hand2;
+  if (winner.value) activeP.value = winner.value;
   emits("next-round");
   await resetRefs();
   selectedCard.value = "";
@@ -61,28 +58,28 @@ async function newGame(score?: number) {
   return;
 }
 
-async function checkForInstantYaku(hand: Ref<string[]>): Promise<void> {
+async function checkForInstantYaku(checkHand: Ref<string[]>): Promise<void> {
   if (WAIT) return;
-  let yaku = checkForWinOrVoid(hand.value);
+  let yaku = checkForWinOrVoid(checkHand.value);
   if (yaku === null) return;
-  if (yaku && hand === field) {
+  if (yaku && checkHand === hand.field) {
     newGame();
     return;
   }
   if (yaku) {
-    if (winningYaku.value) winningYaku.value[yaku] = hand.value;
-    winner.value = hand === hand1 ? "p1" : "p2";
+    if (winningYaku.value) winningYaku.value[yaku] = checkHand.value;
+    winner.value = activeP.value;
     return;
   }
 }
 
 function dealFirstHands(cards: string[]): void {
-  hand1.value = cards.slice(0, 8);
-  hand2.value = cards.slice(8, 16);
-  field.value = cards.slice(16);
-  [hand1, hand2, field].forEach(checkForInstantYaku);
+  hand.p1.value = cards.slice(0, 8);
+  hand.p2.value = cards.slice(8, 16);
+  hand.field.value = cards.slice(16);
+  [hand.p1, hand.p2, hand.field].forEach(checkForInstantYaku);
   draw.value = false;
-  if (activeHand === hand2) aiFindMatch();
+  if (activeP.value === "p2") aiFindMatch();
 }
 
 async function setSelectedCard(cardName: string): Promise<void> {
@@ -104,22 +101,22 @@ function checkForDraw() {
   selectedCard.value = "";
   draw.value = !draw.value;
   if (draw.value === true) return;
-  if (activeHand.value.length === 0) {
+  if (activeHand().value.length === 0) {
     winningYaku.value = null;
     winner.value = null;
     return;
   }
-  activeHand = activeHand === hand1 ? hand2 : hand1;
-  console.log(`It's Player${activeHand === hand1 ? "1" : "2"}'s turn...`);
-  if (activeHand === hand2) aiFindMatch();
+  activeP.value = activeP.value === "p1" ? "p2" : "p1";
+  console.log(`It's Player${activeHand() === hand.p1 ? "1" : "2"}'s turn...`);
+  if (activeP.value === "p2") aiFindMatch();
 }
 
 function aiFindMatch() {
   let aiCard = "";
   let matchedCards: string[] = [];
-  for (let card of hand2.value) {
+  for (let card of hand.p2.value) {
     aiCard = card;
-    matchedCards = matchCardInArr(card, field.value);
+    matchedCards = matchCardInArr(card, hand.field.value);
     if (matchedCards.length) {
       console.log(`%cPlayer 2 matched ${aiCard} with ${matchedCards}`, "color: yellow;");
       break;
@@ -146,7 +143,7 @@ async function aiSelectMatch(cardName: string, matchedCards: string[]) {
 
 async function getMatch(cardName: string): Promise<void> {
   await setSelectedCard(cardName);
-  let matches = matchCardInArr(cardName, field.value);
+  let matches = matchCardInArr(cardName, hand.field.value);
   if (matches.length === 0) {
     noMatch(cardName);
     return;
@@ -159,7 +156,7 @@ async function getMatch(cardName: string): Promise<void> {
     return;
   }
   // AI player has 2 possible matches from the deck draw
-  if (draw.value && activeHand === hand2) {
+  if (draw.value && activeP.value === "p2") {
     // Select the first match
     handleMatch(matches.slice(0, 1));
     return;
@@ -173,8 +170,8 @@ function noMatch(cardName: string) {
   // Remove selected card from hand and add to field
   let thrownCard = draw.value
     ? cardName
-    : activeHand.value.splice(activeHand.value.indexOf(cardName), 1)[0];
-  field.value.push(thrownCard);
+    : activeHand().value.splice(activeHand().value.indexOf(cardName), 1)[0];
+  hand.field.value.push(thrownCard);
   console.log(`${thrownCard} placed on the field.`);
   checkForDraw();
 }
@@ -190,32 +187,26 @@ function showMatch(cards: string[]): void {
 async function handleMatch(cards: string[]) {
   // Clear matches and hide modal
   match.value.splice(0);
-  let hand = draw.value ? field : activeHand;
+  let playHand = draw.value ? hand.field : activeHand();
   let matchedCards = new Set([selectedCard.value, ...cards]);
 
-  [field.value, hand.value] = await Promise.all<Promise<string[]>[]>([
+  [hand.field.value, playHand.value] = await Promise.all<Promise<string[]>[]>([
     // Remove matched card from field
     new Promise((resolve) => {
-      setTimeout(() => resolve(removeSetFromArr(matchedCards, field.value)), 200);
+      setTimeout(() => resolve(removeSetFromArr(matchedCards, hand.field.value)), 200);
     }),
     // Remove selected card from hand
     new Promise((resolve) => {
-      setTimeout(() => resolve(removeSetFromArr(matchedCards, hand.value)), 200);
+      setTimeout(() => resolve(removeSetFromArr(matchedCards, playHand.value)), 200);
     }),
   ]);
 
-  let collected = await collectCards(
-    matchedCards,
-    activeHand === hand1 ? 'p1' : 'p2'
-  );
+  let collected = await collectCards(matchedCards, activeP.value);
   if (collected) checkForDraw();
   return;
 }
 
-async function collectCards(
-  cardSet: Set<string>,
-  player: string
-): Promise<boolean> {
+async function collectCards(cardSet: Set<string>, player: string): Promise<boolean> {
   try {
     collection[player] = [...collection[player], ...cardSet];
   } catch (err) {
@@ -245,7 +236,7 @@ async function showYaku(yakuNames: string[], player: string) {
 async function continueGame(bool: boolean, player: string) {
   if (player === "p2") {
     let chance = Math.floor(Math.random() * 100);
-    let factor = hand2.value.length * 10;
+    let factor = hand.p2.value.length * 10;
     bool = chance < factor;
   }
   newYaku.value = {};
@@ -266,13 +257,13 @@ async function continueGame(bool: boolean, player: string) {
     <!-- TOP ROW -->
     <div id="p2-hand" class="">
       <Hand
-        :is-active="activeHand === hand2"
+        :is-active="activeP === 'p2'"
         player="p2"
-        :cards="hand2"
+        :cards="hand.p2.value"
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
-    <template v-if="activeHand === hand2 && selectedCard && !draw">
+    <template v-if="(activeP === 'p2') && selectedCard && !draw">
       <div id="p2-reveal">
         <Card :name="selectedCard" />
       </div>
@@ -289,7 +280,7 @@ async function continueGame(bool: boolean, player: string) {
     <div id="deck" class="flex justify-center items-center">
       <Deck
         :draw-card="draw"
-        :ai-draw="activeHand === hand2"
+        :ai-draw="activeP === 'p2'"
         @draw="(cardName: string) => revealCard(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
@@ -300,19 +291,19 @@ async function continueGame(bool: boolean, player: string) {
       </template>
     </div>
     <div id="field">
-      <Field :cards="field" />
+      <Field :cards="hand.field.value" />
     </div>
 
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
       class="flex-none justify-center items-center w-full ml-4"
-      :data-msg="`${activeHand === hand1 && !draw ? 'Play a card' : ''}`"
+      :data-msg="`${activeP === 'p1' && !draw ? 'Play a card' : ''}`"
     >
       <Hand
-        :is-active="activeHand === hand1 && !draw"
+        :is-active="activeP === 'p1' && !draw"
         player="p1"
-        :cards="hand1"
+        :cards="hand.p1.value"
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
@@ -340,7 +331,7 @@ async function continueGame(bool: boolean, player: string) {
           :show-modal="!!Object.keys(newYaku).length"
           :player="<string>newYaku.player"
           :yakuList="<Dict>newYaku.newList"
-          :koikoi-allowed="!!(activeHand.length || draw)"
+          :koikoi-allowed="!!(activeHand().value.length || draw)"
           @koi-koi="async (bool, player) => await continueGame(bool, player)"
         />
       </div>
@@ -497,6 +488,7 @@ async function continueGame(bool: boolean, player: string) {
   translate: -50% -50%;
   color: white;
   font-size: x-large;
+  z-index: 10;
 
   & .btn-bar {
     width: 360px;
