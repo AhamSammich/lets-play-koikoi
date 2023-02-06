@@ -373,9 +373,8 @@ async function continueGame(bool: boolean, player: string) {
 
 #reveal {
   position: absolute;
-  top: 50%;
-  left: 0;
-  z-index: 2;
+  top: 40%;
+  left: 25px;
   pointer-events: none;
   animation: pickUp 0.5s 1s;
 }
@@ -424,6 +423,8 @@ async function continueGame(bool: boolean, player: string) {
   grid-area: field;
   min-width: 320px;
   justify-self: flex-start;
+  margin-left: 25px;
+  transform-origin: left;
   @media (width < 500px) or (height < 400px) {
     transform: scale(0.75);
   }
@@ -455,6 +456,57 @@ async function continueGame(bool: boolean, player: string) {
       left: 0;
       top: 10%;
     }
+  }
+}
+
+.modal {
+  background: hsl(0 0% 13% / 0.9);
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  color: white;
+  font-size: x-large;
+
+  & .btn-bar {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: all;
+
+    & button {
+      outline: 1px solid yellow;
+      border-radius: 0.2rem;
+      background: firebrick;
+      padding: 0.5em 1em;
+      font-weight: bold;
+      font-size: smaller;
+
+      &:hover {
+        transform: translate3d(0, -5%, 0);
+      }
+    }
+  }
+
+  & h1,
+  & h2 {
+    font-weight: bold;
+    font-size: larger;
+    text-transform: uppercase;
+  }
+
+  & h2 {
+    font-size: inherit;
   }
 }
 

@@ -61,11 +61,9 @@ onUpdated(() => {
 .collected {
   --card-w: 28px;
   --card-h: calc(var(--card-w)*1.5);
-  /* width: inherit;
-  height: inherit; */
   display: grid;
   grid-template-columns: repeat(2, calc(5.5*var(--card-w)));
-  grid-template-rows: repeat(2, calc(1*var(--card-h)));
+  grid-template-rows: repeat(2, calc(1.4*var(--card-h)));
   gap: 0.2rem;
 }
 
@@ -74,12 +72,15 @@ onUpdated(() => {
   flex-wrap: wrap;
   max-width: 180px;
   min-height: 50px;
-  gap: 0.1rem;
+  /* gap: 0.1rem; */
+  overflow: hidden;
 
   & > * {
     width: var(--card-w);
     height: var(--card-h);
-    margin-bottom: -1rem;
+  }
+  & > *:nth-child(n+6) {
+    margin-top: calc(-0.6 * var(--card-h));
   }
 }
 </style>

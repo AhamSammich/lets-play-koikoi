@@ -11,11 +11,12 @@ const emits = defineEmits(["match-select"]);
 <template>
   <div :class="{ modal: true, hidden: !showModal }">
     <template v-if="matchSrc">
+      <h1>{{ matchSrc.replace(/-\d?/g, " ") }}</h1>
       <div id="match-src">
         <Card :name="matchSrc" />
       </div>
     </template>
-    <h1>Select a card to match:</h1>
+    <h2>Select a card to match:</h2>
     <div id="choose-match">
       <template v-for="(card, index) in cards">
         <div :id="`${index}`">
@@ -40,27 +41,5 @@ const emits = defineEmits(["match-select"]);
 
 #match-src {
   pointer-events: none;
-}
-
-.modal {
-  background: hsl(0 0% 13% / 0.95);
-  width: 100%;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  color: white;
-  font-size: x-large;
-  font-weight: bold;
-}
-
-.hidden {
-  display: none;
 }
 </style>

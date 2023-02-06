@@ -101,7 +101,7 @@ onUpdated(async () => {
     remainingCards = await shuffle([...allCards]);
     emits("deal", dealHands());
   }
-  if (props.aiDraw === true && props.drawCard === true) {
+  if (props.drawCard === true) {
     emits("draw", draw());
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
@@ -112,9 +112,7 @@ onUpdated(async () => {
   <div id="deck-progress"></div>
   <div
     class="deck bg-red-600"
-    @click="$emit('draw', draw())"
-    :data-text="drawCard ? aiDraw ? 'Drawing card...' : 'Draw a card!' : ''"
-    :style="`${aiDraw || !drawCard ? 'pointer-events: none;' : ''}`"
+    data-text=""
   ></div>
 </template>
 
