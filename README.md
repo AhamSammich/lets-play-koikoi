@@ -27,6 +27,8 @@
 - UI
   - [x] Round number
   - [x] Scoreboard
+    - [ ] Reposition near deck
+    - [ ] Koi-Koi bonus & oya indicator
   - [ ] Highlight possible match
   - [ ] Yaku progress
   - [ ] How To Play
@@ -35,4 +37,4 @@
   - [ ] Game log
   - [ ] Display action messages
   - [x] Mobile layout
-    - [ ] FIX: Overflow
+    - [x] FIX: Overflow
