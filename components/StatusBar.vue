@@ -9,7 +9,7 @@ const props = defineProps<{
 <template>
   <header
     id="status"
-    class="flex items center justify-between px-4 py-1 fixed top-0 left-0 w-screen bg-gray-900 bg-opacity-50 text-white z-10"
+    class="flex items center justify-between px-4 py-1 fixed top-0 left-0 w-screen bg-gray-900 bg-opacity-50 opacity-25 text-white z-10"
   >
     <p id="p1-score" :class="{ oya: oya === 'p1' }">P1: {{ score.p1 }}</p>
     <p id="round-num">ROUND {{ roundNum }}</p>
@@ -18,6 +18,13 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="postcss">
+#status {
+  transition: opacity 0.5s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
 p {
     font-weight: bold;
 }

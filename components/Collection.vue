@@ -57,18 +57,20 @@ onUpdated(() => {
 
 <style scoped lang="postcss">
 .collected {
-  --card-w: 28px;
+  --card-w: 40px;
   --card-h: calc(var(--card-w)*1.5);
+  --row-w: calc(5.5*var(--card-w));
   display: grid;
-  grid-template-columns: repeat(2, calc(5.5*var(--card-w)));
+  grid-template-columns: repeat(2, var(--row-w));
   grid-template-rows: repeat(2, calc(1.4*var(--card-h)));
   gap: 0.2rem;
+
 }
 
 .subset {
   display: flex;
   flex-wrap: wrap;
-  max-width: 180px;
+  max-width: var(--row-w);
   min-height: 50px;
   /* gap: 0.1rem; */
   overflow: hidden;

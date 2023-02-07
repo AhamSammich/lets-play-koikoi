@@ -255,7 +255,7 @@ async function continueGame(bool: boolean, player: string) {
 <template>
   <div id="tabletop">
     <!-- TOP ROW -->
-    <div id="p2-hand" class="">
+    <div id="p2-hand">
       <Hand
         :is-active="activeP === 'p2'"
         player="p2"
@@ -277,7 +277,7 @@ async function continueGame(bool: boolean, player: string) {
     </div>
 
     <!-- CENTER ROW -->
-    <div id="deck" class="flex justify-center items-center">
+    <div id="deck">
       <Deck
         :draw-card="draw"
         :ai-draw="activeP === 'p2'"
@@ -297,8 +297,8 @@ async function continueGame(bool: boolean, player: string) {
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
-      class="flex-none justify-center items-center w-full ml-4"
-      :data-msg="`${activeP === 'p1' && !draw ? 'Play a card' : ''}`"
+      class=""
+      :data-msg="`${activeP === 'p1' && !draw ? 'Pick a card' : ''}`"
     >
       <Hand
         :is-active="activeP === 'p1' && !draw"
@@ -360,8 +360,8 @@ async function continueGame(bool: boolean, player: string) {
   background-color: rgb(22 101 52);
   overflow: hidden;
   display: grid;
-  grid-template-columns: 100px 1fr;
-  grid-template-rows: minmax(75px, 200px) 1fr minmax(75px, 200px);
+  grid-template-columns: 75px 1fr;
+  grid-template-rows: minmax(75px, 150px) 1fr minmax(75px, 150px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -375,12 +375,13 @@ async function continueGame(bool: boolean, player: string) {
 
 #deck {
   grid-area: deck;
+  transform-origin: left;
 }
 
 #reveal {
   position: absolute;
-  top: 40%;
   left: 25px;
+  width: max-content;
   pointer-events: none;
   animation: pickUp 0.5s 1s;
 }
@@ -397,6 +398,17 @@ async function continueGame(bool: boolean, player: string) {
     right: 50%;
     color: #eee;
     font-weight: bold;
+    font-style: italic;
+    animation: crawl 5s alternate infinite;
+  }
+}
+
+@keyframes crawl {
+  from {
+    transform: translate3d(-25%, 0, 0);
+  }
+  to {
+    transform: translate3d(25%, 0, 0);
   }
 }
 
@@ -436,10 +448,13 @@ async function continueGame(bool: boolean, player: string) {
   grid-area: field;
   min-width: 350px;
   justify-self: flex-start;
-  margin-left: 25px;
   transform-origin: left;
-  @media (width < 500px) or (height < 400px) {
-    scale: 0.75;
+}
+
+@media (width < 500px) or (height < 500px) {
+  
+  #deck, #field {
+    scale: 0.65;
   }
 }
 
@@ -447,15 +462,18 @@ async function continueGame(bool: boolean, player: string) {
   position: absolute;
   margin: 1rem 0.5rem;
   pointer-events: none;
+  transform: scale(0.65);
 
   &#p1-collection {
     right: 0;
     bottom: 0;
+    transform-origin: bottom right;
   }
 
   &#p2-collection {
     left: 0;
     top: 0;
+    transform-origin: top left;
   }
 
   @media (orientation: portrait) {
@@ -476,18 +494,17 @@ async function continueGame(bool: boolean, player: string) {
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   position: fixed;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
   color: white;
-  font-size: x-large;
+  font-size: large;
   z-index: 10;
 
   & .btn-bar {
@@ -505,7 +522,8 @@ async function continueGame(bool: boolean, player: string) {
       font-size: smaller;
 
       &:hover {
-        transform: translate3d(0, -5%, 0);
+        transform: translate3d(0, 5%, 0);
+        box-shadow: 0 0.1rem 0.3rem 0 palegoldenrod;
       }
     }
   }

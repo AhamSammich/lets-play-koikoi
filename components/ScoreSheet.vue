@@ -115,6 +115,7 @@ onBeforeMount(() => {
 .card {
   max-width: 50px;
   max-height: 75px;
+  animation: none;
 
   &:nth-child(n+6) {
     transform: translate3d(0, -50%, 0);
@@ -123,15 +124,17 @@ onBeforeMount(() => {
   &:nth-child(6) {
     margin-left: 10%;
   }
-
 }
 
-@media (width > 800px) {
+@media (width > 800px) or (orientation: landscape) {
   #scoresheet { 
     flex-direction: row;
     flex-wrap: wrap;
   }
 
+  #points h2 {
+    font-size: 32px;
+  }
   .yaku {
     width: 45vw;
   }

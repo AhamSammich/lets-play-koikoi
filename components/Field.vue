@@ -18,7 +18,6 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 .field {
-  max-width: 350px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -27,7 +26,20 @@ const props = defineProps<{
   overflow: visible;
   pointer-events: none;
 
+  @media (orientation: landscape) {
+    gap: 0.2rem;
+
+    & :nth-child(9) {
+      margin-left: 5%;
+    }
+
+    & :nth-child(n+9) {
+      margin-top:  -10%;
+    }
+  }
+
   @media (orientation: portrait) {
+    max-width: 350px;
     flex-direction: row;
 
     & :nth-child(5) {
