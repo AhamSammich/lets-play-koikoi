@@ -19,7 +19,7 @@ function checkForMatch(cardName: string) {
   <div class="hand" :style="`${isActive ? '' : 'pointer-events: none;'}`">
     <template v-for="(card, index) in cards">
       <div
-        :id="`${player || 'field'}-${index}`"
+        :id="`${player}-${index}`"
         :class="`${player ? 'p-card' : 'f-card'}`"
       >
         <!-- Get selected card details and check table for match -->
@@ -30,26 +30,25 @@ function checkForMatch(cardName: string) {
 </template>
 
 <style lang="postcss">
-@container (width < 900px) {
+.hand {
+  height: inherit;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: 0.5rem;
+  transform-origin: left;
+  animation: fanOut 2s;
+}
+
+@media (width < 800px) {
   .p-card {
     margin-right: -1.5rem;
     margin-bottom: -3rem;
   }
-}
-
-
-.hand {
-  container-type: inline-size;
-  width: 100%;
-  height: inherit;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.2rem;
-  transform-origin: left;
-  scale: 0.8;
-  animation: fanOut 2s;
+  .hand {
+    scale: 0.75;
+  }
 }
 
 @keyframes fanOut {

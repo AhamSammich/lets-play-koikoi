@@ -60,7 +60,7 @@ let remainingCards: string[];
 let progressBar: HTMLElement;
 
 function updateProgress(numberLeft: number) {
-  let percent = Math.floor(numberLeft / 48 * 100);
+  let percent = Math.floor((numberLeft / 48) * 100);
   progressBar?.style.setProperty("transform", `scaleY(${percent}%)`);
 }
 
@@ -91,7 +91,7 @@ async function shuffle(cards: string[]): Promise<string[]> {
 }
 
 onMounted(async () => {
-  progressBar = <HTMLElement>document.getElementById('deck-progress');
+  progressBar = <HTMLElement>document.getElementById("deck-progress");
   remainingCards = await shuffle([...allCards]);
   emits("deal", dealHands());
 });
@@ -103,39 +103,32 @@ onUpdated(async () => {
   }
   if (props.drawCard === true) {
     emits("draw", draw());
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 });
 </script>
 
 <template>
   <div id="deck-progress"></div>
-  <div
-    class="deck bg-red-600"
-    data-text=""
-  ></div>
+  <div class="deck bg-red-600"></div>
 </template>
 
 <style scoped lang="postcss">
 #deck-progress {
-  float: left;
-  margin-right: 0.5rem;
-  width: 0.25rem;
-  height: 113px;
-  background: linear-gradient(
-    45deg,
-    goldenrod,
-    palegoldenrod
-  );
+  float: right;
+  margin-left: 0.2rem;
+  width: 0.2rem;
+  height: 100px;
+  background: linear-gradient(45deg, goldenrod, palegoldenrod);
   outline: 0.5px solid #111;
-  transform-origin: bottom;
+  transform-origin: center;
   transition: transform 0.5s;
   border-radius: 0.2rem;
 }
 
 .deck {
   width: 75px;
-  height: 113px;
+  aspect-ratio: 2 / 3;
   cursor: grab;
   outline: 1px solid #111;
   border-radius: 0.2rem;

@@ -107,31 +107,34 @@ onBeforeMount(() => {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  max-width: 300px;
+  max-width: 350px;
   gap: 0.2rem;
   pointer-events: none;
 }
 
 .card {
-  max-width: 50px;
-  max-height: 75px;
+  max-width: 60px;
+  aspect-ratio: 2 / 3;
+  animation: none;
 
   &:nth-child(n+6) {
-    transform: translate3d(0, -50%, 0);
+    transform: translate3d(0, -20%, 0);
   }
   
   &:nth-child(6) {
-    margin-left: 10%;
+    margin-left: 5%;
   }
-
 }
 
-@media (width > 800px) {
+@media (width > 800px) or (orientation: landscape) {
   #scoresheet { 
     flex-direction: row;
     flex-wrap: wrap;
   }
 
+  #points h2 {
+    font-size: 32px;
+  }
   .yaku {
     width: 45vw;
   }
