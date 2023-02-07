@@ -263,7 +263,7 @@ async function continueGame(bool: boolean, player: string) {
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
-    <template v-if="(activeP === 'p2') && selectedCard && !draw">
+    <template v-if="activeP === 'p2' && selectedCard && !draw">
       <div id="p2-reveal">
         <Card :name="selectedCard" />
       </div>
@@ -295,11 +295,7 @@ async function continueGame(bool: boolean, player: string) {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div
-      id="p1-hand"
-      class=""
-      :data-msg="`${activeP === 'p1' && !draw ? 'Pick a card' : ''}`"
-    >
+    <div id="p1-hand" data-msg="">
       <Hand
         :is-active="activeP === 'p1' && !draw"
         player="p1"
@@ -428,9 +424,9 @@ async function continueGame(bool: boolean, player: string) {
 
 #p2-reveal {
   position: absolute;
-  top: 20%;
-  right: 10%;
-  animation: pickUp 0.5s 1s;
+  top: 30%;
+  right: 40%;
+  animation: pickUp 1s 1s;
 }
 
 @keyframes pickUp {
@@ -451,8 +447,8 @@ async function continueGame(bool: boolean, player: string) {
 }
 
 @media (width < 500px) or (height < 500px) {
-  
-  #deck, #field {
+  #deck,
+  #field {
     scale: 0.8;
   }
 }
@@ -505,6 +501,7 @@ async function continueGame(bool: boolean, player: string) {
   color: white;
   font-size: large;
   z-index: 10;
+  transition: all 0.5s;
 
   & .btn-bar {
     width: 360px;
@@ -541,5 +538,6 @@ async function continueGame(bool: boolean, player: string) {
 
 .hidden {
   display: none;
+  scale: 1 0;
 }
 </style>

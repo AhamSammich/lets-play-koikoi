@@ -54,6 +54,7 @@ onBeforeMount(() => {
 
 <style scoped lang="postcss">
 #scoresheet {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

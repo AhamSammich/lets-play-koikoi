@@ -52,6 +52,7 @@ onMounted(async () => {
 
 <style scoped lang="postcss">
 #new-yaku {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -87,7 +88,7 @@ onMounted(async () => {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  max-width: 300px;
+  max-width: 350px;
   gap: 0.2rem;
   pointer-events: none;
   transform-origin: left;
@@ -95,8 +96,8 @@ onMounted(async () => {
 }
 
 .card {
-  max-width: 50px;
-  max-height: 75px;
+  max-width: 60px;
+  aspect-ratio: 2 / 3;
 
   &:nth-child(n+6) {
     transform: translate3d(0, -50%, 0);
