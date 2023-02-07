@@ -11,7 +11,7 @@ import {
 const emits = defineEmits(["match-select", "deck-draw", "next-round"]);
 
 const hand: Record<string, Ref<string[]>> = { p1: ref([]), p2: ref([]), field: ref([]) };
-const match: Ref<string[]> = ref([]);
+const matchSelection: Ref<string[]> = ref([]);
 const draw: Ref<boolean | null> = ref(false);
 
 const collection: Record<string, string[]> = reactive({
@@ -27,8 +27,9 @@ const winner: Ref<string | null> = ref("");
 
 const scoreboard: Record<string, Ref<number>> = { p1: useScore1(), p2: useScore2() };
 const selectedCard = ref("");
-const activeP = useActiveP();
+const matchedCards: Set<string> = new Set();
 
+const activeP = useActiveP();
 const activeHand = () => hand[activeP.value];
 let WAIT = false;
 let calledKoiKoi = "";
@@ -38,7 +39,7 @@ async function sleep(ms = 1000) {
 }
 
 async function resetRefs() {
-  [hand.p1, hand.p2, hand.field, match].forEach((refVar) => (refVar.value = []));
+  [hand.p1, hand.p2, hand.field, matchSelection].forEach((refVar) => (refVar.value = []));
   [yaku1, yaku2, newYaku, winningYaku].forEach((refVar) => (refVar.value = {}));
   collection.p1 = [];
   collection.p2 = [];
@@ -84,7 +85,7 @@ function dealFirstHands(cards: string[]): void {
 
 async function setSelectedCard(cardName: string): Promise<void> {
   selectedCard.value = cardName;
-  await sleep(300);
+  await sleep(500);
   return;
 }
 
@@ -96,11 +97,28 @@ async function revealCard(cardName: string) {
   return;
 }
 
-function checkForDraw() {
+async function collectCards(cardSet: Set<string>, player: string): Promise<boolean> {
+  try {
+    collection[player] = [...collection[player], ...cardSet];
+  } catch (err) {
+    console.error(err);
+    WAIT = true;
+    return false;
+  }
+  selectedCard.value = "";
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return true;
+}
+
+async function checkForDraw() {
   if (WAIT) return;
   selectedCard.value = "";
   draw.value = !draw.value;
   if (draw.value === true) return;
+  
+  let collected = await collectCards(matchedCards, activeP.value);
+  if (collected) matchedCards.clear();
+
   if (activeHand().value.length === 0) {
     winningYaku.value = null;
     winner.value = null;
@@ -181,42 +199,31 @@ function showMatch(cards: string[]): void {
     handleMatch(cards);
     return;
   }
-  match.value.push(...cards);
+  matchSelection.value.push(...cards);
 }
 
 async function handleMatch(cards: string[]) {
   // Clear matches and hide modal
-  match.value.splice(0);
+  matchSelection.value.splice(0);
   let playHand = draw.value ? hand.field : activeHand();
-  let matchedCards = new Set([selectedCard.value, ...cards]);
+  let matches = new Set([selectedCard.value, ...cards]);
 
   [hand.field.value, playHand.value] = await Promise.all<Promise<string[]>[]>([
     // Remove matched card from field
     new Promise((resolve) => {
-      setTimeout(() => resolve(removeSetFromArr(matchedCards, hand.field.value)), 200);
+      setTimeout(() => resolve(removeSetFromArr(matches, hand.field.value)), 200);
     }),
     // Remove selected card from hand
     new Promise((resolve) => {
-      setTimeout(() => resolve(removeSetFromArr(matchedCards, playHand.value)), 200);
+      setTimeout(() => resolve(removeSetFromArr(matches, playHand.value)), 200);
     }),
   ]);
 
-  let collected = await collectCards(matchedCards, activeP.value);
-  if (collected) checkForDraw();
+  // Save cards for collection at end of turn
+  matches.forEach(card => matchedCards.add(card));
+  await sleep(500);
+  checkForDraw();
   return;
-}
-
-async function collectCards(cardSet: Set<string>, player: string): Promise<boolean> {
-  try {
-    collection[player] = [...collection[player], ...cardSet];
-  } catch (err) {
-    console.error(err);
-    WAIT = true;
-    return false;
-  }
-  selectedCard.value = "";
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return true;
 }
 
 async function showYaku(yakuNames: string[], player: string) {
@@ -252,6 +259,10 @@ async function continueGame(bool: boolean, player: string) {
 }
 </script>
 
+////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// TEMPLATE //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
 <template>
   <div id="tabletop">
     <!-- TOP ROW -->
@@ -263,7 +274,7 @@ async function continueGame(bool: boolean, player: string) {
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
-    <template v-if="(activeP === 'p2') && selectedCard && !draw">
+    <template v-if="activeP === 'p2' && selectedCard && !draw">
       <div id="p2-reveal">
         <Card :name="selectedCard" />
       </div>
@@ -319,8 +330,8 @@ async function continueGame(bool: boolean, player: string) {
     <div id="match">
       <MatchSelect
         :match-src="selectedCard"
-        :cards="match"
-        :show-modal="match.length > 0"
+        :cards="matchSelection"
+        :show-modal="matchSelection.length > 0"
         @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
       />
     </div>
@@ -350,6 +361,10 @@ async function continueGame(bool: boolean, player: string) {
     </template>
   </div>
 </template>
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////// STYLE //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 <style lang="postcss">
 #tabletop {
@@ -451,8 +466,8 @@ async function continueGame(bool: boolean, player: string) {
 }
 
 @media (width < 500px) or (height < 500px) {
-  
-  #deck, #field {
+  #deck,
+  #field {
     scale: 0.8;
   }
 }
