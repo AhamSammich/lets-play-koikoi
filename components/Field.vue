@@ -21,19 +21,20 @@ const props = defineProps<{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 500px;
   align-items: flex-start;
-  gap: 0.2rem;
+  gap: 0.3rem;
   overflow: visible;
   pointer-events: none;
 
   @media (orientation: landscape) {
-    gap: 0.2rem;
+    gap: 0.3rem;
 
-    & :nth-child(9) {
+    & :nth-child(7) {
       margin-left: 5%;
     }
 
-    & :nth-child(n+9) {
+    & :nth-child(n+7) {
       margin-top:  -10%;
     }
   }

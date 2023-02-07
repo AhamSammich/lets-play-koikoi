@@ -122,9 +122,11 @@ onMounted(async () => {
 @keyframes spreadLeft {
   from {
     scale: 0 1;
+    opacity: 0;
   }
   to {
     scale: 1 1;
+    opacity: 1;
   }
 }
 </style>

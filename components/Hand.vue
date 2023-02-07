@@ -47,7 +47,7 @@ function checkForMatch(cardName: string) {
     margin-bottom: -3rem;
   }
   .hand {
-    scale: 0.6;
+    scale: 0.75;
   }
 }
 

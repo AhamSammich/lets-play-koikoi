@@ -42,5 +42,6 @@ const emits = defineEmits(["match-select"]);
 #match-src {
   pointer-events: none;
   animation: none;
+  width: 50px;
 }
 </style>

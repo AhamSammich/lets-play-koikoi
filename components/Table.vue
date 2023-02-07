@@ -355,13 +355,13 @@ async function continueGame(bool: boolean, player: string) {
 #tabletop {
   width: 100vw;
   width: 100dvw;
-  height: 100vh;
-  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: rgb(22 101 52);
   overflow: hidden;
   display: grid;
   grid-template-columns: 75px 1fr;
-  grid-template-rows: minmax(75px, 150px) 1fr minmax(75px, 150px);
+  grid-template-rows: minmax(75px, 150px) minmax(200px, 1fr) minmax(75px, 150px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -390,17 +390,17 @@ async function continueGame(bool: boolean, player: string) {
   grid-area: p1;
   position: relative;
 
-  &::before {
+  /* &::before {
     content: attr(data-msg);
     display: block;
     position: absolute;
-    bottom: 75%;
-    right: 50%;
+    bottom: 45%;
+    right: 25%;
     color: #eee;
     font-weight: bold;
     font-style: italic;
     animation: crawl 5s alternate infinite;
-  }
+  } */
 }
 
 @keyframes crawl {
@@ -423,7 +423,6 @@ async function continueGame(bool: boolean, player: string) {
     right: 0;
     top: -50px;
     transform-origin: bottom;
-    rotate: 180deg;
   }
 }
 
@@ -454,7 +453,7 @@ async function continueGame(bool: boolean, player: string) {
 @media (width < 500px) or (height < 500px) {
   
   #deck, #field {
-    scale: 0.65;
+    scale: 0.8;
   }
 }
 
