@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   drawCard: boolean | null;
-  aiDraw?: boolean;
 }>();
 const emits = defineEmits(["deal", "draw"]);
 

@@ -268,7 +268,6 @@ async function continueGame(bool: boolean, player: string) {
     <!-- TOP ROW -->
     <div id="p2-hand">
       <Hand
-        :is-active="activeP === 'p2'"
         player="p2"
         :cards="hand.p2.value"
         @check-match="(cardName: string) => getMatch(cardName)"
@@ -291,7 +290,6 @@ async function continueGame(bool: boolean, player: string) {
     <div id="deck">
       <Deck
         :draw-card="draw"
-        :ai-draw="activeP === 'p2'"
         @draw="(cardName: string) => revealCard(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
@@ -306,9 +304,8 @@ async function continueGame(bool: boolean, player: string) {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div id="p1-hand">
+    <div id="p1-hand" :class="{ inactive: activeP != 'p1'}">
       <Hand
-        :is-active="activeP === 'p1' && !draw"
         player="p1"
         :cards="hand.p1.value"
         @check-match="(cardName: string) => getMatch(cardName)"
@@ -366,15 +363,14 @@ async function continueGame(bool: boolean, player: string) {
 
 <style lang="postcss">
 #tabletop {
-  width: 100vw;
-  width: 100dvw;
+  width: 100%;
   min-height: 420px;
   height: 100%;
   max-height: 800px;
   background-color: var(--tbl-green);
   display: grid;
   grid-template-columns: 75px 1fr;
-  grid-template-rows: minmax(75px, 125px) minmax(200px, 1fr) minmax(75px, 125px);
+  grid-template-rows: minmax(75px, 200px) minmax(200px, 1fr) minmax(75px, 200px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -383,6 +379,10 @@ async function continueGame(bool: boolean, player: string) {
   & > * {
     display: flex;
     align-items: center;
+  }
+
+  @media (orientation: landscape) {
+    grid-template-rows: minmax(75px, 125px) minmax(200px, 1fr) minmax(75px, 125px);
   }
 }
 
@@ -393,7 +393,8 @@ async function continueGame(bool: boolean, player: string) {
 
 #reveal {
   position: absolute;
-  left: 25px;
+  left: 5px;
+  top: 5px;
   width: max-content;
   pointer-events: none;
   animation: pickUp 0.5s 1s;
@@ -402,26 +403,27 @@ async function continueGame(bool: boolean, player: string) {
 #p1-hand {
   grid-area: p1;
   position: relative;
+
+  &.inactive {
+    pointer-events: none;
+  }
 }
 
 #p2-hand {
   grid-area: p2;
   pointer-events: none;
   position: relative;
-  margin-right: 1rem;
 
   & > * {
     position: absolute;
     right: 0;
-    top: -50px;
-    transform-origin: bottom;
   }
 }
 
 #p2-reveal {
   position: absolute;
-  top: 30%;
-  right: 40%;
+  top: 25%;
+  right: 25%;
   animation: pickUp 1s 1s;
 }
 

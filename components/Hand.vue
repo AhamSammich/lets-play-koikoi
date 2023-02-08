@@ -1,28 +1,29 @@
 <script setup lang="ts">
+import { useActiveP } from "~~/components/composables/game";
 const props = defineProps<{
-  isActive: boolean;
   player: string;
   cards: string[];
 }>();
 
 // Emit card detail to Table
 const emits = defineEmits(["check-match", "set-selected"]);
+const activeP = useActiveP();
 
 // If match, props.cards will be updated
 function checkForMatch(cardName: string) {
-  if (cardName == null || props.isActive === false) return;
+  if (cardName == null || activeP.value !== "p1") return;
   emits("check-match", cardName);
 }
 </script>
 
 <template>
-  <div class="hand" :style="`${isActive ? '' : 'pointer-events: none;'}`">
-    <template v-for="(card, index) in cards">
-      <div :id="`${player}-${index}`" class="p-card">
+  <div class="hand">
+    <template v-for="card in cards">
+      <div class="card">
         <!-- Get selected card details and check table for match -->
         <Card
           :name="card"
-          :hide="player.includes('2')"
+          :hide="player === 'p2'"
           @card-select="(cardName: string) => checkForMatch(cardName)"
         />
       </div>
@@ -30,34 +31,34 @@ function checkForMatch(cardName: string) {
   </div>
 </template>
 
-<style lang="postcss">
+<style scoped lang="postcss">
 .hand {
   height: inherit;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.3rem;
   margin-left: 0.5rem;
   transform-origin: left;
-  animation: fanOut 2s;
 }
 
 @media (width < 800px) {
-  .p-card {
-    margin-right: -1.5rem;
-    margin-bottom: -3rem;
-  }
-  .hand {
-    scale: 0.75;
-  }
-}
+  .card {
+    max-width: 60px;
 
-@keyframes fanOut {
-  from {
-    gap: 3rem;
+    &:nth-child(5) {
+      margin-left: 10%;
+    }
+
+    &:nth-child(n + 5) {
+      margin-top: -10%;
+    }
   }
-  to {
-    gap: 0.2rem;
+
+  .hand {
+    flex-wrap: wrap;
+    max-width: 350px;
+    gap: 0.5rem;
   }
 }
 </style>

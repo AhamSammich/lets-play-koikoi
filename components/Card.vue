@@ -13,7 +13,7 @@ function handleClick(e: Event) {
 
 <template> 
   <template v-if="hide">
-    <div class="card bg-red-600" @click="handleClick"></div>
+    <div class="card down"></div>
   </template>
   <template v-else>
     <img class="card" :src="`cards/${props.name}.png`" @click="handleClick" />
@@ -25,15 +25,20 @@ function handleClick(e: Event) {
   width: 75px;
   aspect-ratio: 2 / 3;
   outline: 1px solid #111;
+  background-color: #11111180;
   border-radius: 0.2rem;
-  transition: transform 0.3s 0.1s;
+  transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
 
-  &:hover,
-  &:focus {
+  &:hover {
     cursor: pointer;
-    transform: translate3d(0, -30%, 0);
+    transform: translate3d(0, -5%, 0);
+    outline: none;
   }
+}
+
+.down {
+  background-color: rgb(220 38 38);
 }
 
 @keyframes dropIn {

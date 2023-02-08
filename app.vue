@@ -9,10 +9,10 @@ const score2 = useScore2();
 </script>
 
 <template>
-  <div>
+  <main>
     <StatusBar :round-num="roundNum" :score="{ p1: score1, p2: score2 }" oya="p1"/>
     <Table @next-round="roundNum++"/>
-  </div>
+  </main>
 </template>
 
 <style lang="postcss">
@@ -26,7 +26,7 @@ const score2 = useScore2();
   font-family: 'Mochiy Pop One', sans-serif;
 }
 
-body {
+main {
   background-color: var(--tbl-green);
   display: flex;
   flex-direction: column;
