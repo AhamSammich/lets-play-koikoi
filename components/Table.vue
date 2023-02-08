@@ -306,11 +306,7 @@ async function continueGame(bool: boolean, player: string) {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div
-      id="p1-hand"
-      class=""
-      :data-msg="`${activeP === 'p1' && !draw ? 'Pick a card' : ''}`"
-    >
+    <div id="p1-hand">
       <Hand
         :is-active="activeP === 'p1' && !draw"
         player="p1"
@@ -327,14 +323,16 @@ async function continueGame(bool: boolean, player: string) {
     </div>
 
     <!-- MODAL -->
-    <div id="match">
-      <MatchSelect
-        :match-src="selectedCard"
-        :cards="matchSelection"
-        :show-modal="matchSelection.length > 0"
-        @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
-      />
-    </div>
+    <template v-if="matchSelection.length">
+      <div id="match">
+        <MatchSelect
+          :match-src="selectedCard"
+          :cards="matchSelection"
+          :show-modal="matchSelection.length > 0"
+          @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
+        />
+      </div>
+    </template>
 
     <template v-if="Object.keys(newYaku).length">
       <div id="yaku-modal">
@@ -370,13 +368,13 @@ async function continueGame(bool: boolean, player: string) {
 #tabletop {
   width: 100vw;
   width: 100dvw;
-  min-height: 100vh;
-  min-height: 100dvh;
-  background-color: rgb(22 101 52);
-  overflow: hidden;
+  min-height: 420px;
+  height: 100%;
+  max-height: 800px;
+  background-color: var(--tbl-green);
   display: grid;
   grid-template-columns: 75px 1fr;
-  grid-template-rows: minmax(75px, 150px) minmax(200px, 1fr) minmax(75px, 150px);
+  grid-template-rows: minmax(75px, 125px) minmax(200px, 1fr) minmax(75px, 125px);
   grid-template-areas:
     "p2 p2"
     "deck field"
@@ -404,27 +402,6 @@ async function continueGame(bool: boolean, player: string) {
 #p1-hand {
   grid-area: p1;
   position: relative;
-
-  /* &::before {
-    content: attr(data-msg);
-    display: block;
-    position: absolute;
-    bottom: 45%;
-    right: 25%;
-    color: #eee;
-    font-weight: bold;
-    font-style: italic;
-    animation: crawl 5s alternate infinite;
-  } */
-}
-
-@keyframes crawl {
-  from {
-    transform: translate3d(-25%, 0, 0);
-  }
-  to {
-    transform: translate3d(25%, 0, 0);
-  }
 }
 
 #p2-hand {
@@ -443,9 +420,9 @@ async function continueGame(bool: boolean, player: string) {
 
 #p2-reveal {
   position: absolute;
-  top: 20%;
-  right: 10%;
-  animation: pickUp 0.5s 1s;
+  top: 30%;
+  right: 40%;
+  animation: pickUp 1s 1s;
 }
 
 @keyframes pickUp {
@@ -463,6 +440,7 @@ async function continueGame(bool: boolean, player: string) {
   min-width: 350px;
   justify-self: flex-start;
   transform-origin: left;
+  margin-left: 0.3rem;
 }
 
 @media (width < 500px) or (height < 500px) {
@@ -489,21 +467,9 @@ async function continueGame(bool: boolean, player: string) {
     top: 0;
     transform-origin: top left;
   }
-
-  @media (orientation: portrait) {
-    &#p1-collection {
-      right: 0;
-      bottom: 15%;
-    }
-
-    &#p2-collection {
-      left: 0;
-      top: 10%;
-    }
-  }
 }
 
-.modal {
+dialog {
   background: hsl(0 0% 13% / 0.9);
   width: 100vw;
   height: 100vh;
@@ -520,6 +486,7 @@ async function continueGame(bool: boolean, player: string) {
   color: white;
   font-size: large;
   z-index: 10;
+  transition: all 0.5s;
 
   & .btn-bar {
     width: 360px;
@@ -535,7 +502,8 @@ async function continueGame(bool: boolean, player: string) {
       font-weight: bold;
       font-size: smaller;
 
-      &:hover {
+      &:hover,
+      &:focus {
         transform: translate3d(0, 5%, 0);
         box-shadow: 0 0.1rem 0.3rem 0 palegoldenrod;
       }
@@ -556,5 +524,6 @@ async function continueGame(bool: boolean, player: string) {
 
 .hidden {
   display: none;
+  scale: 1 0;
 }
 </style>

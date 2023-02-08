@@ -11,7 +11,7 @@ function handleClick(e: Event) {
 }
 </script>
 
-<template>
+<template> 
   <template v-if="hide">
     <div class="card bg-red-600" @click="handleClick"></div>
   </template>
@@ -29,7 +29,8 @@ function handleClick(e: Event) {
   transition: transform 0.3s 0.1s;
   animation: dropIn 0.5s;
 
-  &:hover {
+  &:hover,
+  &:focus {
     cursor: pointer;
     transform: translate3d(0, -30%, 0);
   }

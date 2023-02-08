@@ -9,7 +9,7 @@ const emits = defineEmits(["match-select"]);
 </script>
 
 <template>
-  <div :class="{ modal: true, hidden: !showModal }">
+  <dialog :open="showModal" aria-modal="true">
     <template v-if="matchSrc">
       <h1>{{ matchSrc.replace(/-\d?/g, " ") }}</h1>
       <div id="match-src">
@@ -28,7 +28,7 @@ const emits = defineEmits(["match-select"]);
         </div>
       </template>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <style scoped lang="postcss">

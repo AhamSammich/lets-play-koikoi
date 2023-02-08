@@ -24,7 +24,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div :class="{ modal: true, hidden: !showModal }">
+  <dialog :open="showModal" aria-modal="true">
     <div id="points">
       <h1>{{ player || "draw" }}</h1>
       <h2>{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
@@ -47,13 +47,14 @@ onBeforeMount(() => {
     </template>
     <div class="btn-bar">
       <!-- <button @click="">END GAME</button> -->
-      <button @click="resetGame()">NEXT ROUND</button>
+      <button @click="resetGame()" autofocus="true" tabindex="1">NEXT ROUND</button>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <style scoped lang="postcss">
 #scoresheet {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -82,6 +83,38 @@ onBeforeMount(() => {
   & * {
     animation: none;
   }
+
+  & .yaku {
+    /* width: 45vw; */
+    padding-left: 2rem;
+  }
+
+  & .yaku-cards {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    max-width: 350px;
+    gap: 0.2rem;
+    pointer-events: none;
+  }
+
+  & .card {
+    max-width: 60px;
+    aspect-ratio: 2 / 3;
+    animation: none;
+
+    &:nth-child(n+6) {
+      transform: translate3d(0, -20%, 0);
+    }
+
+    &:nth-child(n+11) {
+      transform: translate3d(0, -40%, 0);
+    }
+    
+    &:nth-child(6) {
+      margin-left: 5%;
+    }
+  }
 }
 
 #points {
@@ -98,43 +131,18 @@ onBeforeMount(() => {
     
 }
 
-.yaku {
-  /* width: 45vw; */
-  padding-left: 2rem;
-}
-
-.yaku-cards {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  max-width: 350px;
-  gap: 0.2rem;
-  pointer-events: none;
-}
-
-.card {
-  max-width: 60px;
-  aspect-ratio: 2 / 3;
-  animation: none;
-
-  &:nth-child(n+6) {
-    transform: translate3d(0, -20%, 0);
-  }
-  
-  &:nth-child(6) {
-    margin-left: 5%;
-  }
-}
 
 @media (width > 800px) or (orientation: landscape) {
   #scoresheet { 
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   #points h2 {
     font-size: 32px;
   }
+  
   .yaku {
     width: 45vw;
   }
