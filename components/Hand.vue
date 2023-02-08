@@ -6,24 +6,25 @@ const props = defineProps<{
 }>();
 
 // Emit card detail to Table
-const emits = defineEmits(['check-match', 'set-selected']);
+const emits = defineEmits(["check-match", "set-selected"]);
 
 // If match, props.cards will be updated
 function checkForMatch(cardName: string) {
   if (cardName == null || props.isActive === false) return;
-  emits('check-match', cardName);
+  emits("check-match", cardName);
 }
 </script>
 
 <template>
   <div class="hand" :style="`${isActive ? '' : 'pointer-events: none;'}`">
     <template v-for="(card, index) in cards">
-      <div
-        :id="`${player}-${index}`"
-        :class="`${player ? 'p-card' : 'f-card'}`"
-      >
+      <div :id="`${player}-${index}`" class="p-card">
         <!-- Get selected card details and check table for match -->
-        <Card :name="card" :hide="player.includes('2')" @card-select="(cardName: string) => checkForMatch(cardName)" />
+        <Card
+          :name="card"
+          :hide="player.includes('2')"
+          @card-select="(cardName: string) => checkForMatch(cardName)"
+        />
       </div>
     </template>
   </div>

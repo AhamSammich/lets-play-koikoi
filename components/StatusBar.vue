@@ -9,11 +9,20 @@ const props = defineProps<{
 <template>
   <header
     id="status"
-    class="flex items center justify-between px-4 py-1 fixed top-0 left-0 w-screen bg-gray-900 bg-opacity-50 opacity-25 text-white z-10"
+    class="flex flex-col items-center justify-around p-1 fixed top-0 right-0 h-screen bg-gray-900 bg-opacity-50 opacity-25 text-white z-10"
   >
-    <p id="p1-score" :class="{ oya: oya === 'p1' }">P1: {{ score.p1 }}</p>
-    <p id="round-num">ROUND {{ roundNum }}</p>
-    <p id="p2-score" :class="{ oya: oya === 'p2' }">P2: {{ score.p2 }}</p>
+    <div id="p2-score">
+      <p>P2</p>
+      <p>{{ score.p2 }}</p>
+    </div>
+    <div id="round-num">
+      <p>RND</p>
+      <p>{{ roundNum }}</p>
+    </div>
+    <div id="p1-score">
+      <p>P1</p>
+      <p>{{ score.p1 }}</p>
+    </div>
   </header>
 </template>
 
@@ -27,5 +36,7 @@ const props = defineProps<{
 }
 p {
     font-weight: bold;
+    font-size: smaller;
+    text-align: center;
 }
 </style>
