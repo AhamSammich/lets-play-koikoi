@@ -23,7 +23,7 @@ const emits = defineEmits(["match-select"]);
           <!-- Get selected card details and check table for match -->
           <Card
             :name="card"
-            @card-select="(cardName: string) => $emit('match-select', [cardName])"
+            @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
           />
         </div>
       </template>
