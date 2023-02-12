@@ -35,10 +35,11 @@ function handleClick(e: Event) {
     transform: translate3d(0, -5%, 0);
     outline: none;
   }
-}
 
-.down {
+  &.down {
   background-color: rgb(220 38 38);
+  max-width: 40px;
+}
 }
 
 @keyframes dropIn {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useActiveP } from "~~/components/composables/game";
+import { STORE } from "~~/components/composables/game";
 const props = defineProps<{
   player: string;
   cards: string[];
@@ -7,7 +7,7 @@ const props = defineProps<{
 
 // Emit card detail to Table
 const emits = defineEmits(["check-match", "set-selected"]);
-const activeP = useActiveP();
+const activeP = STORE.useActiveP();
 
 // If match, props.cards will be updated
 function checkForMatch(cardName: string) {
@@ -40,6 +40,9 @@ function checkForMatch(cardName: string) {
   gap: 0.3rem;
   margin-left: 0.5rem;
   transform-origin: left;
+}
+.card {
+  max-width: 60px;
 }
 
 @media (width < 800px) {

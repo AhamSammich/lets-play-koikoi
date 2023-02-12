@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useScore1, useScore2 } from '~~/components/composables/game';
+import { STORE} from '~~/components/composables/game';
 const roundNum = ref(1);
-const score1 = useScore1();
-const score2 = useScore2();
+const score1 = STORE.useScore1();
+const score2 = STORE.useScore2();
 
 // const newOya = useOya();
 
