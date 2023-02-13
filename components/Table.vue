@@ -458,7 +458,7 @@ async function runGame() {
   }
 
   @media (orientation: landscape) {
-    grid-template-rows: 60px minmax(150px, 1fr) 100px;
+    grid-template-rows: 60px minmax(100px, 1fr) 120px;
   }
 }
 
@@ -495,7 +495,7 @@ async function runGame() {
 
   & > * {
     position: absolute;
-    right: 0;
+    right: 0.5rem;
   }
 }
 
@@ -516,7 +516,7 @@ async function runGame() {
   }
   to {
     opacity: 0;
-    transform: scale(1.2) translate3d(20%, 0, 0);
+    transform: scale(1.2) translate3d(25%, 0, 0);
   }
 }
 

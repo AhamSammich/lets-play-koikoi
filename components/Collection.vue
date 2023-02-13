@@ -61,10 +61,10 @@ onUpdated(() => {
 .collected {
   --card-w: 35px;
   --card-h: calc(var(--card-w) * 1.5);
-  --row-w: calc(5.5 * var(--card-w));
+  --row-w: calc(5.2 * var(--card-w));
   display: grid;
   grid-template-columns: repeat(2, var(--row-w));
-  grid-template-rows: repeat(2, calc(1.2 * var(--card-h)));
+  grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));
   gap: 0.1rem;
 }
 
@@ -73,15 +73,19 @@ onUpdated(() => {
   flex-wrap: wrap;
   max-width: var(--row-w);
   min-height: 50px;
-  /* gap: 0.1rem; */
   overflow: hidden;
 
   & > * {
     width: var(--card-w);
     height: var(--card-h);
   }
+
+  & > *:nth-child(6) {
+    margin-left: calc(0.2 * var(--card-h));
+  }
+  
   & > *:nth-child(n + 6) {
-    margin-top: calc(-0.8 * var(--card-h));
+    margin-top: calc(-0.7 * var(--card-h));
   }
 }
 </style>
