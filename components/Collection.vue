@@ -6,7 +6,7 @@ const props = defineProps<{
   cards: string[];
 }>();
 
-const emits = defineEmits(["new-yaku"]);
+const emits = defineEmits(["collecting", "new-yaku", "no-yaku"]);
 
 const yakuList = new Map();
 let sortedCards = sortCardsByType(props.cards);
@@ -19,6 +19,7 @@ function registerYaku(yakuArr: string[]) {
 }
 
 onBeforeUpdate(() => {
+  emits("collecting");
   if (props.cards.length === 0) yakuList.clear();
   sortedCards = sortCardsByType(props.cards);
 });
@@ -27,6 +28,7 @@ onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
   yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
   if (yakuArr.length) registerYaku(yakuArr);
+  else emits("no-yaku");
 });
 </script>
 
@@ -57,14 +59,13 @@ onUpdated(() => {
 
 <style scoped lang="postcss">
 .collected {
-  --card-w: 40px;
-  --card-h: calc(var(--card-w)*1.5);
-  --row-w: calc(5.5*var(--card-w));
+  --card-w: 35px;
+  --card-h: calc(var(--card-w) * 1.5);
+  --row-w: calc(5.2 * var(--card-w));
   display: grid;
   grid-template-columns: repeat(2, var(--row-w));
-  grid-template-rows: repeat(2, calc(1.4*var(--card-h)));
-  gap: 0.2rem;
-
+  grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));
+  gap: 0.1rem;
 }
 
 .subset {
@@ -72,15 +73,19 @@ onUpdated(() => {
   flex-wrap: wrap;
   max-width: var(--row-w);
   min-height: 50px;
-  /* gap: 0.1rem; */
   overflow: hidden;
 
   & > * {
     width: var(--card-w);
     height: var(--card-h);
   }
-  & > *:nth-child(n+6) {
-    margin-top: calc(-0.6 * var(--card-h));
+
+  & > *:nth-child(6) {
+    margin-left: calc(0.2 * var(--card-h));
+  }
+  
+  & > *:nth-child(n + 6) {
+    margin-top: calc(-0.7 * var(--card-h));
   }
 }
 </style>

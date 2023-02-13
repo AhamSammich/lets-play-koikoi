@@ -13,3 +13,10 @@ type Card = Record<string, CardDetails>;
 type Dict = Record<string, string[]>;
 
 type MultiDict = Record<string, string | Dict>;
+
+type Player = {
+  hand: Ref<string[]>;
+  collection: Ref<string[]>;
+  yaku: Ref<Dict>;
+  score: Ref<number>;
+};

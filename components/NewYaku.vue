@@ -24,7 +24,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div :class="{ modal: true, hidden: !showModal }">
+  <dialog :open="showModal" aria-modal="true">
     <div id="new-yaku">
       <template v-for="yaku in Object.keys(yakuList)" :key="yaku">
         <div class="yaku">
@@ -47,11 +47,12 @@ onMounted(async () => {
         <button @click="endGame()">END ROUND</button>
       </div>
     </template>
-  </div>
+  </dialog>
 </template>
 
 <style scoped lang="postcss">
 #new-yaku {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -76,42 +77,46 @@ onMounted(async () => {
   &::-webkit-scrollbar-thumb {
     background: linear-gradient(45deg, goldenrod, palegoldenrod);
   }
-}
 
-.yaku {
-  /* width: 45vw; */
-  padding-left: 2rem;
-}
-
-.yaku-cards {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  max-width: 300px;
-  gap: 0.2rem;
-  pointer-events: none;
-  transform-origin: left;
-  animation: spreadLeft 0.5s;
-}
-
-.card {
-  max-width: 50px;
-  max-height: 75px;
-
-  &:nth-child(n+6) {
-    transform: translate3d(0, -50%, 0);
-  }
-  
-  &:nth-child(6) {
-    margin-left: 10%;
+  & .yaku {
+    padding-left: 2rem;
   }
 
+  & .yaku-cards {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    max-width: 350px;
+    gap: 0.2rem;
+    pointer-events: none;
+    transform-origin: left;
+    animation: spreadLeft 0.5s;
+  }
+
+  & .card {
+    max-width: 60px;
+    aspect-ratio: 2 / 3;
+
+    &:nth-child(n+6) {
+      transform: translate3d(0, -20%, 0);
+    }
+
+    &:nth-child(n+11) {
+      transform: translate3d(0, -40%, 0);
+    }
+    
+    &:nth-child(6) {
+      margin-left: 5%;
+    }
+
+  }
 }
 
 @media (width > 800px) or (orientation: landscape) {
   #new-yaku { 
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .yaku {

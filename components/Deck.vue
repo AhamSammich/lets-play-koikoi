@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   drawCard: boolean | null;
-  aiDraw?: boolean;
 }>();
 const emits = defineEmits(["deal", "draw"]);
 
@@ -92,8 +91,8 @@ async function shuffle(cards: string[]): Promise<string[]> {
 
 onMounted(async () => {
   progressBar = <HTMLElement>document.getElementById("deck-progress");
-  remainingCards = await shuffle([...allCards]);
-  emits("deal", dealHands());
+  // remainingCards = await shuffle([...allCards]);
+  // emits("deal", dealHands());
 });
 
 onUpdated(async () => {
@@ -129,21 +128,8 @@ onUpdated(async () => {
 .deck {
   width: 75px;
   aspect-ratio: 2 / 3;
-  cursor: grab;
-  outline: 1px solid #111;
+  outline: 0.05px solid lightgoldenrodyellow;
   border-radius: 0.2rem;
   position: relative;
-
-  &::after {
-    content: attr(data-text);
-    color: #eee;
-    font-weight: bold;
-    margin-top: 5rem;
-    display: block;
-    white-space: nowrap;
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
 }
 </style>

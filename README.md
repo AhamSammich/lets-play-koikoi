@@ -11,7 +11,7 @@
   - [x] Yaku determination
     - [x] FIX: Handle simultaneous yaku
     - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
-    - [ ] FIX: Check for yaku after deck draw
+    - [x] FIX: Check for yaku after deck draw
   - [x] Check for instant win(hand)/re-deal(field) (full suit or 4 pairs)
 
 - GAME STATE
@@ -19,7 +19,7 @@
   - [x] Track selected card
   - [x] Call Koi-Koi
     - [x] FIX: AI Koi-Koi decision
-  - [ ] Start screen
+  - [x] Start screen
   - [x] End round
   - [x] Reset
   - [x] Track scoring
@@ -27,7 +27,6 @@
 - UI
   - [x] Round number
   - [x] Scoreboard
-    - [ ] Reposition near deck
     - [ ] Koi-Koi bonus & oya indicator
   - [ ] Highlight possible match
   - [ ] Yaku progress

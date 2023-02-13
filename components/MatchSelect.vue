@@ -9,7 +9,7 @@ const emits = defineEmits(["match-select"]);
 </script>
 
 <template>
-  <div :class="{ modal: true, hidden: !showModal }">
+  <dialog :open="showModal" aria-modal="true">
     <template v-if="matchSrc">
       <h1>{{ matchSrc.replace(/-\d?/g, " ") }}</h1>
       <div id="match-src">
@@ -23,12 +23,12 @@ const emits = defineEmits(["match-select"]);
           <!-- Get selected card details and check table for match -->
           <Card
             :name="card"
-            @card-select="(cardName: string) => $emit('match-select', [cardName])"
+            @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
           />
         </div>
       </template>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <style scoped lang="postcss">
