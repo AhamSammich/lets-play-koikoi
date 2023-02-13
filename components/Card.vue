@@ -24,7 +24,7 @@ function handleClick(e: Event) {
 .card {
   width: 75px;
   aspect-ratio: 2 / 3;
-  outline: 1px solid #111;
+  outline: 0.05px solid lightgoldenrodyellow;
   background-color: #11111180;
   border-radius: 0.2rem;
   transition: all 0.3s 0.1s;

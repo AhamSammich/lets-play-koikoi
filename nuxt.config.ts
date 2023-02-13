@@ -1,5 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    pages: false,
+    ssr: true, 
+    // app: {
+    //     pageTransition: { name: 'page', mode: 'out-in' }
+    //   },
     modules: [
         '@nuxtjs/tailwindcss',
     ],
@@ -9,10 +14,7 @@ export default defineNuxtConfig({
         plugins: {
             'autoprefixer': {},
             'postcss-preset-env': {
-                stage: 0,
-                // features: {
-                //     'container-queries': true,
-                // }
+                stage: 1,
             }
         }
     }

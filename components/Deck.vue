@@ -91,8 +91,8 @@ async function shuffle(cards: string[]): Promise<string[]> {
 
 onMounted(async () => {
   progressBar = <HTMLElement>document.getElementById("deck-progress");
-  remainingCards = await shuffle([...allCards]);
-  emits("deal", dealHands());
+  // remainingCards = await shuffle([...allCards]);
+  // emits("deal", dealHands());
 });
 
 onUpdated(async () => {
@@ -128,7 +128,6 @@ onUpdated(async () => {
 .deck {
   width: 75px;
   aspect-ratio: 2 / 3;
-  cursor: grab;
   outline: 1px solid #111;
   border-radius: 0.2rem;
   position: relative;

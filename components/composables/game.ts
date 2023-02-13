@@ -13,6 +13,7 @@ export const STORE: Record<string, () => Ref> = {
     useYaku2: () => useState("yaku2", () => <Dict>{}),
     useActiveP: (): Ref<string> => useState("activeP", () => "p1"),
     useWait: () => useState("waiting", () => false),
+    useStart: () => useState("start", () => false),
 }
 
 export function addState(stateName: string, initVal: unknown) {

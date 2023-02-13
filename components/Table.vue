@@ -7,12 +7,21 @@ import {
   matchCardInArr,
 } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "deck-draw", "next-round"]);
+const emits = defineEmits(["match-select", "deck-draw", "next-round", "reset"]);
 
+onMounted(() => {
+  newGame();
+});
+
+onUnmounted(() => {
+  emits("reset");
+});
 
 // ============================================================== //
 // =====================  REACTIVE VARS  ======================== //
 // ============================================================== //
+
+const started = STORE.useStart();
 
 const P1: Player = {
   hand: STORE.useHand1(),
@@ -53,8 +62,6 @@ const TABLE = {
 const activeP = STORE.useActiveP();
 const activeHand = () => player[activeP.value]().hand;
 
-
-
 // ============================================================== //
 // =======================  UTILITIES =========================== //
 // ============================================================== //
@@ -71,12 +78,12 @@ async function setActiveP(): Promise<string> {
   return winner.value || activeP.value === "p1" ? "p2" : "p1";
 }
 
-
 // ============================================================== //
 // ======================  START GAME  ========================== //
 // ============================================================== //
 
 async function resetRefs() {
+  console.log("Resetting...");
   Object.values(player).forEach((p) => {
     p().hand.value = [];
     p().collection.value = [];
@@ -110,7 +117,6 @@ function dealFirstHands(cards: string[]): void {
     START = true;
   }
 }
-
 
 // ============================================================== //
 // =======================  TRIGGERS  =========================== //
@@ -156,7 +162,6 @@ async function collectCards(
   }
 }
 
-
 // ============================================================== //
 // =======================  MATCHING  =========================== //
 // ============================================================== //
@@ -189,7 +194,6 @@ async function handleMatch(cards: string[]) {
   TABLE.matchesFound.value = [];
   WAIT.value = false;
 }
-
 
 // ============================================================== //
 // =====================  VICTORY CHECK ========================= //
@@ -240,25 +244,22 @@ async function continueGame(bool: boolean, p: string) {
   WAIT.value = false;
 }
 
-
 // ============================================================== //
 // =======================  MAIN LOOP  ========================== //
 // ============================================================== //
 
 async function runGame() {
-  let running = true;
-  let reset = false;
+  let running = () => started.value;
   let waiting = () => WAIT.value;
+  let reset = false;
 
   let selectedCard: string;
   let matches: string[];
-  let aiPlay: boolean;
-  while (running) {
-    if (reset) {
-      running = false;
-    }
+  let aiPlay = false;
+  while (running()) {
+    if (reset) break;
 
-    while (true) {
+    while (running()) {
       aiPlay = activeP.value === "p2";
       if (aiPlay && draw.value) break;
       if (aiPlay && !draw.value) {
@@ -327,6 +328,7 @@ async function runGame() {
       console.log(`IT'S PLAYER ${activeP.value === "p1" ? 1 : 2}'S TURN`);
     }
   }
+  // await resetRefs();
 }
 </script>
 
@@ -442,7 +444,6 @@ async function runGame() {
   min-height: 420px;
   height: 100%;
   max-height: 800px;
-  /* background-color: var(--tbl-green); */
   display: grid;
   grid-template-columns: 80px 1fr;
   grid-template-rows: minmax(75px, 200px) minmax(200px, 1fr) minmax(75px, 200px);
@@ -524,6 +525,7 @@ async function runGame() {
   justify-self: flex-start;
   transform-origin: left;
   margin-left: 0.3rem;
+  z-index: 0;
 }
 
 @media (width < 500px) or (height < 500px) {
@@ -550,63 +552,5 @@ async function runGame() {
     top: 0;
     transform-origin: top left;
   }
-}
-
-dialog {
-  background: hsl(0 0% 13% / 0.9);
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  color: white;
-  font-size: large;
-  z-index: 10;
-  transition: all 0.5s;
-
-  & .btn-bar {
-    width: 360px;
-    display: flex;
-    justify-content: space-around;
-    pointer-events: all;
-
-    & button {
-      outline: 1px solid yellow;
-      border-radius: 0.2rem;
-      background: firebrick;
-      padding: 0.5em 1em;
-      font-weight: bold;
-      font-size: smaller;
-
-      &:hover,
-      &:focus {
-        transform: translate3d(0, 5%, 0);
-        box-shadow: 0 0.1rem 0.3rem 0 palegoldenrod;
-      }
-    }
-  }
-
-  & h1,
-  & h2 {
-    font-weight: bold;
-    font-size: larger;
-    text-transform: uppercase;
-  }
-
-  & h2 {
-    font-size: inherit;
-  }
-}
-
-.hidden {
-  display: none;
-  scale: 1 0;
 }
 </style>
