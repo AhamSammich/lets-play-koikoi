@@ -18,8 +18,14 @@ function resetGame() {
 </script>
 
 <template>
-  <header class="flex fixed top-0 justify-start w-full h-max z-20">
-    <button id="back-btn" class="p-2 font-black text-5xl text-white" @click="endGame()">
+  <header class="flex fixed top-0 justify-start w-max h-max z-20">
+    <button
+      id="back-btn"
+      :class="`${
+        started ? '' : 'hidden'
+      } p-2 opacity-25 font-black text-3xl text-white transition-all duration-500`"
+      @click="endGame()"
+    >
       &lAarr;
     </button>
   </header>
@@ -48,6 +54,11 @@ function resetGame() {
 body {
   overflow: hidden;
   font-family: "Mochiy Pop One", sans-serif;
+}
+
+#back-btn:hover {
+  translate: -5% 0;
+  opacity: 1;
 }
 
 #hero {
@@ -90,7 +101,7 @@ main {
 }
 
 dialog {
-  background: rgba(14, 20, 34, 0.9);
+  background: rgba(14, 20, 34, 0.95);
   width: 100vw;
   height: 100vh;
   height: 100dvh;
@@ -105,7 +116,7 @@ dialog {
   translate: -50% -50%;
   color: white;
   font-size: large;
-  z-index: 10;
+  z-index: 30;
   transition: all 0.5s;
 
   & .btn-bar {

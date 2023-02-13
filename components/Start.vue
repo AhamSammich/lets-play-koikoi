@@ -41,7 +41,7 @@ section {
 
 #hero-title {
   font-size: xx-large;
-  background: linear-gradient(45deg, darkgoldenrod 20%, palegoldenrod);
+  background: linear-gradient(180deg, darkgoldenrod 50%, palegoldenrod);
   background-clip: text;
   color: transparent;
   font-family: "Potta One", "Mochiy Pop One", sans-serif;

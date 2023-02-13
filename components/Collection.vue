@@ -59,13 +59,13 @@ onUpdated(() => {
 
 <style scoped lang="postcss">
 .collected {
-  --card-w: 40px;
+  --card-w: 35px;
   --card-h: calc(var(--card-w) * 1.5);
   --row-w: calc(5.5 * var(--card-w));
   display: grid;
   grid-template-columns: repeat(2, var(--row-w));
-  grid-template-rows: repeat(2, calc(1.4 * var(--card-h)));
-  gap: 0.2rem;
+  grid-template-rows: repeat(2, calc(1.2 * var(--card-h)));
+  gap: 0.1rem;
 }
 
 .subset {
@@ -81,7 +81,7 @@ onUpdated(() => {
     height: var(--card-h);
   }
   & > *:nth-child(n + 6) {
-    margin-top: calc(-0.6 * var(--card-h));
+    margin-top: calc(-0.8 * var(--card-h));
   }
 }
 </style>

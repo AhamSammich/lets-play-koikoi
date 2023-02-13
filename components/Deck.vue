@@ -128,20 +128,8 @@ onUpdated(async () => {
 .deck {
   width: 75px;
   aspect-ratio: 2 / 3;
-  outline: 1px solid #111;
+  outline: 0.05px solid lightgoldenrodyellow;
   border-radius: 0.2rem;
   position: relative;
-
-  &::after {
-    content: attr(data-text);
-    color: #eee;
-    font-weight: bold;
-    margin-top: 5rem;
-    display: block;
-    white-space: nowrap;
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
 }
 </style>

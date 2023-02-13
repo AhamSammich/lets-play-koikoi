@@ -458,7 +458,7 @@ async function runGame() {
   }
 
   @media (orientation: landscape) {
-    grid-template-rows: minmax(75px, 125px) minmax(200px, 1fr) minmax(75px, 125px);
+    grid-template-rows: 60px minmax(150px, 1fr) 100px;
   }
 }
 
@@ -491,6 +491,7 @@ async function runGame() {
   grid-area: p2;
   pointer-events: none;
   position: relative;
+  opacity: 0.5;
 
   & > * {
     position: absolute;
@@ -538,8 +539,18 @@ async function runGame() {
 .collection {
   position: absolute;
   margin: 1rem 0.5rem;
-  pointer-events: none;
   transform: scale(0.65);
+  transition: all 0.5s;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  
+  & * {
+    pointer-events: none;
+  }
 
   &#p1-collection {
     right: 0;

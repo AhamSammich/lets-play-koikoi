@@ -9,7 +9,7 @@ const props = defineProps<{
 <template>
   <header
     id="status"
-    class="flex flex-row items-center justify-around p-4 absolute bottom-0 right-0 w-screen opacity-30 text-white z-20"
+    class="flex flex-row items-center justify-around p-4 fixed top-0 right-0 w-screen opacity-30 text-white z-10"
   >
     <div id="p1-score">
       <p>PLAYER 1</p>
