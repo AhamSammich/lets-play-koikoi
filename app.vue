@@ -29,14 +29,12 @@ async function loadData() {
   });
 }
 
-async function saveLocalData(newOya?: string) {
+async function saveLocalData() {
   return new Promise((resolve, reject) => {
-    roundNum.value++;
-    if (newOya) oya.value = newOya === 'p1' ? 1 : 2;
     if (!localStorage) reject(console.warn("No local storage found."));
     try {
-      Object.keys(saveData).forEach(
-        (key) => (localStorage.setItem(key, `${saveData[key].value}`))
+      Object.keys(saveData).forEach((key) =>
+        localStorage.setItem(key, `${saveData[key].value}`)
       );
       resolve(console.log("Data saved successfully."));
     } catch (err) {
@@ -51,10 +49,15 @@ function endGame() {
 }
 
 function resetGame() {
-  saveLocalData();
   roundNum.value = 0;
   score1.value = 0;
   score2.value = 0;
+}
+
+async function handleNext(newOya?: string) {
+  if (newOya) oya.value = newOya === "p1" ? 1 : 2;
+  await saveLocalData();
+  roundNum.value++;
 }
 
 onMounted(async () => {
@@ -79,8 +82,12 @@ onMounted(async () => {
     <div id="hero" :class="{ 'scroll-up': started }"></div>
     <Start />
     <template v-if="started">
-      <Table @next-round="(newOya: string) => saveLocalData(newOya)" @reset="resetGame()" />
-      <StatusBar :round-num="roundNum" :score="{ p1: score1, p2: score2 }" :oya="`p${oya}`" />
+      <Table @next-round="(newOya: string) => handleNext(newOya)" @reset="resetGame()" />
+      <StatusBar
+        :round-num="roundNum"
+        :score="{ p1: score1, p2: score2 }"
+        :oya="`p${oya}`"
+      />
     </template>
   </main>
 </template>
@@ -93,6 +100,7 @@ onMounted(async () => {
   --tbl-black: rgb(14, 20, 34);
   --tbl-green: rgb(17, 75, 38);
   --gradient-gold: linear-gradient(15deg, goldenrod, palegoldenrod);
+  --tbl-w-max: 1000px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -101,10 +109,12 @@ onMounted(async () => {
 body {
   overflow: hidden;
   font-family: "Mochiy Pop One", sans-serif;
+  user-select: none;
+  margin: 0 auto;
 }
 
 #back-btn {
-  font-family: 'Potta One';
+  font-family: "Potta One";
 
   &:hover {
     translate: -5% 0;
@@ -122,10 +132,20 @@ body {
   z-index: 0;
   position: fixed;
   top: 0;
+  animation: fadeIn 2s;
   transition: all 2s;
 
   &.scroll-up {
     translate: 0 -60%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

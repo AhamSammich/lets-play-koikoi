@@ -50,13 +50,13 @@ function pointToActive() {
   scale: 0.7;
 
   &:hover {
-    /* background: var(--tbl-black); */
     scale: none;
     opacity: 1;
   }
 
   @media (orientation: portrait) {
     width: 100vw;
+    max-width: var(--tbl-w-max);
     left: 0;
   }
 
@@ -67,8 +67,9 @@ function pointToActive() {
     gap: 5rem;
     height: 100vh;
     height: 100dvh;
-    right: -5rem;
+    left: 100%;
     rotate: 180deg;
+    width: max-content;
 
     & > * {
       rotate: 180deg;
@@ -101,17 +102,18 @@ p {
 }
 
 #turn-pointer {
+  --pointer-color: gold;
   border-radius: 50%;
   height: 50px;
   width: 50px;
   position: absolute;
-  border-bottom: 5px solid goldenrod;
+  border-bottom: 5px solid var(--pointer-color);
   top: 90%;
   left: 50%;
   translate: -50% -50%;
   transform-origin: center top;
   transition: all 1s;
-  opacity: 0.7;
+  opacity: 0.8;
   z-index: 20;
 
   @media (orientation: landscape) {
@@ -126,7 +128,7 @@ p {
     top: 47px;
     left: 13px;
     width: 24px;
-    border-top: 10px solid goldenrod;
+    border-top: 10px solid var(--pointer-color);
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
   }

@@ -30,16 +30,18 @@ section {
     height: 100dvh;
     height: 100vh;
     opacity: 1;
+    animation: fadeIn 3s;
   }
 
   &.show #hero-title {
+    translate: 0 0;
     transition: all 0.5s;
-
     opacity: 1;
   }
 }
 
 #hero-title {
+  translate: 0 -50%;
   font-size: xx-large;
   background: var(--gradient-gold);
   background-clip: text;
@@ -67,8 +69,8 @@ button {
   background: firebrick;
   padding: 0.5em 1em;
   font-weight: bold;
-  font-size: smaller;
-  width: 300px;
+  /* font-size: smaller; */
+  width: 200px;
   margin: 0 auto;
   color: #eee;
   text-align: center;

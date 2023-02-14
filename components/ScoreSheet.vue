@@ -27,7 +27,7 @@ onBeforeMount(() => {
   <dialog :open="showModal" aria-modal="true">
     <div id="points">
       <h1>{{ player || "draw" }}</h1>
-      <h2 :class="{ bonus: koikoi }">{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
+      <h2 :class="{ bonus: koikoi && score > 0 }">{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
     </div>
     <template v-if="player && yakuList">
       <div id="scoresheet">

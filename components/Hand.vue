@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { STORE } from "~~/components/composables/game";
-const props = defineProps<{
+defineProps<{
   player: string;
   cards: string[];
 }>();
 
 // Emit card detail to Table
-const emits = defineEmits(["check-match", "set-selected"]);
+const emits = defineEmits(["check-match"]);
 const activeP = STORE.useActiveP();
 
 // If match, props.cards will be updated
@@ -19,7 +19,7 @@ function selectCard(cardName: string) {
 <template>
   <div class="hand">
     <template v-for="card in cards">
-      <div class="card">
+      <div class="player-card">
         <!-- Get selected card details and check table for match -->
         <Card
           :name="card"
@@ -41,12 +41,12 @@ function selectCard(cardName: string) {
   margin-left: 0.5rem;
   transform-origin: left;
 }
-.card {
+.player-card {
   max-width: 60px;
 }
 
 @media (width < 800px) {
-  .card {
+  .player-card {
     max-width: 60px;
 
     &:nth-child(5) {
@@ -62,6 +62,7 @@ function selectCard(cardName: string) {
     flex-wrap: wrap;
     max-width: 350px;
     gap: 0.5rem;
+    z-index: 1;
   }
 }
 </style>

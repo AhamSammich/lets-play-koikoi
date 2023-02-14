@@ -7,7 +7,13 @@ import {
   matchCardInArr,
 } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "deck-draw", "next-round", "reset", "called-koikoi"]);
+const emits = defineEmits([
+  "match-select",
+  "deck-draw",
+  "next-round",
+  "reset",
+  "called-koikoi",
+]);
 
 onMounted(() => {
   newGame();
@@ -28,7 +34,7 @@ const P1: Player = {
   collection: STORE.useCollection1(),
   yaku: STORE.useYaku1(),
   score: STORE.useScore1(),
-  koikoi: 0
+  koikoi: 0,
 };
 
 const P2: Player = {
@@ -36,7 +42,7 @@ const P2: Player = {
   collection: STORE.useCollection2(),
   yaku: STORE.useYaku2(),
   score: STORE.useScore2(),
-  koikoi: 0
+  koikoi: 0,
 };
 
 const player: Record<string, () => Player> = {
@@ -62,7 +68,7 @@ const TABLE = {
 };
 
 const activeP = STORE.useActiveP();
-const otherP = () => activeP.value === "p1" ? "p2" : "p1";
+const otherP = () => (activeP.value === "p1" ? "p2" : "p1");
 const otherPlayer = () => player[otherP()]();
 const activePlayer = () => player[activeP.value]();
 const activeHand = () => activePlayer().hand;
@@ -72,11 +78,21 @@ const activeHand = () => activePlayer().hand;
 // ============================================================== //
 
 const WAIT = ref(false);
+const SHOUT = ref("");
 let START = false;
 const callKoiKoi = () => {
+  shoutMsg("KOI KOI");
   activePlayer().koikoi++;
-  console.log(`${activeP.value.toUpperCase()} called Koi-Koi (x${activePlayer().koikoi})`);
+  console.log(
+    `${activeP.value.toUpperCase()} called Koi-Koi (x${activePlayer().koikoi})`
+  );
 };
+
+async function shoutMsg(msg: string) {
+  SHOUT.value = msg;
+  await sleep(2000);
+  SHOUT.value = "";
+}
 
 async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -332,7 +348,7 @@ async function runGame() {
         newOya = winner.value || "";
         await sleep(500);
       }
-      
+
       // Call a draw if player has no more cards
       if (activeHand().value.length === 0) {
         WAIT.value = true;
@@ -446,6 +462,10 @@ async function runGame() {
         />
       </div>
     </template>
+
+    <template v-if="SHOUT">
+      <Shout :msg="SHOUT" />
+    </template>
   </div>
 </template>
 
@@ -456,9 +476,11 @@ async function runGame() {
 <style lang="postcss">
 #tabletop {
   width: 100%;
+  max-width: var(--tbl-w-max);
   min-height: 420px;
   height: 100%;
   max-height: 800px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 80px 1fr;
   grid-template-rows: minmax(75px, 200px) minmax(200px, 1fr) minmax(75px, 200px);
@@ -525,19 +547,6 @@ async function runGame() {
   z-index: 1;
 }
 
-@keyframes pickUp {
-  from {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.75;
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.2) translate3d(25%, 0, 0);
-  }
-}
-
 #field {
   grid-area: field;
   min-width: 350px;
@@ -565,7 +574,7 @@ async function runGame() {
     opacity: 1;
     transform: scale(0.9);
   }
-  
+
   & * {
     pointer-events: none;
   }
