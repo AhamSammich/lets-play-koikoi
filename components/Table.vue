@@ -7,7 +7,7 @@ import {
   matchCardInArr,
 } from "~~/assets/scripts/match";
 
-const emits = defineEmits(["match-select", "deck-draw", "next-round", "reset"]);
+const emits = defineEmits(["match-select", "deck-draw", "next-round", "reset", "called-koikoi"]);
 
 onMounted(() => {
   newGame();
@@ -28,6 +28,7 @@ const P1: Player = {
   collection: STORE.useCollection1(),
   yaku: STORE.useYaku1(),
   score: STORE.useScore1(),
+  koikoi: 0
 };
 
 const P2: Player = {
@@ -35,6 +36,7 @@ const P2: Player = {
   collection: STORE.useCollection2(),
   yaku: STORE.useYaku2(),
   score: STORE.useScore2(),
+  koikoi: 0
 };
 
 const player: Record<string, () => Player> = {
@@ -60,7 +62,10 @@ const TABLE = {
 };
 
 const activeP = STORE.useActiveP();
-const activeHand = () => player[activeP.value]().hand;
+const otherP = () => activeP.value === "p1" ? "p2" : "p1";
+const otherPlayer = () => player[otherP()]();
+const activePlayer = () => player[activeP.value]();
+const activeHand = () => activePlayer().hand;
 
 // ============================================================== //
 // =======================  UTILITIES =========================== //
@@ -68,14 +73,17 @@ const activeHand = () => player[activeP.value]().hand;
 
 const WAIT = ref(false);
 let START = false;
-let calledKoiKoi = "";
+const callKoiKoi = () => {
+  activePlayer().koikoi++;
+  console.log(`${activeP.value.toUpperCase()} called Koi-Koi (x${activePlayer().koikoi})`);
+};
 
 async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function setActiveP(): Promise<string> {
-  return winner.value || activeP.value === "p1" ? "p2" : "p1";
+  return winner.value || otherP();
 }
 
 // ============================================================== //
@@ -88,6 +96,7 @@ async function resetRefs() {
     p().hand.value = [];
     p().collection.value = [];
     p().yaku.value = {};
+    p().koikoi = 0;
   });
   [newYaku, winningYaku].forEach((refVar) => (refVar.value = {}));
   winner.value = "";
@@ -97,10 +106,9 @@ async function resetRefs() {
 async function newGame(score?: number) {
   if (score && winner.value) scoreboard[winner.value].value += score;
   if (winner.value) activeP.value = winner.value;
-  emits("next-round");
+  emits("next-round", winner.value);
   await resetRefs();
   TABLE.selectedCard.value = "";
-  calledKoiKoi = "";
   WAIT.value = false;
   draw.value = null; // Triggers deck reshuffle
   await sleep();
@@ -216,7 +224,7 @@ async function checkForInstantYaku(checkHand: Ref<string[]>): Promise<void> {
 
 async function showYaku(yakuNames: string[], p: string) {
   WAIT.value = true;
-  const P = player[activeP.value]();
+  const P = activePlayer();
   let [yakuList, coll] = [P.yaku.value, P.collection.value];
   let newList: Record<string, string[]> = {};
   yakuNames.forEach((yakuName) => {
@@ -240,7 +248,7 @@ async function continueGame(bool: boolean, p: string) {
     winner.value = p;
     return;
   }
-  calledKoiKoi = p;
+  callKoiKoi();
   WAIT.value = false;
 }
 
@@ -271,7 +279,7 @@ async function runGame() {
       await sleep();
     }
 
-    await sleep(500);
+    await sleep(400);
 
     selectedCard = TABLE.selectedCard.value;
     matches = await getMatch(selectedCard);
@@ -282,28 +290,29 @@ async function runGame() {
         // Collect matches and selected
         [selectedCard, ...matches].forEach((card) => TABLE.cardsToCollect.add(card));
         console.log(`${activeP.value} matched ${[...TABLE.cardsToCollect]}.`);
+        await sleep(400);
         TABLE.hand.value = await removeFromHand(new Set(matches), TABLE.hand.value);
         matches = [];
       } else {
         WAIT.value = true;
         TABLE.matchesFound.value = matches;
-        while (waiting()) await sleep();
+        while (waiting()) await sleep(500);
         matches = [];
       }
     } else {
-      await sleep(500);
+      await sleep(400);
       // NO MATCHES; place on table
       console.log(`${activeP.value} placed ${selectedCard} on the table.`);
       TABLE.hand.value = TABLE.hand.value.concat([selectedCard]);
     }
     activeHand().value = await removeFromHand(selectedCard, activeHand().value);
 
-    await sleep(500);
+    await sleep(400);
 
     if (TABLE.matchesFound.value.length) {
       console.log(...TABLE.matchesFound.value);
       while (TABLE.matchesFound.value.length) {
-        await sleep();
+        await sleep(500);
       }
     }
 
@@ -312,23 +321,29 @@ async function runGame() {
 
     if (!draw.value) {
       console.log("Collecting...");
-      player[activeP.value]().collection.value = await collectCards(
+      activePlayer().collection.value = await collectCards(
         TABLE.cardsToCollect,
-        player[activeP.value]().collection.value
+        activePlayer().collection.value
       );
       TABLE.cardsToCollect.clear();
       WAIT.value = true;
       let newOya;
       while (waiting()) {
         newOya = winner.value || "";
-        await sleep();
+        await sleep(500);
       }
-
+      
+      // Call a draw if player has no more cards
+      if (activeHand().value.length === 0) {
+        WAIT.value = true;
+        winningYaku.value = null;
+        winner.value = null;
+        while (waiting()) await sleep(500);
+      }
       activeP.value = newOya || (await setActiveP());
       console.log(`IT'S PLAYER ${activeP.value === "p1" ? 1 : 2}'S TURN`);
     }
   }
-  // await resetRefs();
 }
 </script>
 
@@ -379,7 +394,7 @@ async function runGame() {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div id="p1-hand" :class="{ inactive: activeP != 'p1' }">
+    <div id="p1-hand" :class="{ inactive: activeP != 'p1' || draw }">
       <Hand
         player="p1"
         :cards="P1.hand.value"
@@ -425,7 +440,7 @@ async function runGame() {
         <ScoreSheet
           :player="winner"
           :yakuList="winningYaku"
-          :koikoi="!!calledKoiKoi && winner != calledKoiKoi"
+          :koikoi="otherPlayer().koikoi"
           :show-modal="winner !== ''"
           @reset="(score: number) => newGame(score)"
         />
@@ -476,6 +491,7 @@ async function runGame() {
   pointer-events: none;
   opacity: 0;
   animation: pickUp 1s 0.5s;
+  z-index: 1;
 }
 
 #p1-hand {
@@ -492,6 +508,7 @@ async function runGame() {
   pointer-events: none;
   position: relative;
   opacity: 0.5;
+  padding-bottom: 50px;
 
   & > * {
     position: absolute;
@@ -505,6 +522,7 @@ async function runGame() {
   right: 25%;
   opacity: 0;
   animation: pickUp 1s 0.5s;
+  z-index: 1;
 }
 
 @keyframes pickUp {

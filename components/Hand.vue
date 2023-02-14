@@ -10,7 +10,7 @@ const emits = defineEmits(["check-match", "set-selected"]);
 const activeP = STORE.useActiveP();
 
 // If match, props.cards will be updated
-function checkForMatch(cardName: string) {
+function selectCard(cardName: string) {
   if (cardName == null || activeP.value !== "p1") return;
   emits("check-match", cardName);
 }
@@ -24,7 +24,7 @@ function checkForMatch(cardName: string) {
         <Card
           :name="card"
           :hide="player === 'p2'"
-          @card-select="(cardName: string) => checkForMatch(cardName)"
+          @card-select="(cardName: string) => selectCard(cardName)"
         />
       </div>
     </template>

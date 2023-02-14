@@ -5,7 +5,7 @@ const props = defineProps<{
   showModal: boolean;
   player: string | null;
   yakuList: Dict | null;
-  koikoi: boolean;
+  koikoi: number;
 }>();
 
 const emits = defineEmits(["reset", "next"]);
@@ -27,7 +27,7 @@ onBeforeMount(() => {
   <dialog :open="showModal" aria-modal="true">
     <div id="points">
       <h1>{{ player || "draw" }}</h1>
-      <h2>{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
+      <h2 :class="{ bonus: koikoi }">{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
     </div>
     <template v-if="player && yakuList">
       <div id="scoresheet">
@@ -63,12 +63,7 @@ onBeforeMount(() => {
   justify-content: flex-start;
   align-items: flex-start;
   align-self: flex-start;
-  mask-image: linear-gradient(
-    180deg,
-    transparent,
-    #111 25px 95%,
-    transparent
-  );
+  mask-image: linear-gradient(180deg, transparent, #111 25px 95%, transparent);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
@@ -103,14 +98,14 @@ onBeforeMount(() => {
     aspect-ratio: 2 / 3;
     animation: none;
 
-    &:nth-child(n+6) {
+    &:nth-child(n + 6) {
       transform: translate3d(0, -20%, 0);
     }
 
-    &:nth-child(n+11) {
+    &:nth-child(n + 11) {
       transform: translate3d(0, -40%, 0);
     }
-    
+
     &:nth-child(6) {
       margin-left: 5%;
     }
@@ -124,16 +119,21 @@ onBeforeMount(() => {
   justify-content: flex-start;
   align-items: center;
   gap: 2rem;
+  transition: all 0.5s;
 
   & h2 {
-  font-size: 44px;
+    font-size: 44px;
+
+    &.bonus {
+      color: transparent;
+      background: var(--gradient-gold);
+      background-clip: text;
+    }
   }
-    
 }
 
-
 @media (width > 800px) or (orientation: landscape) {
-  #scoresheet { 
+  #scoresheet {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
@@ -142,9 +142,9 @@ onBeforeMount(() => {
   #points h2 {
     font-size: 32px;
   }
-  
+
   .yaku {
-    width: 45vw;
+    width: 48vw;
   }
 }
 </style>

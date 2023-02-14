@@ -120,7 +120,7 @@ onMounted(async () => {
   }
 
   .yaku {
-    width: 45vw;
+    width: 48vw;
   }
 }
 

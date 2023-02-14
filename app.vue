@@ -1,20 +1,66 @@
 <script setup lang="ts">
+import { Ref } from "vue";
 import { STORE } from "~~/components/composables/game";
 
 const roundNum = ref(0);
 const score1 = STORE.useScore1();
 const score2 = STORE.useScore2();
 const started = STORE.useStart();
+const oya = ref(1);
+
+const saveData: Record<string, Ref<number>> = {
+  "lpk-round-num": roundNum,
+  "lpk-p1-score": score1,
+  "lpk-p2-score": score2,
+  "lpk-oya": oya,
+};
+
+async function loadData() {
+  return new Promise((resolve, reject) => {
+    if (!localStorage) reject("No stored data found.");
+    try {
+      Object.keys(saveData).forEach(
+        (key) => (saveData[key].value = parseInt(localStorage.getItem(key) || "0"))
+      );
+      resolve("Data loaded successfully.");
+    } catch (err) {
+      reject(`Failed to load stored data. ${err}`);
+    }
+  });
+}
+
+async function saveLocalData(newOya?: string) {
+  return new Promise((resolve, reject) => {
+    roundNum.value++;
+    if (newOya) oya.value = newOya === 'p1' ? 1 : 2;
+    if (!localStorage) reject(console.warn("No local storage found."));
+    try {
+      Object.keys(saveData).forEach(
+        (key) => (localStorage.setItem(key, `${saveData[key].value}`))
+      );
+      resolve(console.log("Data saved successfully."));
+    } catch (err) {
+      reject(console.error(`Failed to save data. ${err}`));
+    }
+  });
+}
 
 function endGame() {
   started.value = false;
+  localStorage.clear();
 }
 
 function resetGame() {
+  saveLocalData();
   roundNum.value = 0;
   score1.value = 0;
   score2.value = 0;
 }
+
+onMounted(async () => {
+  let loadMsg = await loadData();
+  console.log(loadMsg);
+});
 </script>
 
 <template>
@@ -23,18 +69,18 @@ function resetGame() {
       id="back-btn"
       :class="`${
         started ? '' : 'hidden'
-      } p-2 opacity-25 font-black text-3xl text-white transition-all duration-500`"
+      } px-4 py-1 opacity-25 font-black text-3xl text-white transition-all duration-500`"
       @click="endGame()"
     >
-      &lAarr;
+      &larr;
     </button>
   </header>
   <main>
     <div id="hero" :class="{ 'scroll-up': started }"></div>
     <Start />
     <template v-if="started">
-      <Table @next-round="roundNum++" @reset="resetGame()" />
-      <StatusBar :round-num="roundNum" :score="{ p1: score1, p2: score2 }" oya="p1" />
+      <Table @next-round="(newOya: string) => saveLocalData(newOya)" @reset="resetGame()" />
+      <StatusBar :round-num="roundNum" :score="{ p1: score1, p2: score2 }" :oya="`p${oya}`" />
     </template>
   </main>
 </template>
@@ -46,6 +92,7 @@ function resetGame() {
 * {
   --tbl-black: rgb(14, 20, 34);
   --tbl-green: rgb(17, 75, 38);
+  --gradient-gold: linear-gradient(15deg, goldenrod, palegoldenrod);
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -56,9 +103,13 @@ body {
   font-family: "Mochiy Pop One", sans-serif;
 }
 
-#back-btn:hover {
-  translate: -5% 0;
-  opacity: 1;
+#back-btn {
+  font-family: 'Potta One';
+
+  &:hover {
+    translate: -5% 0;
+    opacity: 1;
+  }
 }
 
 #hero {
@@ -96,7 +147,7 @@ main {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, goldenrod, palegoldenrod);
+    background: var(--gradient-gold);
   }
 }
 
@@ -109,7 +160,7 @@ dialog {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   position: fixed;
   top: 50%;
   left: 50%;
