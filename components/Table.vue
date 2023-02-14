@@ -299,7 +299,7 @@ async function runGame() {
 
     selectedCard = TABLE.selectedCard.value;
     matches = await getMatch(selectedCard);
-    if (aiPlay) matches = matches.slice(0, 1);
+    if (aiPlay && matches.length === 2) matches = matches.slice(0, 1);
 
     if (matches.length) {
       if (matches.length == 1 || matches.length == 3) {
