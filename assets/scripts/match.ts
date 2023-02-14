@@ -87,7 +87,7 @@ export function processYakuList(yakuList: Dict): Dict {
 
 export function getYakuScore(
   yakuList: Record<string, string[]>,
-  koikoi: boolean
+  koikoi: number
 ): number {
   let total = 0;
   for (let yaku in yakuList) {
@@ -104,7 +104,7 @@ export function getYakuScore(
   }
   console.log(Object.keys(yakuList), total + " points");
   if (total >= 7) total *= 2;
-  if (koikoi) total *= 2;
+  total *= (1 + koikoi);
   return total;
 }
 

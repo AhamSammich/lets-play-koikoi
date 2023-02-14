@@ -10,7 +10,6 @@
   - [x] Triplet on table
   - [x] Yaku determination
     - [x] FIX: Handle simultaneous yaku
-    - [ ] FIX: Handle subsequent yaku (tan/tane-zaku, kasu)
     - [x] FIX: Check for yaku after deck draw
   - [x] Check for instant win(hand)/re-deal(field) (full suit or 4 pairs)
 
@@ -31,9 +30,7 @@
   - [ ] Highlight possible match
   - [ ] Yaku progress
   - [ ] How To Play
-    - [ ] Create route
     - [ ] Yaku cheatsheat
-  - [ ] Game log
-  - [ ] Display action messages
   - [x] Mobile layout
-    - [x] FIX: Overflow
+  - [x] Message when calling koi-koi
+  - [ ] Sidebar/header menu

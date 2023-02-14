@@ -42,7 +42,7 @@ onMounted(async () => {
     <template v-if="player === 'p1'">
       <div class="btn-bar">
         <template v-if="koikoiAllowed">
-          <button @click="callKoiKoi()">KOI KOI!</button>
+          <button @click="callKoiKoi()">KOI KOI</button>
         </template>
         <button @click="endGame()">END ROUND</button>
       </div>
@@ -120,7 +120,7 @@ onMounted(async () => {
   }
 
   .yaku {
-    width: 45vw;
+    width: 48vw;
   }
 }
 

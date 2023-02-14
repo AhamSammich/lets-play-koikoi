@@ -7,11 +7,19 @@ const props = defineProps<{
 const emits = defineEmits(["card-select"]);
 
 function handleClick(e: Event) {
+  (<HTMLElement>e.target).classList.add("selected");
   emits("card-select", props.name);
 }
+
+onUpdated(() =>
+  document.querySelectorAll("#p1-hand .card").forEach((card) => {
+    card.classList.add("inanimate");
+    card.classList.remove("selected", "inanimate");
+  })
+);
 </script>
 
-<template> 
+<template>
   <template v-if="hide">
     <div class="card down"></div>
   </template>
@@ -30,6 +38,11 @@ function handleClick(e: Event) {
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
 
+  &.inanimate {
+    animation: none;
+    transition: none;
+  }
+
   &:hover {
     cursor: pointer;
     transform: translate3d(0, -5%, 0);
@@ -37,9 +50,15 @@ function handleClick(e: Event) {
   }
 
   &.down {
-  background-color: rgb(220 38 38);
-  max-width: 40px;
-}
+    background-color: rgb(220 38 38);
+    max-width: 60px;
+  }
+
+  &.selected {
+    transform-origin: bottom;
+    outline: none;
+    opacity: 0;
+  }
 }
 
 @keyframes dropIn {
@@ -50,6 +69,21 @@ function handleClick(e: Event) {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes pickUp {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.2) translate3d(25%, 0, 0);
+    box-shadow: none;
+    outline: none;
   }
 }
 </style>

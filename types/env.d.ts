@@ -19,4 +19,5 @@ type Player = {
   collection: Ref<string[]>;
   yaku: Ref<Dict>;
   score: Ref<number>;
+  koikoi: number;
 };

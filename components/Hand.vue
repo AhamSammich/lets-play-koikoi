@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { STORE } from "~~/components/composables/game";
-const props = defineProps<{
+defineProps<{
   player: string;
   cards: string[];
 }>();
 
 // Emit card detail to Table
-const emits = defineEmits(["check-match", "set-selected"]);
+const emits = defineEmits(["check-match"]);
 const activeP = STORE.useActiveP();
 
 // If match, props.cards will be updated
-function checkForMatch(cardName: string) {
+function selectCard(cardName: string) {
   if (cardName == null || activeP.value !== "p1") return;
   emits("check-match", cardName);
 }
@@ -19,12 +19,12 @@ function checkForMatch(cardName: string) {
 <template>
   <div class="hand">
     <template v-for="card in cards">
-      <div class="card">
+      <div class="player-card">
         <!-- Get selected card details and check table for match -->
         <Card
           :name="card"
           :hide="player === 'p2'"
-          @card-select="(cardName: string) => checkForMatch(cardName)"
+          @card-select="(cardName: string) => selectCard(cardName)"
         />
       </div>
     </template>
@@ -41,12 +41,12 @@ function checkForMatch(cardName: string) {
   margin-left: 0.5rem;
   transform-origin: left;
 }
-.card {
+.player-card {
   max-width: 60px;
 }
 
 @media (width < 800px) {
-  .card {
+  .player-card {
     max-width: 60px;
 
     &:nth-child(5) {
@@ -62,6 +62,7 @@ function checkForMatch(cardName: string) {
     flex-wrap: wrap;
     max-width: 350px;
     gap: 0.5rem;
+    z-index: 1;
   }
 }
 </style>
