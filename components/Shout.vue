@@ -24,7 +24,7 @@ defineProps<{
   translate: -50% -50%;
   animation: stamp 0.3s ease-in;
   white-space: nowrap;
-  background: #11111150;
+  background: rgba(14, 20, 34, 0.5);
   height: 100vh;
   height: 100dvh;
   width: 100vw;

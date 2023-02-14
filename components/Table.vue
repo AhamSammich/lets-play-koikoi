@@ -496,6 +496,9 @@ async function runGame() {
 
   @media (orientation: landscape) {
     grid-template-rows: 60px minmax(100px, 1fr) 120px;
+    & #p1-hand {
+      padding-bottom: 50px;
+    }
   }
 }
 
@@ -530,7 +533,6 @@ async function runGame() {
   pointer-events: none;
   position: relative;
   opacity: 0.5;
-  padding-bottom: 50px;
 
   & > * {
     position: absolute;
@@ -552,7 +554,7 @@ async function runGame() {
   min-width: 350px;
   justify-self: flex-start;
   transform-origin: left;
-  margin-left: 0.3rem;
+  margin-left: 0.5rem;
   z-index: 0;
 }
 
@@ -583,12 +585,20 @@ async function runGame() {
     right: 0;
     bottom: 0;
     transform-origin: bottom right;
+
+    @media (orientation: landscape) {
+      right: 2.5rem;
+    }
   }
 
   &#p2-collection {
     left: 0;
     top: 0;
     transform-origin: top left;
+
+    @media (orientation: portrait) {
+      top: 2.5rem;
+    }
   }
 }
 </style>
