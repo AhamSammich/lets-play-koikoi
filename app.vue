@@ -20,7 +20,7 @@ async function loadLocalData() {
     if (!localStorage) reject(console.warn("No stored data found."));
     try {
       Object.keys(saveData).forEach(
-        (key) => (saveData[key].value = Number(localStorage.getItem(key) || "0"))
+        (key) => (saveData[key].value = Number(localStorage.getItem(key) || key.endsWith("score") ? "0" : "1"))
       );
       resolve(console.info("Data loaded successfully."));
     } catch (err) {
