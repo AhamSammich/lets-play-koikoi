@@ -6,9 +6,26 @@ const props = defineProps<{
 
 const emits = defineEmits(["card-select"]);
 
+// Single-click to preview card matches
 function handleClick(e: Event) {
-  (<HTMLElement>e.target).classList.add("selected");
+  (<HTMLElement>e.target).classList.add("previewed");
+}
+
+// Click and hold (2 sec) to select/play card
+async function handlePointerDown(e: Event) {
+  console.log("Selecting...");
+  let target = <HTMLElement>e.target;
+  target.classList.add("selected");
+  target.addEventListener("pointerup", cancelPointerDown, { once: true });
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  if (!target.classList.contains("selected")) return;
+  target.classList.remove("previewed");
   emits("card-select", props.name);
+}
+
+async function cancelPointerDown(e: Event) {
+  (<HTMLElement>e.target).classList.remove("selected");
+    console.log('...selection cancelled.');;
 }
 
 onUpdated(() =>
@@ -24,7 +41,12 @@ onUpdated(() =>
     <div class="card down"></div>
   </template>
   <template v-else>
-    <img class="card" :src="`cards/${props.name}.png`" @click="handleClick" />
+    <img
+      class="card"
+      :src="`cards/${props.name}.png`"
+      @click="handleClick"
+      @pointerdown="handlePointerDown"
+    />
   </template>
 </template>
 
@@ -58,7 +80,9 @@ onUpdated(() =>
     transform-origin: bottom;
     outline: none;
     opacity: 0;
+    transition-delay: 1.5s;
   }
+
 }
 
 @keyframes dropIn {
