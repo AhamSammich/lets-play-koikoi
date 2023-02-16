@@ -2,6 +2,7 @@ import { Ref } from "vue";
 
 export const STORE: Record<string, () => Ref> = {
     useRoundNum: () => useState("roundNum", () => 1),
+    useCurrentOya: () => useState("currentOya", () => 1),
     useScore1: () => useState("score1", () => 0),
     useScore2: () => useState("score2", () => 0),
     useHand1: () => useState("hand1", () => <string[]>[]),
