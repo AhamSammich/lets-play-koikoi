@@ -6,7 +6,7 @@ const roundNum = ref(0);
 const score1 = STORE.useScore1();
 const score2 = STORE.useScore2();
 const started = STORE.useStart();
-const oya = ref(1);
+const oya = STORE.useCurrentOya();
 
 const saveData: Record<string, Ref<number>> = {
   "lpk-round-num": roundNum,
@@ -15,16 +15,16 @@ const saveData: Record<string, Ref<number>> = {
   "lpk-oya": oya,
 };
 
-async function loadData() {
+async function loadLocalData() {
   return new Promise((resolve, reject) => {
-    if (!localStorage) reject("No stored data found.");
+    if (!localStorage) reject(console.warn("No stored data found."));
     try {
       Object.keys(saveData).forEach(
-        (key) => (saveData[key].value = parseInt(localStorage.getItem(key) || "0"))
+        (key) => (saveData[key].value = Number(localStorage.getItem(key) || "0"))
       );
-      resolve("Data loaded successfully.");
+      resolve(console.info("Data loaded successfully."));
     } catch (err) {
-      reject(`Failed to load stored data. ${err}`);
+      reject(console.error(`Failed to load stored data. ${err}`));
     }
   });
 }
@@ -36,7 +36,7 @@ async function saveLocalData() {
       Object.keys(saveData).forEach((key) =>
         localStorage.setItem(key, `${saveData[key].value}`)
       );
-      resolve(console.log("Data saved successfully."));
+      resolve(console.info("Data saved successfully."));
     } catch (err) {
       reject(console.error(`Failed to save data. ${err}`));
     }
@@ -52,17 +52,16 @@ function resetGame() {
   roundNum.value = 0;
   score1.value = 0;
   score2.value = 0;
+  oya.value = 1;
 }
 
-async function handleNext(newOya?: string) {
-  if (newOya) oya.value = newOya === "p1" ? 1 : 2;
+async function handleNext() {
   await saveLocalData();
   roundNum.value++;
 }
 
 onMounted(async () => {
-  let loadMsg = await loadData();
-  console.log(loadMsg);
+  await loadLocalData();
 });
 </script>
 
@@ -82,7 +81,7 @@ onMounted(async () => {
     <div id="hero" :class="{ 'scroll-up': started }"></div>
     <Start />
     <template v-if="started">
-      <Table @next-round="(newOya: string) => handleNext(newOya)" @reset="resetGame()" />
+      <Table @next-round="handleNext()" @reset="resetGame()" />
       <StatusBar
         :round-num="roundNum"
         :score="{ p1: score1, p2: score2 }"

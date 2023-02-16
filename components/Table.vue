@@ -68,6 +68,7 @@ const TABLE = {
 };
 
 const activeP = STORE.useActiveP();
+const currentOya = STORE.useCurrentOya();
 const otherP = () => (activeP.value === "p1" ? "p2" : "p1");
 const otherPlayer = () => player[otherP()]();
 const activePlayer = () => player[activeP.value]();
@@ -98,9 +99,21 @@ async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function setActiveP(): Promise<string> {
-  return winner.value || otherP();
+async function getActiveP(setPlayer?: string): Promise<string> {
+  // Set ref value (number) and return player name (string)
+  activeP.value = setPlayer || otherP();
+  return activeP.value;
 }
+
+async function getCurrentOya(setOya?: number): Promise<string> {
+  // Set ref value (number) and return oya name (string)
+  if (!(setOya || winner.value)) return `p${currentOya.value}`
+  let playerNum = Number(winner.value?.[1]) || 0;
+  console.log(winner.value?.[1])
+  currentOya.value = setOya || playerNum;
+  return `p${currentOya.value}`;
+}
+
 
 // ============================================================== //
 // ======================  START GAME  ========================== //
@@ -262,6 +275,7 @@ async function continueGame(bool: boolean, p: string) {
     let yakuList = player[p]().yaku.value;
     winningYaku.value = yakuList;
     winner.value = p;
+    await getCurrentOya();
     return;
   }
   callKoiKoi();
@@ -273,6 +287,7 @@ async function continueGame(bool: boolean, p: string) {
 // ============================================================== //
 
 async function runGame() {
+  await getActiveP(await getCurrentOya());
   let running = () => started.value;
   let waiting = () => WAIT.value;
   let reset = false;
@@ -337,17 +352,23 @@ async function runGame() {
 
     if (!draw.value) {
       console.log("Collecting...");
+      // Collection will emit 'new-yaku' or 'no-yaku'
       activePlayer().collection.value = await collectCards(
         TABLE.cardsToCollect,
         activePlayer().collection.value
       );
       TABLE.cardsToCollect.clear();
       WAIT.value = true;
+
+      // Wait for victory determination
       let newOya;
       while (waiting()) {
-        newOya = winner.value || "";
+        if (winner.value && !newOya) {
+          newOya = winner.value;
+        }
         await sleep(500);
       }
+      await getActiveP(newOya);
 
       // Call a draw if player has no more cards
       if (activeHand().value.length === 0) {
@@ -355,8 +376,8 @@ async function runGame() {
         winningYaku.value = null;
         winner.value = null;
         while (waiting()) await sleep(500);
+        await getActiveP(await getCurrentOya());
       }
-      activeP.value = newOya || (await setActiveP());
       console.log(`IT'S PLAYER ${activeP.value === "p1" ? 1 : 2}'S TURN`);
     }
   }
