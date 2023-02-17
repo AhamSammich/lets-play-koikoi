@@ -368,7 +368,6 @@ async function runGame() {
         }
         await sleep(500);
       }
-      await getActiveP(newOya);
 
       // Call a draw if player has no more cards
       if (activeHand().value.length === 0) {
@@ -377,6 +376,8 @@ async function runGame() {
         winner.value = null;
         while (waiting()) await sleep(500);
         await getActiveP(await getCurrentOya());
+      } else {
+        await getActiveP(newOya);
       }
       console.log(`IT'S PLAYER ${activeP.value === "p1" ? 1 : 2}'S TURN`);
     }
