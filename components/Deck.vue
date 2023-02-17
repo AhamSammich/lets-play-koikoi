@@ -4,7 +4,7 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(["deal", "draw"]);
 
-const allCards = [
+const CARDS = [
   "matsu-ni-tsuru",
   "matsu-no-tan",
   "matsu-no-kasu-1",
@@ -91,18 +91,16 @@ async function shuffle(cards: string[]): Promise<string[]> {
 
 onMounted(async () => {
   progressBar = <HTMLElement>document.getElementById("deck-progress");
-  // remainingCards = await shuffle([...allCards]);
-  // emits("deal", dealHands());
 });
 
 onUpdated(async () => {
   if (props.drawCard == null) {
-    remainingCards = await shuffle([...allCards]);
+    remainingCards = await shuffle([...CARDS]);
     emits("deal", dealHands());
   }
   if (props.drawCard === true) {
     emits("draw", draw());
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await sleep();
   }
 });
 </script>

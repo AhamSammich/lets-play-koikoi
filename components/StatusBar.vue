@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // @ts-ignore
 import peony from "../assets/images/peony2.png";
-import { STORE } from "./composables/state";
 
 const props = defineProps<{
   roundNum: number;

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { STORE } from "./composables/state";
-import { getFlower } from "~~/assets/scripts/match";
-
 const props = defineProps<{
   name: string;
   hide?: boolean;
@@ -34,7 +31,7 @@ async function handlePointerDown(e: Event) {
   let target = <HTMLElement>e.target;
   target.classList.add("selecting");
   target.addEventListener("pointerup", cancelPointerDown, { once: true });
-  if (isTouchScreen()) await new Promise((resolve) => setTimeout(resolve, 300));
+  if (isTouchScreen()) await sleep(300);
 
   if (!target.classList.contains("selecting")) return;
   target.classList.add("selected");

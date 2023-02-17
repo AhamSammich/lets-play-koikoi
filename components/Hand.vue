@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { STORE } from "~~/components/composables/state";
 defineProps<{
   player: string;
   cards: string[];

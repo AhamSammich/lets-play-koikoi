@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getFlower } from '~~/assets/scripts/match';
 
 defineProps<{
   cards: string[];
