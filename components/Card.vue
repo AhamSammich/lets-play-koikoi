@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { STORE } from "./composables/game";
+import { STORE } from "./composables/state";
 import { getFlower } from "~~/assets/scripts/match";
 
 const props = defineProps<{
