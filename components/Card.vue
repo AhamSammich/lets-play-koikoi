@@ -55,6 +55,8 @@ async function cancelPointerDown(e: Event) {
     <img
       class=""
       :src="`cards/${props.name}.png`"
+      @touchstart.prevent
+      @touchend.prevent
       @pointerover="handleHover"
       @pointerdown="handlePointerDown"
     />
@@ -133,7 +135,7 @@ img {
   transition: stroke-dashoffset var(--duration);
 }
 
-.glow:is(:hover, :focus, .previewed) :is(.glow-line, .glow-blur) {
+.glow:is(:hover, .previewed) :is(.glow-line, .glow-blur) {
   stroke-dashoffset: -60px;
 }
 
@@ -148,7 +150,7 @@ img {
   stroke-width: var(--glow-blur-size);
 }
 
-.glow:is(:hover, :focus) .glow-container {
+.glow:is(:hover) .glow-container {
   animation: glow-visibility ease-in-out var(--duration) infinite;
 }
 
