@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { STORE } from "~~/components/composables/state";
 import { Ref } from "vue";
-import {
-  checkForWinOrVoid,
-  getCardsInYaku,
-  matchCardInArr,
-} from "~~/assets/scripts/match";
 
 const emits = defineEmits([
   "match-select",
@@ -45,9 +39,16 @@ const P2: Player = {
   koikoi: 0,
 };
 
-const player: Record<string, () => Player> = {
+const PLAYER: Record<string, () => Player> = {
   p1: () => P1,
   p2: () => P2,
+};
+
+const TABLE = {
+  hand: STORE.useField(),
+  selectedCard: ref(""),
+  matchesFound: ref(<string[]>[]),
+  cardsToCollect: <Set<string>>new Set(),
 };
 
 const draw: Ref<boolean | null> = ref(false);
@@ -60,18 +61,11 @@ const scoreboard: Record<string, Ref<number>> = {
   p2: <Ref<number>>STORE.useScore2(),
 };
 
-const TABLE = {
-  hand: STORE.useField(),
-  selectedCard: ref(""),
-  matchesFound: ref(<string[]>[]),
-  cardsToCollect: <Set<string>>new Set(),
-};
-
 const activeP = STORE.useActiveP();
 const currentOya = STORE.useCurrentOya();
 const otherP = () => (activeP.value === "p1" ? "p2" : "p1");
-const otherPlayer = () => player[otherP()]();
-const activePlayer = () => player[activeP.value]();
+const otherPlayer = () => PLAYER[otherP()]();
+const activePlayer = () => PLAYER[activeP.value]();
 const activeHand = () => activePlayer().hand;
 
 // ============================================================== //
@@ -95,10 +89,6 @@ async function shoutMsg(msg: string) {
   SHOUT.value = "";
 }
 
-async function sleep(ms = 1000) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 async function getActiveP(setPlayer?: string): Promise<string> {
   // Set ref value (number) and return player name (string)
   activeP.value = setPlayer || otherP();
@@ -107,13 +97,12 @@ async function getActiveP(setPlayer?: string): Promise<string> {
 
 async function getCurrentOya(setOya?: number): Promise<string> {
   // Set ref value (number) and return oya name (string)
-  if (!(setOya || winner.value)) return `p${currentOya.value}`
+  if (!(setOya || winner.value)) return `p${currentOya.value}`;
   let playerNum = Number(winner.value?.[1]) || 0;
-  console.log(winner.value?.[1])
+  console.log(winner.value?.[1]);
   currentOya.value = setOya || playerNum;
   return `p${currentOya.value}`;
 }
-
 
 // ============================================================== //
 // ======================  START GAME  ========================== //
@@ -121,7 +110,7 @@ async function getCurrentOya(setOya?: number): Promise<string> {
 
 async function resetRefs() {
   console.log("Resetting...");
-  Object.values(player).forEach((p) => {
+  Object.values(PLAYER).forEach((p) => {
     p().hand.value = [];
     p().collection.value = [];
     p().yaku.value = {};
@@ -272,7 +261,7 @@ async function continueGame(bool: boolean, p: string) {
   }
   newYaku.value = {};
   if (!bool) {
-    let yakuList = player[p]().yaku.value;
+    let yakuList = PLAYER[p]().yaku.value;
     winningYaku.value = yakuList;
     winner.value = p;
     await getCurrentOya();

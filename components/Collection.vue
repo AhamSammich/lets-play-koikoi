@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { checkForYaku, sortCardsByType, getCardsInYaku } from "~~/assets/scripts/match";
-
 const props = defineProps<{
   player: string;
   cards: string[];

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import { STORE } from "~~/components/composables/state";
 
 const roundNum = ref(0);
 const score1 = STORE.useScore1();

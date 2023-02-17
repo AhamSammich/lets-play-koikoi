@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { STORE } from "~~/components/composables/state";
-
 const started = STORE.useStart();
 
 function startGame() {
