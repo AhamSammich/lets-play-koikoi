@@ -1,53 +1,81 @@
 <script setup lang="ts">
+import { STORE } from "./composables/game";
+import { getFlower } from "~~/assets/scripts/match";
+
 const props = defineProps<{
   name: string;
   hide?: boolean;
+  interactive?: boolean;
 }>();
 
 const emits = defineEmits(["card-select"]);
+const previewCard = STORE.usePreview();
 
-function handleClick(e: Event) {
-  (<HTMLElement>e.target).classList.add("selected");
+const isMatched = () =>
+  props.interactive && getFlower(props.name) === getFlower(previewCard.value);
+
+// Mouseover to preview card matches
+function handleHover(e: Event) {
+  previewCard.value = props.name;
+  e.target?.addEventListener("pointerleave", cancelHover, { once: true });
+}
+
+// Remove effects from matched cards
+// Delayed to allow quick preview on touchscreens without hover
+async function cancelHover() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  previewCard.value = "";
+}
+
+// Click and hold (0.5 sec) to select/play card
+async function handlePointerDown(e: Event) {
+  e.preventDefault();
+  let target = <HTMLElement>e.target;
+  target.classList.add("selecting");
+  target.addEventListener("pointerup", cancelPointerDown, { once: true });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  if (!target.classList.contains("selecting")) return;
+  previewCard.value = "";
   emits("card-select", props.name);
 }
 
-onUpdated(() =>
-  document.querySelectorAll("#p1-hand .card").forEach((card) => {
-    card.classList.add("inanimate");
-    card.classList.remove("selected", "inanimate");
-  })
-);
+// Remove selection effects
+async function cancelPointerDown(e: Event) {
+  (<HTMLElement>e.target).classList.remove("selecting", "selected");
+}
 </script>
 
 <template>
-  <template v-if="hide">
-    <div class="card down"></div>
-  </template>
-  <template v-else>
-    <img class="card" :src="`cards/${props.name}.png`" @click="handleClick" />
-  </template>
+  <div v-if="hide" class="card down"></div>
+
+  <div v-else :class="`card glow ${isMatched() ? 'previewed' : ''}`">
+    <svg v-if="interactive" class="glow-container absolute">
+      <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
+      <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
+    </svg>
+    <img
+      class=""
+      :src="`cards/${props.name}.png`"
+      @touchstart.prevent
+      @touchend.prevent
+      @pointerover="handleHover"
+      @pointerdown="handlePointerDown"
+    />
+  </div>
 </template>
 
 <style lang="postcss">
+.card,
+img {
+  border-radius: 0.2rem;
+}
 .card {
   width: 75px;
   aspect-ratio: 2 / 3;
   outline: 0.05px solid lightgoldenrodyellow;
-  background-color: #11111180;
-  border-radius: 0.2rem;
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
-
-  &.inanimate {
-    animation: none;
-    transition: none;
-  }
-
-  &:hover {
-    cursor: pointer;
-    transform: translate3d(0, -5%, 0);
-    outline: none;
-  }
 
   &.down {
     background-color: rgb(220 38 38);
@@ -58,6 +86,84 @@ onUpdated(() =>
     transform-origin: bottom;
     outline: none;
     opacity: 0;
+    transition-delay: 0.1s;
+  }
+
+  &.previewed {
+    position: relative;
+    scale: 1.1;
+  }
+}
+
+.previewed,
+.card:hover {
+  /* Used for calc */
+  --container-offset: 50px;
+  --glow-line-color: lightgoldenrodyellow;
+  --glow-line-thickness: 1.5px;
+  --glow-blur-color: lightgoldenrodyellow;
+  --glow-blur-size: 8px;
+  --duration: 1s;
+  position: relative;
+
+  &:has(.selecting) {
+    --glow-line-color: gold;
+    --glow-blur-color: gold;
+    --duration: 500ms;
+  }
+
+  &:has(.selected) {
+    --duration: 5s;
+  }
+}
+
+.glow-container {
+  width: calc(100% + var(--container-offset));
+  height: calc(100% + var(--container-offset));
+  inset: calc(var(--container-offset) / -2);
+  pointer-events: none;
+}
+
+.glow-blur,
+.glow-line {
+  width: calc(100% - var(--container-offset));
+  height: calc(100% - var(--container-offset));
+  x: calc(var(--container-offset) / 2);
+  y: calc(var(--container-offset) / 2);
+  fill: transparent;
+  stroke: lightgoldenrodyellow;
+  stroke-width: 3px;
+  stroke-dasharray: 20px 30px;
+  transition: stroke-dashoffset var(--duration);
+}
+
+.glow:is(:hover, .previewed) :is(.glow-line, .glow-blur) {
+  stroke-dashoffset: -60px;
+}
+
+.glow-line {
+  stroke: var(--glow-line-color);
+  stroke-width: var(--glow-line-thickness);
+}
+
+.glow-blur {
+  filter: blur(var(--glow-blur-size));
+  stroke: var(--glow-blur-color);
+  stroke-width: var(--glow-blur-size);
+}
+
+.glow:is(:hover) .glow-container {
+  animation: glow-visibility ease-in-out var(--duration) infinite;
+}
+
+@keyframes glow-visibility {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    opacity: 1;
   }
 }
 
