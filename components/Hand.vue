@@ -24,6 +24,7 @@ function selectCard(cardName: string) {
         <Card
           :name="card"
           :hide="player === 'p2'"
+          :interactive="player === 'p1'"
           @card-select="(cardName: string) => selectCard(cardName)"
         />
       </div>
@@ -41,7 +42,7 @@ function selectCard(cardName: string) {
   margin-left: 0.5rem;
   transform-origin: left;
 }
-.player-card {
+.player-card > * {
   max-width: 60px;
 }
 

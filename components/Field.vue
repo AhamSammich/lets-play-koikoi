@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getFlower } from '~~/assets/scripts/match';
 
-const props = defineProps<{
+defineProps<{
   cards: string[];
 }>();
 </script>
@@ -10,7 +10,7 @@ const props = defineProps<{
   <div class="field">
     <template v-for="(card, index) in cards">
       <div :id="`field-${index}`" :class="`field-card ${getFlower(card)}`">
-        <Card :name="card" />
+        <Card :name="card" :interactive="true"/>
       </div>
     </template>
   </div>
