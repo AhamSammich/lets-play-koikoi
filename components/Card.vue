@@ -14,14 +14,16 @@ const previewCard = STORE.usePreview();
 const isMatched = () =>
   props.interactive && getFlower(props.name) === getFlower(previewCard.value);
 
-// Mouse to preview card matches
+// Mouseover to preview card matches
 function handleHover(e: Event) {
   previewCard.value = props.name;
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
 
 // Remove effects from matched cards
-function cancelHover() {
+// Delayed to allow quick preview on touchscreens without hover
+async function cancelHover() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   previewCard.value = "";
 }
 
@@ -33,8 +35,8 @@ async function handlePointerDown(e: Event) {
   target.addEventListener("pointerup", cancelPointerDown, { once: true });
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  previewCard.value = "";
   if (!target.classList.contains("selecting")) return;
+  previewCard.value = "";
   emits("card-select", props.name);
 }
 
