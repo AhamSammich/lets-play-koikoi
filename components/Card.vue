@@ -11,6 +11,7 @@ const props = defineProps<{
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
+const isTouchScreen = () => window.matchMedia("(pointer:coarse)").matches;
 const isMatched = () =>
   props.interactive && getFlower(props.name) === getFlower(previewCard.value);
 
@@ -21,21 +22,22 @@ function handleHover(e: Event) {
 }
 
 // Remove effects from matched cards
-// Delayed to allow quick preview on touchscreens without hover
+// Maintains preview on touchscreens without hover
 async function cancelHover() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  if (isTouchScreen()) return;
   previewCard.value = "";
 }
 
-// Click and hold (0.5 sec) to select/play card
+// Click (and hold for touchscreen) to play a card
 async function handlePointerDown(e: Event) {
   e.preventDefault();
   let target = <HTMLElement>e.target;
   target.classList.add("selecting");
   target.addEventListener("pointerup", cancelPointerDown, { once: true });
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  if (isTouchScreen()) await new Promise((resolve) => setTimeout(resolve, 300));
 
   if (!target.classList.contains("selecting")) return;
+  target.classList.add("selected");
   previewCard.value = "";
   emits("card-select", props.name);
 }
@@ -50,16 +52,18 @@ async function cancelPointerDown(e: Event) {
   <div v-if="hide" class="card down"></div>
 
   <div v-else :class="`card glow ${isMatched() ? 'previewed' : ''}`">
+    <!-- No effects if interactive is false -->
     <svg v-if="interactive" class="glow-container absolute">
       <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
       <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
     </svg>
+    <!-- Prevent long-press menu on touchscreen -->
     <img
       class=""
       :src="`cards/${props.name}.png`"
       @touchstart.prevent
       @touchend.prevent
-      @pointerover="handleHover"
+      @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
     />
   </div>
@@ -86,7 +90,6 @@ img {
     transform-origin: bottom;
     outline: none;
     opacity: 0;
-    transition-delay: 0.1s;
   }
 
   &.previewed {
@@ -101,19 +104,27 @@ img {
   --container-offset: 50px;
   --glow-line-color: lightgoldenrodyellow;
   --glow-line-thickness: 1.5px;
+  --glow-line-length: 20px;
   --glow-blur-color: lightgoldenrodyellow;
-  --glow-blur-size: 8px;
+  --glow-blur-size: 5px;
   --duration: 1s;
   position: relative;
 
+  /* Visual feedback for card selection */
   &:has(.selecting) {
     --glow-line-color: gold;
     --glow-blur-color: gold;
     --duration: 500ms;
+    opacity: 0.2;
+
+    /* Provides better touchscreen long-press feedback */
+    @media (pointer: coarse) {
+      --glow-line-length: 50px;
+    }
   }
 
   &:has(.selected) {
-    --duration: 5s;
+    opacity: 0;
   }
 }
 
@@ -133,12 +144,16 @@ img {
   fill: transparent;
   stroke: lightgoldenrodyellow;
   stroke-width: 3px;
-  stroke-dasharray: 20px 30px;
-  transition: stroke-dashoffset var(--duration);
+  stroke-dasharray: var(--glow-line-length) calc(50px - var(--glow-line-length));
+  transition: stroke-dashoffset var(--duration), stroke-dasharray var(--duration);
+  /* Provides better touchscreen long-press feedback */
+  @media (pointer: coarse) {
+    transition: stroke-dasharray var(--duration);
+  }
 }
 
 .glow:is(:hover, .previewed) :is(.glow-line, .glow-blur) {
-  stroke-dashoffset: -60px;
+  stroke-dashoffset: -40px;
 }
 
 .glow-line {
