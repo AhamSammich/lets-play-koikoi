@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { STORE } from "~~/components/composables/game";
+import { STORE } from "~~/components/composables/state";
 import { Ref } from "vue";
 import {
   checkForWinOrVoid,
