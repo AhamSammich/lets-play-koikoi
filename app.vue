@@ -76,6 +76,9 @@ onMounted(async () => {
       &larr;
     </button>
   </header>
+
+  <Menu :is-open="true" />
+
   <main>
     <div id="hero" :class="{ 'scroll-up': started }"></div>
     <Start />
@@ -96,7 +99,6 @@ onMounted(async () => {
 
 * {
   --tbl-black: rgb(14, 20, 34);
-  --tbl-green: rgb(17, 75, 38);
   --gradient-gold: linear-gradient(15deg, goldenrod, palegoldenrod);
   --tbl-w-max: 1000px;
   box-sizing: border-box;
