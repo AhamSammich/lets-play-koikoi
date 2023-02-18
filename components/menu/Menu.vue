@@ -16,12 +16,16 @@ const isOpen = ref(false);
       <div id="menu-btn" class="absolute z-50 top-4 mr-4 right-full">
         <MenuButton @open-menu="isOpen = true" @close-menu="isOpen = false" />
       </div>
-      <div id="menu-nav" class="w-full">
+      <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
-          <li>How To Play</li>
+          <li>
+            <a href="https://fudawiki.org/en/hanafuda/games/koi-koi" target="_blank"
+              >How To Play<Icon name="mi:external-link"
+            /></a>
+          </li>
           <li>Options</li>
         </ul>
-      </div>
+      </nav>
       <div id="menu-social"></div>
       <div id="menu-foot"></div>
     </div>
@@ -67,5 +71,9 @@ li {
     background: var(--menu-accent);
     box-shadow: -0.1rem 0 0 gold;
   }
+}
+
+.icon {
+  margin: 0 0.5em;
 }
 </style>
