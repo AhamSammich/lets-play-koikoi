@@ -1,21 +1,24 @@
 <script setup lang="ts">
 const isOpen = ref(false);
+
+const started = STORE.useStart();
+
 </script>
 
 <template>
+  <div id="menu-btn" :class="`absolute z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`">
+    <MenuButton @open-menu="isOpen = true" @close-menu="isOpen = false" />
+  </div>
   <div
     id="menu-backdrop"
     class="absolute transform-none top-0 left-0 h-screen w-screen opacity-0 z-30"
   ></div>
   <menu
     id="menu-container"
-    class="absolute right-0 top-0 translate-x-full max-w-full h-screen z-40"
+    class="absolute right-0 top-0 translate-x-full scale-x-0 max-w-full h-screen z-40"
     :aria-expanded="isOpen"
   >
     <div id="menu" class="relative h-full py-4 flex flex-col justify-between items-start">
-      <div id="menu-btn" class="absolute z-50 top-4 mr-4 right-full">
-        <MenuButton @open-menu="isOpen = true" @close-menu="isOpen = false" />
-      </div>
       <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
           <li>
@@ -23,11 +26,20 @@ const isOpen = ref(false);
               >How To Play<Icon name="mi:external-link"
             /></a>
           </li>
-          <li>Options</li>
         </ul>
       </nav>
-      <div id="menu-social"></div>
-      <div id="menu-foot"></div>
+      <section v-if="!started" id="menu-options" class="w-full p-8">
+        <h1>Options:</h1>
+        <MenuGameOptions />
+      </section>
+      <nav id="menu-foot" class="w-full flex justify-center items-end">
+        <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
+              ><Icon name="mdi:github"
+            /></a>
+        <a href="https://www.twitter.com/hammons_dev" target="_blank"
+              ><Icon name="mdi:twitter"
+            /></a>
+      </nav>
     </div>
   </menu>
 </template>
@@ -37,8 +49,17 @@ const isOpen = ref(false);
   --menu-black: rgb(14, 20, 34);
   --menu-gray1: rgb(64, 73, 90);
   --menu-gray2: rgb(36, 43, 61);
-  --menu-accent: red;
+  --menu-accent1: firebrick;
+  --menu-accent2: lightgoldenrodyellow;
   --menu-speed: 0.5s;
+}
+
+h1 {
+  font-family: 'Potta One';
+  font-size: larger;
+  margin-bottom: 0.5em;
+  letter-spacing: 0.05em;
+  color: var(--menu-accent2);
 }
 
 #menu-backdrop {
@@ -53,27 +74,56 @@ const isOpen = ref(false);
 }
 
 #menu-container {
-  min-width: 300px;
+  width: clamp(300px, 40vw, 400px);
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
   color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transform-origin: right;
 
   &[aria-expanded="true"] {
     transform: translate(0, 0);
   }
 }
 
-li {
-  width: 100%;
-  padding: 0.75rem 2rem;
+@media (orientation: landscape) {
+  #menu {
+    width: 100vw;
+    flex-direction: row;
+  }
 
-  &:hover {
-    background: var(--menu-accent);
-    box-shadow: -0.1rem 0 0 gold;
+  #menu-container[aria-expanded="true"] {
+    width: 100vw;
+  }
+
+  #menu-foot {
+    height: 100%;
+
   }
 }
 
+li {
+  font-family: 'Potta One';
+  width: 100%;
+  padding: 0.75rem 2rem;
+  letter-spacing: 0.05em;
+
+  &:hover {
+    background: var(--menu-accent1);
+    box-shadow: -0.1rem 0 0 var(--menu-accent2);
+  }
+}
+
+a:not(li a):hover {
+  cursor: pointer;
+  color: var(--menu-accent1);
+}
 .icon {
+  font-size: 1.2em;
   margin: 0 0.5em;
+
+  &:is(#menu-foot .icon) {
+    font-size: 1.5em;
+  }
 }
 </style>
