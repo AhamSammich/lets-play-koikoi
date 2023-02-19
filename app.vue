@@ -1,5 +1,25 @@
 <script setup lang="ts">
 import { Ref } from "vue";
+import titleImg from "~~/assets/images/lp-koikoi-title";
+
+useHead({
+  link: [
+    {
+      rel: "icon",
+      type: "image/png",
+      href: "/coin.png",
+    },
+  ],
+});
+
+useServerSeoMeta({
+  title: "Let's Play Koi-Koi!",
+  ogTitle: "Let's Play Koi-Koi!",
+  description: "Play Hanafuda Koi-Koi against an AI opponent!",
+  ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
+  ogImage: titleImg,
+  twitterCard: "summary_large_image",
+});
 
 const roundNum = STORE.useRoundNum();
 const score1 = STORE.useScore1();
@@ -28,7 +48,12 @@ async function loadLocalData() {
             localStorage.getItem(key) || (key.endsWith("oya") ? "1" : "0")
           ))
       );
-      roundHistory = JSON.parse((<string>localStorage?.getItem('lpk-history')), mapReviver);
+      let loadedMap = JSON.parse(
+        <string>localStorage?.getItem("lpk-history"),
+        mapReviver
+      );
+      if (loadedMap instanceof Map) roundHistory = loadedMap;
+      else console.warn("Failed to load round history.");
       resolve(console.info("Data loaded successfully."));
     } catch (err) {
       reject(console.error(`Failed to load stored data. ${err}`));
@@ -71,17 +96,16 @@ function recordRound() {
     p2: score2.value,
     oya: `P${oya.value}`,
   });
-  localStorage.setItem('lpk-history', JSON.stringify(roundHistory, mapReplacer));
+  localStorage.setItem("lpk-history", JSON.stringify(roundHistory, mapReplacer));
 }
 
 async function handleNext() {
   recordRound();
   await saveLocalData();
   if (roundNum.value >= maxRounds.value) {
-    console.dir(JSON.parse(JSON.stringify(roundHistory, mapReplacer),mapReviver));
+    console.dir(JSON.parse(JSON.stringify(roundHistory, mapReplacer), mapReviver));
     endGame();
-  }
-  else roundNum.value++;
+  } else roundNum.value++;
 }
 
 onMounted(async () => {
