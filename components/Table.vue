@@ -100,7 +100,6 @@ async function getCurrentOya(setOya?: number): Promise<string> {
   // Set ref value (number) and return oya name (string)
   if (!(setOya || winner.value)) return `p${currentOya.value}`;
   let playerNum = Number(winner.value?.[1]) || 0;
-  console.log(winner.value?.[1]);
   currentOya.value = setOya || playerNum;
   return `p${currentOya.value}`;
 }

@@ -8,6 +8,9 @@ const started = STORE.useStart();
 const oya = STORE.useCurrentOya();
 const showProgress = ref(false);
 
+let roundHistory = new Map();
+const maxRounds = RULES.useMaxRounds();
+
 const saveData: Record<string, Ref<number>> = {
   "lpk-round-num": roundNum,
   "lpk-p1-score": score1,
@@ -25,6 +28,7 @@ async function loadLocalData() {
             localStorage.getItem(key) || (key.endsWith("oya") ? "1" : "0")
           ))
       );
+      roundHistory = JSON.parse((<string>localStorage?.getItem('lpk-history')), mapReviver);
       resolve(console.info("Data loaded successfully."));
     } catch (err) {
       reject(console.error(`Failed to load stored data. ${err}`));
@@ -49,6 +53,7 @@ async function saveLocalData() {
 function endGame() {
   started.value = false;
   localStorage.clear();
+  roundHistory.clear();
 }
 
 function resetGame() {
@@ -58,9 +63,25 @@ function resetGame() {
   oya.value = 1;
 }
 
+function recordRound() {
+  if (!roundNum.value) return;
+  roundHistory.set(roundNum.value, {
+    round: roundNum.value,
+    p1: score1.value,
+    p2: score2.value,
+    oya: `P${oya.value}`,
+  });
+  localStorage.setItem('lpk-history', JSON.stringify(roundHistory, mapReplacer));
+}
+
 async function handleNext() {
+  recordRound();
   await saveLocalData();
-  roundNum.value++;
+  if (roundNum.value >= maxRounds.value) {
+    console.dir(JSON.parse(JSON.stringify(roundHistory, mapReplacer),mapReviver));
+    endGame();
+  }
+  else roundNum.value++;
 }
 
 onMounted(async () => {
@@ -83,7 +104,11 @@ onMounted(async () => {
 
   <Menu />
 
-  <div v-if="started" id="progress-btn" :class="`z-40 absolute top-16 right-4 ${showProgress ? 'opacity-100' : 'opacity-50'}`">
+  <div
+    v-if="started"
+    id="progress-btn"
+    :class="`z-40 absolute top-16 right-4 ${showProgress ? 'opacity-100' : 'opacity-50'}`"
+  >
     <MenuButton
       ico-name="mdi:cards"
       @open-menu="showProgress = true"
@@ -109,11 +134,11 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Potta+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Potta+One&display=swap");
 
 * {
   --tbl-black: rgb(14, 20, 34);
-  --gradient-gold: linear-gradient(15deg,lightgoldenrodyellow, gold , palegoldenrod);
+  --gradient-gold: linear-gradient(15deg, lightgoldenrodyellow, gold, palegoldenrod);
   --tbl-w-max: 1000px;
   box-sizing: border-box;
   margin: 0;
@@ -237,7 +262,7 @@ dialog {
   }
 
   & h1 {
-    font-family: 'Potta One';
+    font-family: "Potta One";
     letter-spacing: 0.05em;
   }
 
