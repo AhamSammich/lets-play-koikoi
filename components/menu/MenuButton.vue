@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const props = defineProps<{
+  icoName?: string;
+}>();
 const emits = defineEmits(["open-menu", "close-menu"]);
 
 const menuOpen = ref(false);
@@ -10,9 +13,12 @@ function toggleBtn() {
 
 <template>
   <div class="container" :class="{ 'menu-open': menuOpen }" @pointerup="toggleBtn()">
-    <div class="top bar"></div>
-    <div class="middle bar"></div>
-    <div class="bottom bar"></div>
+    <template v-if="!icoName || (icoName && menuOpen)">
+      <div class="top bar"></div>
+      <div class="middle bar"></div>
+      <div class="bottom bar"></div>
+    </template>
+    <Icon v-else name="mdi:cards" />
   </div>
 </template>
 
@@ -71,5 +77,15 @@ function toggleBtn() {
 
 .bottom {
   transform: translate3d(0, 300%, 0);
+}
+
+.icon {
+  position: absolute;
+  height: 80%;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  stroke: white;
 }
 </style>

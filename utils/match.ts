@@ -1,4 +1,55 @@
-const SPECIAL_YAKU: Record<string, string[]> = {
+export const CARDS = [
+  "matsu-ni-tsuru",
+  "matsu-no-tan",
+  "matsu-no-kasu-1",
+  "matsu-no-kasu-2",
+  "ume-ni-uguisu",
+  "ume-no-tan",
+  "ume-no-kasu-1",
+  "ume-no-kasu-2",
+  "sakura-ni-maku",
+  "sakura-no-tan",
+  "sakura-no-kasu-1",
+  "sakura-no-kasu-2",
+  "ayame-ni-yatsuhashi",
+  "ayame-no-tan",
+  "ayame-no-kasu-1",
+  "ayame-no-kasu-2",
+  "hagi-ni-inoshishi",
+  "hagi-no-tan",
+  "hagi-no-kasu-1",
+  "hagi-no-kasu-2",
+  "botan-ni-chou",
+  "botan-no-tan",
+  "botan-no-kasu-1",
+  "botan-no-kasu-2",
+  "fuji-ni-kakku",
+  "fuji-no-tan",
+  "fuji-no-kasu-1",
+  "fuji-no-kasu-2",
+  "susuki-ni-tsuki",
+  "susuki-ni-kari",
+  "susuki-no-kasu-1",
+  "susuki-no-kasu-2",
+  "kiku-ni-sakazuki",
+  "kiku-no-tan",
+  "kiku-no-kasu-1",
+  "kiku-no-kasu-2",
+  "momiji-ni-shika",
+  "momiji-no-tan",
+  "momiji-no-kasu-1",
+  "momiji-no-kasu-2",
+  "yanagi-ni-ono-no-toufuu",
+  "yanagi-ni-tsubame",
+  "yanagi-no-tan",
+  "yanagi-no-kasu",
+  "kiri-ni-ho-oh",
+  "kiri-no-kasu-1",
+  "kiri-no-kasu-2",
+  "kiri-no-kasu-3",
+];
+
+export const SPECIAL_YAKU: Record<string, string[]> = {
   "ino-shika-chou": ["hagi-ni-inoshishi", "botan-ni-chou", "momiji-ni-shika"],
   "hanami-zake": ["sakura-ni-maku", "kiku-ni-sakazuki"],
   "tsukimi-zake": ["susuki-ni-tsuki", "kiku-ni-sakazuki"],
@@ -6,7 +57,7 @@ const SPECIAL_YAKU: Record<string, string[]> = {
   "ao-tan": ["botan-no-tan", "kiku-no-tan", "momiji-no-tan"],
 };
 
-const BRIGHTS = [
+export const BRIGHTS = [
   "matsu-ni-tsuru",
   "sakura-ni-maku",
   "susuki-ni-tsuki",
@@ -14,7 +65,7 @@ const BRIGHTS = [
   "kiri-ni-ho-oh",
 ];
 
-const POINTS: Record<string, number> = {
+export const POINTS: Record<string, number> = {
   gokou: 15,
   shikou: 8,
   "ame-shikou": 7,
@@ -31,13 +82,14 @@ const POINTS: Record<string, number> = {
   kuttsuki: 6,
 };
 
-const isBright: CheckCardType = (cardName) => BRIGHTS.includes(cardName);
-const isAnimal: CheckCardType = (cardName) =>
+export const isBright: CheckCardType = (cardName) => BRIGHTS.includes(cardName);
+export const isAnimal: CheckCardType = (cardName) =>
   !isBright(cardName) && /-ni-/.test(cardName);
-const isRibbon: CheckCardType = (cardName) => /-no-tan/.test(cardName);
-const isPlain: CheckCardType = (cardName) => /-no-kasu/.test(cardName);
+export const isRibbon: CheckCardType = (cardName) => /-no-tan/.test(cardName);
+export const isPlain: CheckCardType = (cardName) => /-no-kasu/.test(cardName);
 
 export const getFlower = (cardName: string): string => cardName?.split("-")[0];
+export const getName = (cardName: string): string => cardName?.replace(/-\d?/g," ").trim();
 
 // Emit card details when element is clicked
 export function addDetails(cardName: string): Card {
