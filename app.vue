@@ -179,7 +179,7 @@ dialog {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
