@@ -20,3 +20,10 @@ export const STORE: Record<string, () => Ref> = {
 
     usePreview: (): Ref<string> => useState("cardPreview", () => ""),
 }
+
+export const RULES: Record<string, () => Ref> = {
+    useMaxRounds: () => useState("maxRounds", () => 12),
+    useViewingsAllowed: () => useState("viewingsAllowed", () => 3),
+    useBonusForAnyKoiKoi: () => useState("bonusForAnyKoiKoi", () => false),
+    useDoubledOverSeven: () => useState("doubledOverSeven", () => false),
+}

@@ -9,7 +9,7 @@ function startGame() {
 <template>
   <section
     id="start-page"
-    :class="`${started ? '' : 'show'} flex flex-col gap-8 align-center justify-center`"
+    :class="`${started ? '' : 'show'} flex flex-col align-center justify-center gap-8`"
   >
     <h1 id="hero-title" class="text-center"><span>Let's Play!</span> KOI-KOI</h1>
     <button id="start-btn" @click="startGame()">START</button>
@@ -44,7 +44,7 @@ section {
   background: var(--gradient-gold);
   background-clip: text;
   color: transparent;
-  font-family: "Potta One", "Mochiy Pop One", sans-serif;
+  font-family: "Potta One", "Mochiy Pop One", Verdana, sans-serif;
   font-size: 56px;
   max-width: 500px;
   margin: 0 auto;
@@ -55,14 +55,14 @@ section {
     text-align: left;
     display: block;
     font-size: 20px;
-    color: #111;
+    color: var(--tbl-black);
     font-style: italic;
-    text-shadow: 0 0 0.1rem palegoldenrod;
+    text-shadow: 0 0 0.3em white;
   }
 }
 
 button {
-  outline: 1px solid yellow;
+  outline: 1px solid gold;
   border-radius: 0.2rem;
   background: firebrick;
   padding: 0.5em 1em;
@@ -77,7 +77,7 @@ button {
   &:hover,
   &:focus {
     transform: translate3d(0, 5%, 0);
-    box-shadow: 0 0.1rem 0.3rem 0 palegoldenrod;
+    box-shadow: 0 0.1rem 0.3rem 0 lightgoldenrodyellow;
   }
 }
 </style>

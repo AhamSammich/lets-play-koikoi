@@ -18,7 +18,7 @@ function pointToActive() {
 <template>
   <header
     id="status"
-    class="flex items-center justify-around p-4 fixed top-0 opacity-30 text-white z-10"
+    class="flex items-center justify-around p-4 fixed top-0 opacity-50 text-white z-10"
   >
     <div id="p1-score" :class="{ 'is-oya': props.oya === 'p1' }">
       <p>PLAYER 1</p>
@@ -44,7 +44,7 @@ function pointToActive() {
 
 <style scoped lang="postcss">
 #status {
-  transform-origin: top right;
+  transform-origin: top;
   transition: all 0.5s;
   scale: 0.7;
 

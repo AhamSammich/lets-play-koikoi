@@ -77,7 +77,7 @@ onMounted(async () => {
     </button>
   </header>
 
-  <Menu :is-open="true" />
+  <Menu />
 
   <main>
     <div id="hero" :class="{ 'scroll-up': started }"></div>
@@ -107,7 +107,9 @@ onMounted(async () => {
 }
 
 body {
+  background-color: var(--tbl-black);
   overflow: hidden;
+  width: 100vw;
   font-family: "Mochiy Pop One", sans-serif;
   user-select: none;
   margin: 0 auto;
@@ -126,11 +128,11 @@ body {
   width: 100vw;
   height: 100%;
   background: url(grey-hills.jpg);
-  background-position: center;
+  background-position: center -100px;
   background-size: cover;
   background-repeat: no-repeat;
   z-index: 0;
-  position: fixed;
+  position: absolute;
   top: 0;
   animation: fadeIn 2s;
   transition: all 2s;
@@ -150,16 +152,12 @@ body {
 }
 
 main {
-  background-color: var(--tbl-black);
-  background-size: cover;
-  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
   min-height: 100dvh;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
 
   &::-webkit-scrollbar {
     width: 0.2rem;
@@ -207,7 +205,7 @@ dialog {
       &:hover,
       &:focus {
         transform: translate3d(0, 5%, 0);
-        box-shadow: 0 0.1rem 0.3rem 0 palegoldenrod;
+        box-shadow: 0 0.1rem 0.3rem 0 lightgoldenrodyellow;
       }
     }
   }
@@ -227,22 +225,5 @@ dialog {
 .hidden {
   display: none;
   scale: 1 0;
-}
-
-.page-enter-active,
-.page-leave-active {
-  transition: all 1s;
-  /* transform: translateY(0); */
-}
-.page-enter-from {
-  opacity: 0;
-  filter: blur(1rem);
-  transform: translateY(100%);
-}
-
-.page-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
-  transform: translateY(-100%);
 }
 </style>
