@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Ref } from "vue";
-import titleImg from "~~/assets/images/lp-koikoi-title";
+import { Ref } from "vue";;
 
 useHead({
   link: [
@@ -12,14 +11,14 @@ useHead({
   ],
 });
 
-useServerSeoMeta({
-  title: "Let's Play Koi-Koi!",
-  ogTitle: "Let's Play Koi-Koi!",
-  description: "Play Hanafuda Koi-Koi against an AI opponent!",
-  ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
-  ogImage: titleImg,
-  twitterCard: "summary_large_image",
-});
+// useServerSeoMeta({
+//   title: "Let's Play Koi-Koi!",
+//   ogTitle: "Let's Play Koi-Koi!",
+//   description: "Play Hanafuda Koi-Koi against an AI opponent!",
+//   ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
+//   ogImage: "~/assets/images/lp-koikoi-title.jpg",
+//   twitterCard: "summary_large_image",
+// });
 
 const roundNum = STORE.useRoundNum();
 const score1 = STORE.useScore1();
