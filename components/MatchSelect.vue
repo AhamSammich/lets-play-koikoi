@@ -19,7 +19,7 @@ const emits = defineEmits(["match-select"]);
     <h2>Select a card to match:</h2>
     <div id="choose-match">
       <template v-for="(card, index) in cards">
-        <div :id="`${index}`">
+        <div :id="`${index}`" class="cursor-pointer">
           <!-- Get selected card details and check table for match -->
           <Card
             :name="card"

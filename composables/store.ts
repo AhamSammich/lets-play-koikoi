@@ -23,7 +23,7 @@ export const STORE: Record<string, () => Ref> = {
 
 export const RULES: Record<string, () => Ref> = {
     useMaxRounds: () => useState("maxRounds", () => 12),
-    useViewingsAllowed: () => useState("viewingsAllowed", () => 3),
+    useViewingsAllowed: () => useState("viewingsAllowed", () => 2),
     useBonusForAnyKoiKoi: () => useState("bonusForAnyKoiKoi", () => false),
     useDoubledOverSeven: () => useState("doubledOverSeven", () => false),
 }

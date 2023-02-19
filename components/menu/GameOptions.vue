@@ -1,6 +1,23 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 
+const started = STORE.useStart();
+
+onMounted(() => {
+  watchEffect(() => {
+    if (started.value) {
+      [...document.querySelectorAll("input")].forEach(
+        (input) => (input.disabled = true)
+      );
+    } 
+    else if (!started.value) {
+      [...document.querySelectorAll("input")].forEach(
+        (input) => (input.disabled = false)
+      );
+    }
+  });
+});
+
 const rules: Record<string, Ref> = {
   maxRounds: <Ref<number>>RULES.useMaxRounds(),
   viewingsAllowed: <Ref<number>>RULES.useViewingsAllowed(),
@@ -74,7 +91,7 @@ function updateBooleanRule(e) {
           type="radio"
           id="viewings-never"
           name="viewingsAllowed"
-          value="1"
+          value="0"
           @change="updateNumberRule"
         />
       </div>
@@ -84,7 +101,7 @@ function updateBooleanRule(e) {
           type="radio"
           id="viewings-limited"
           name="viewingsAllowed"
-          value="2"
+          value="1"
           @change="updateNumberRule"
         />
       </div>
@@ -94,7 +111,7 @@ function updateBooleanRule(e) {
           type="radio"
           id="viewings-always"
           name="viewingsAllowed"
-          value="3"
+          value="2"
           @change="updateNumberRule"
           checked
         />
@@ -167,6 +184,11 @@ fieldset {
 
     &:has([type="checkbox"]) {
       flex-direction: row;
+    }
+    
+    &:has(:disabled) > * {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 

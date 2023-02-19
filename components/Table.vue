@@ -22,6 +22,7 @@ onUnmounted(() => {
 // ============================================================== //
 
 const started = STORE.useStart();
+const bonusForAnyKoiKoi = RULES.useBonusForAnyKoiKoi();
 
 const P1: Player = {
   hand: STORE.useHand1(),
@@ -467,7 +468,11 @@ async function runGame() {
         <ScoreSheet
           :player="winner"
           :yakuList="winningYaku"
-          :koikoi="otherPlayer().koikoi"
+          :koikoi="
+            bonusForAnyKoiKoi
+              ? otherPlayer().koikoi + activePlayer().koikoi
+              : otherPlayer().koikoi
+          "
           :show-modal="winner !== ''"
           @reset="(score: number) => newGame(score)"
         />

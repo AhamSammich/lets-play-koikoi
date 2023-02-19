@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const props = defineProps<{
   showModal: boolean;
   player: string | null;
@@ -8,6 +7,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(["reset", "next"]);
+const doubledOverSeven = RULES.useDoubledOverSeven();
 let score = 0;
 let finalList: Dict;
 
@@ -18,7 +18,10 @@ function resetGame() {
 onBeforeMount(() => {
   if (props.yakuList === null) return;
   finalList = processYakuList(props.yakuList);
-  score = getYakuScore(finalList, props.koikoi);
+  score =
+    getYakuScore(finalList) *
+    (1 + props.koikoi) *
+    (doubledOverSeven.value && score >= 7 ? 2 : 1);
 });
 </script>
 
@@ -26,7 +29,9 @@ onBeforeMount(() => {
   <dialog :open="showModal" aria-modal="true">
     <div id="points">
       <h1>{{ player || "draw" }}</h1>
-      <h2 :class="{ bonus: koikoi && score > 0 }">{{ score + `${score === 1 ? " point" : " points"}` }}</h2>
+      <h2 :class="{ bonus: koikoi && score > 0 }">
+        {{ score + `${score === 1 ? " point" : " points"}` }}
+      </h2>
     </div>
     <template v-if="player && yakuList">
       <div id="scoresheet">
