@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 
-const roundNum = ref(0);
+const roundNum = STORE.useRoundNum();
 const score1 = STORE.useScore1();
 const score2 = STORE.useScore2();
 const started = STORE.useStart();
 const oya = STORE.useCurrentOya();
+const showProgress = ref(false);
 
 const saveData: Record<string, Ref<number>> = {
   "lpk-round-num": roundNum,
@@ -19,7 +20,10 @@ async function loadLocalData() {
     if (!localStorage) reject(console.warn("No stored data found."));
     try {
       Object.keys(saveData).forEach(
-        (key) => (saveData[key].value = Number(localStorage.getItem(key) || (key.endsWith("oya") ? "1" : "0")))
+        (key) =>
+          (saveData[key].value = Number(
+            localStorage.getItem(key) || (key.endsWith("oya") ? "1" : "0")
+          ))
       );
       resolve(console.info("Data loaded successfully."));
     } catch (err) {
@@ -79,6 +83,17 @@ onMounted(async () => {
 
   <Menu />
 
+  <div v-if="started" id="progress-btn" :class="`z-40 absolute top-16 right-4 ${showProgress ? 'opacity-100' : 'opacity-50'}`">
+    <MenuButton
+      ico-name="mdi:cards"
+      @open-menu="showProgress = true"
+      @close-menu="showProgress = false"
+    />
+  </div>
+  <dialog v-if="showProgress && started" id="current-progress" class="z-30">
+    <YakuProgress @close-progress="showProgress = false" />
+  </dialog>
+
   <main>
     <div id="hero" :class="{ 'scroll-up': started }"></div>
     <Start />
@@ -94,16 +109,24 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Potta+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Potta+One&display=swap');
 
 * {
   --tbl-black: rgb(14, 20, 34);
-  --gradient-gold: linear-gradient(15deg, goldenrod, palegoldenrod);
+  --gradient-gold: linear-gradient(15deg,lightgoldenrodyellow, gold , palegoldenrod);
   --tbl-w-max: 1000px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+    background: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--gradient-gold);
+  }
 }
 
 body {
@@ -124,6 +147,11 @@ body {
   }
 }
 
+#current-progress {
+  position: absolute;
+  animation: fadeIn 0.3s;
+}
+
 #hero {
   width: 100vw;
   height: 100%;
@@ -135,7 +163,7 @@ body {
   position: absolute;
   top: 0;
   animation: fadeIn 2s;
-  transition: all 2s;
+  transition: translate 2s;
 
   &.scroll-up {
     translate: 0 -60%;
@@ -158,15 +186,6 @@ main {
   min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-
-  &::-webkit-scrollbar {
-    width: 0.2rem;
-    background: none;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--gradient-gold);
-  }
 }
 
 dialog {
@@ -185,8 +204,8 @@ dialog {
   translate: -50% -50%;
   color: white;
   font-size: large;
-  z-index: 30;
-  transition: all 0.5s;
+  z-index: 25;
+  transition: all 0.1s;
 
   & .btn-bar {
     width: 360px;
@@ -215,6 +234,11 @@ dialog {
     font-weight: bold;
     font-size: larger;
     text-transform: uppercase;
+  }
+
+  & h1 {
+    font-family: 'Potta One';
+    letter-spacing: 0.05em;
   }
 
   & h2 {

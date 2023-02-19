@@ -114,6 +114,11 @@ onBeforeMount(() => {
       margin-left: 5%;
     }
   }
+
+  & h2 {
+    font-family: 'Potta One';
+    letter-spacing: 0.05em;
+  }
 }
 
 #points {
@@ -126,7 +131,7 @@ onBeforeMount(() => {
   transition: all 0.5s;
 
   & h2 {
-    font-size: 44px;
+    font-size: 40px;
 
     &.bonus {
       color: transparent;

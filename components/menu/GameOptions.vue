@@ -6,11 +6,8 @@ const started = STORE.useStart();
 onMounted(() => {
   watchEffect(() => {
     if (started.value) {
-      [...document.querySelectorAll("input")].forEach(
-        (input) => (input.disabled = true)
-      );
-    } 
-    else if (!started.value) {
+      [...document.querySelectorAll("input")].forEach((input) => (input.disabled = true));
+    } else if (!started.value) {
       [...document.querySelectorAll("input")].forEach(
         (input) => (input.disabled = false)
       );
@@ -49,7 +46,7 @@ function updateBooleanRule(e) {
   <form class="grid gap-1" @submit.prevent>
     <!-- choose number of rounds: 3 / 6 / 12 -->
     <fieldset>
-      <legend>Game Length</legend>
+      <legend>Game Length <p class="inline">({{ rules.maxRounds }} rounds)</p></legend>
       <div>
         <label for="length-season">Season</label>
         <input
@@ -84,7 +81,10 @@ function updateBooleanRule(e) {
     </fieldset>
     <!-- allow hanami-zake/tsukimi-zake: always / limited / never -->
     <fieldset>
-      <legend>Allow "Flower/Moon Viewing"</legend>
+      <legend>Allow "Flower/Moon Viewing"<a
+          href="https://fudawiki.org/en/hanafuda/games/koi-koi#taming-the-sake-cup"
+          ><Icon name="material-symbols:help-outline-rounded"
+        /></a></legend>
       <div>
         <label for="viewings-never">Never</label>
         <input
@@ -119,7 +119,12 @@ function updateBooleanRule(e) {
     </fieldset>
     <!-- select additional scoring rules: x2 any koi-koi / x2 if >7pts -->
     <fieldset>
-      <legend>Additional Scoring Rules</legend>
+      <legend>
+        Additional Scoring Rules<a
+          href="https://fudawiki.org/en/hanafuda/games/koi-koi#scoring-variations"
+          ><Icon name="material-symbols:help-outline-rounded"
+        /></a>
+      </legend>
       <div>
         <input
           type="checkbox"
@@ -185,7 +190,7 @@ fieldset {
     &:has([type="checkbox"]) {
       flex-direction: row;
     }
-    
+
     &:has(:disabled) > * {
       cursor: not-allowed;
       opacity: 0.5;
@@ -246,5 +251,15 @@ fieldset {
   &:checked::after {
     scale: 2.5;
   }
+}
+
+.icon {
+  font-size: 1.5em;
+  margin-left: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+a:hover {
+  color: var(--menu-accent1);
 }
 </style>

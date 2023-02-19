@@ -8,6 +8,13 @@ type CardDetails = {
   isPlain: boolean;
 };
 
+type YakuDetails = {
+  name: string;
+  description: string;
+  points: number;
+  cards: string[];
+};
+
 type Card = Record<string, CardDetails>;
 
 type Dict = Record<string, string[]>;

@@ -1,0 +1,96 @@
+export const YAKU_LIB: YakuDetails[] = [
+  {
+    name: "gokou",
+    description: "Five Brights",
+    points: 15,
+    cards: [
+      "matsu-ni-tsuru",
+      "sakura-ni-maku",
+      "susuki-ni-tsuki",
+      "yanagi-ni-ono-no-toufuu",
+      "kiri-ni-ho-oh",
+    ],
+  },
+  {
+    name: "shikou",
+    description: "Four Brights",
+    points: 8,
+    cards: [
+      "matsu-ni-tsuru",
+      "sakura-ni-maku",
+      "susuki-ni-tsuki",
+      "kiri-ni-ho-oh",
+    ],
+  },
+  {
+    name: "ame-shikou",
+    description: "Rainy Four Brights ( Any 3 + Rain Man )",
+    points: 7,
+    cards: [
+      "matsu-ni-tsuru",
+      "sakura-ni-maku",
+      "susuki-ni-tsuki",
+      "kiri-ni-ho-oh",
+      "yanagi-ni-ono-no-toufuu",
+    ],
+  },
+  {
+    name: "sankou",
+    description: "Three Brights ( Any 3 )",
+    points: 6,
+    cards: [
+      "matsu-ni-tsuru",
+      "sakura-ni-maku",
+      "susuki-ni-tsuki",
+      "kiri-ni-ho-oh",
+    ],
+  },
+  {
+    name: "ino-shika-chou",
+    description: "Boar, Deer & Butterfly",
+    points: 5,
+    cards: ["hagi-ni-inoshishi", "botan-ni-chou", "momiji-ni-shika"],
+  },
+  {
+    name: "hanami-zake",
+    description: "Flower Viewing",
+    points: 5,
+    cards: ["sakura-ni-maku", "kiku-ni-sakazuki"],
+  },
+  {
+    name: "tsukimi-zake",
+    description: "Moon Viewing",
+    points: 5,
+    cards: ["susuki-ni-tsuki", "kiku-ni-sakazuki"],
+  },
+  {
+    name: "aka-tan",
+    description: "Red Poetry Ribbons",
+    points: 5,
+    cards: ["matsu-no-tan", "ume-no-tan", "sakura-no-tan"],
+  },
+  {
+    name: "ao-tan",
+    description: "Blue Ribbons",
+    points: 5,
+    cards: ["botan-no-tan", "kiku-no-tan", "momiji-no-tan"],
+  },
+  {
+    name: "tan-zaku",
+    description: "Any 5 Ribbons ( +1pt for each extra )",
+    points: 1,
+    cards: CARDS.filter(isRibbon),
+  },
+  {
+    name: "tane-zaku",
+    description: "Any 5 Animals ( +1pt for each extra )",
+    points: 1,
+    cards: CARDS.filter(isAnimal),
+  },
+  {
+    name: "kasu",
+    description: "Any 10 Plains ( +1pt for each extra )",
+    points: 1,
+    cards: CARDS.filter(isPlain),
+  },
+];
