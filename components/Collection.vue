@@ -5,6 +5,8 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(["collecting", "new-yaku", "no-yaku"]);
+const viewingsAllowed = RULES.useViewingsAllowed();
+const restrictedYaku = new Set(["hanami-zake", "tsukimi-zake"]);
 
 const yakuList = new Map();
 let sortedCards = sortCardsByType(props.cards);
@@ -24,7 +26,8 @@ onBeforeUpdate(() => {
 
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
-  yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
+  yakuArr = yakuArr.filter(yakuName => yakuName && !yakuList.has(yakuName));
+  if (!viewingsAllowed.value) yakuArr = yakuArr.filter(yakuName => !restrictedYaku.has(yakuName));
   if (yakuArr.length) registerYaku(yakuArr);
   else emits("no-yaku");
 });

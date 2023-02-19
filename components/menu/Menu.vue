@@ -28,7 +28,7 @@ const started = STORE.useStart();
           </li>
         </ul>
       </nav>
-      <section v-if="!started" id="menu-options" class="w-full p-8">
+      <section id="menu-options" class="w-full p-8">
         <h1>Options:</h1>
         <MenuGameOptions />
       </section>
