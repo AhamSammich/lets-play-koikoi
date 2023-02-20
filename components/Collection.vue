@@ -24,7 +24,8 @@ function allowViewings(yakuArr: string[]): string[] {
       return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
 
     case 1:  // 1 => limited allowance
-      if (yakuList.size === 0)
+      // Yaku not allowed if players has no non-viewing yaku
+      if (yakuList.size === 0 && yakuArr.every(yaku => restrictedYaku.has(yaku)))
         return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
 
     default:  // 2 => allow always
