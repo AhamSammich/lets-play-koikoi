@@ -83,6 +83,7 @@ function updateBooleanRule(e) {
     <fieldset>
       <legend>Allow "Flower/Moon Viewing"<a
           href="https://fudawiki.org/en/hanafuda/games/koi-koi#taming-the-sake-cup"
+          target="_blank"
           ><Icon name="material-symbols:help-outline-rounded"
         /></a></legend>
       <div>
@@ -122,6 +123,7 @@ function updateBooleanRule(e) {
       <legend>
         Additional Scoring Rules<a
           href="https://fudawiki.org/en/hanafuda/games/koi-koi#scoring-variations"
+          target="_blank"
           ><Icon name="material-symbols:help-outline-rounded"
         /></a>
       </legend>

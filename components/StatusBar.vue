@@ -18,7 +18,7 @@ function pointToActive() {
 <template>
   <header
     id="status"
-    class="flex items-center justify-around p-4 fixed top-0 opacity-50 text-white z-10"
+    class="flex items-center justify-around p-4 fixed top-0 opacity-70 text-white z-10"
   >
     <div id="p1-score" :class="{ 'is-oya': props.oya === 'p1' }">
       <p>PLAYER 1</p>
@@ -46,7 +46,7 @@ function pointToActive() {
 #status {
   transform-origin: top;
   transition: all 0.5s;
-  scale: 0.7;
+  scale: 0.8;
 
   &:hover {
     scale: none;

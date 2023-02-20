@@ -13,10 +13,7 @@ export default defineNuxtConfig({
   },
   pages: false,
   ssr: true,
-  // app: {
-  //     pageTransition: { name: 'page', mode: 'out-in' }
-  //   },
-  modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@vueuse/nuxt"],
   tailwindcss: {},
   postcss: {
     plugins: {

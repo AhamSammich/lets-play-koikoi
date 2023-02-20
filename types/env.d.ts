@@ -10,9 +10,9 @@ type CardDetails = {
 
 type YakuDetails = {
   name: string;
-  description: string;
+  description?: string[];
   points: number;
-  cards: string[];
+  cards?: string[];
 };
 
 type Card = Record<string, CardDetails>;

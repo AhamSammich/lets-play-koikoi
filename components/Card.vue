@@ -58,6 +58,7 @@ async function cancelPointerDown(e: Event) {
     <img
       class=""
       :src="`cards/${props.name}.png`"
+      loading="lazy"
       @touchstart.prevent
       @touchend.prevent
       @pointerenter="handleHover"
