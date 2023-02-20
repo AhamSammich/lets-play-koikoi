@@ -21,7 +21,7 @@ onBeforeMount(() => {
   score =
     getYakuScore(finalList) *
     (1 + props.koikoi) *
-    (doubledOverSeven.value && score >= 7 ? 2 : 1);
+    ((doubledOverSeven.value && score >= 7) ? 2 : 1);
 });
 </script>
 
