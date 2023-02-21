@@ -1,24 +1,16 @@
 <script setup lang="ts">
-import { Ref } from "vue";;
+import { Ref } from "vue";
+import { useSeoMeta } from "@vueuse/head";
 
-useHead({
-  link: [
-    {
-      rel: "icon",
-      type: "image/png",
-      href: "/coin.png",
-    },
-  ],
+useSeoMeta({
+  // @ts-ignore
+  title: "Let's Play Koi-Koi!",
+  ogTitle: "Let's Play Koi-Koi!",
+  description: "Play Hanafuda Koi-Koi against an AI opponent!",
+  ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
+  ogImage: "~/assets/images/lp-koikoi-title.jpg",
+  twitterCard: "summary_large_image",
 });
-
-// useServerSeoMeta({
-//   title: "Let's Play Koi-Koi!",
-//   ogTitle: "Let's Play Koi-Koi!",
-//   description: "Play Hanafuda Koi-Koi against an AI opponent!",
-//   ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
-//   ogImage: "~/assets/images/lp-koikoi-title.jpg",
-//   twitterCard: "summary_large_image",
-// });
 
 const roundNum = STORE.useRoundNum();
 const score1 = STORE.useScore1();
@@ -143,7 +135,12 @@ onMounted(async () => {
   </dialog>
 
   <main>
-    <div id="hero" :class="{ 'scroll-up': started }"></div>
+    <img
+      id="hero"
+      src="~/assets/images/grey-hills.jpg"
+      loading="lazy"
+      :class="{ 'scroll-up': started }"
+    />
     <Start />
     <template v-if="started">
       <Table @next-round="handleNext()" @reset="resetGame()" />
@@ -183,7 +180,6 @@ body {
   width: 100vw;
   font-family: "Mochiy Pop One", sans-serif;
   user-select: none;
-  margin: 0 auto;
 }
 
 #back-btn {
@@ -201,17 +197,16 @@ body {
 }
 
 #hero {
-  width: 100vw;
-  height: 100%;
-  background: url(grey-hills.jpg);
-  background-position: center -100px;
-  background-size: cover;
-  background-repeat: no-repeat;
+  min-width: 100%;
   z-index: 0;
   position: absolute;
   top: 0;
   animation: fadeIn 2s;
   transition: translate 2s;
+
+  @media (orientation: landscape) {
+    top: -100px;
+  }
 
   &.scroll-up {
     translate: 0 -60%;

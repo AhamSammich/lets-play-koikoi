@@ -590,6 +590,7 @@ async function runGame() {
   &:hover {
     opacity: 1;
     transform: scale(0.9);
+    z-index: 30;
   }
 
   & * {
