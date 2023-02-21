@@ -9,14 +9,18 @@ export default defineNuxtConfig({
           content: "Play Hanafuda Koi-Koi against an AI opponent.",
         },
       ],
+      link: [
+        {
+          rel: "icon",
+          type: "image/png",
+          href: "~/assets/images/coin.png",
+        },
+      ],
     },
   },
   pages: false,
   ssr: true,
-  // app: {
-  //     pageTransition: { name: 'page', mode: 'out-in' }
-  //   },
-  modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@vueuse/nuxt", "nuxt-vitest"],
   tailwindcss: {},
   postcss: {
     plugins: {

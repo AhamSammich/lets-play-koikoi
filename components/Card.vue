@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { useImage } from '@vueuse/core';
 const props = defineProps<{
   name: string;
   hide?: boolean;
   interactive?: boolean;
 }>();
 
+const { isLoading } = useImage({ src: `cards/${props.name}.png` });
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -55,9 +57,11 @@ async function cancelPointerDown(e: Event) {
       <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
     </svg>
     <!-- Prevent long-press menu on touchscreen -->
+    <div v-if="isLoading" class="card loading"></div>
     <img
-      class=""
+      v-else
       :src="`cards/${props.name}.png`"
+      loading="lazy"
       @touchstart.prevent
       @touchend.prevent
       @pointerenter="handleHover"
@@ -92,6 +96,14 @@ img {
   &.previewed {
     position: relative;
     scale: 1.1;
+  }
+
+  &.loading {
+    width: 50px;
+    background: linear-gradient(45deg, #eee, #ddd, white);
+    border: 5px solid red;
+    transition: none;
+    opacity: 0.3;
   }
 }
 

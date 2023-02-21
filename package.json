@@ -10,11 +10,12 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.2.0",
     "@types/jest": "^29.4.0",
+    "@vueuse/core": "^9.13.0",
+    "@vueuse/nuxt": "^9.13.0",
     "autoprefixer": "^10.4.13",
-    "jest": "^29.4.1",
     "nuxt": "^3.0.0",
     "nuxt-icon": "^0.3.2",
-    "postcss-preset-env": "^7.8.3",
-    "ts-jest": "^29.0.5"
+    "nuxt-vitest": "^0.6.6",
+    "postcss-preset-env": "^7.8.3"
   }
 }
