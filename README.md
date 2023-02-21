@@ -26,10 +26,11 @@
 - UI
   - [x] Round number
   - [x] Scoreboard
-    - [x] Koi-Koi bonus & oya indicator
-  - [x] Highlight possible match
-  - [x] Yaku progress
-  - [x] How To Play
+    - [ ] Koi-Koi bonus & oya indicator
+  - [ ] Highlight possible match
+  - [ ] Yaku progress
+  - [ ] How To Play
+    - [ ] Yaku cheatsheat
   - [x] Mobile layout
   - [x] Message when calling koi-koi
-  - [x] Sidebar/header menu
+  - [ ] Sidebar/header menu

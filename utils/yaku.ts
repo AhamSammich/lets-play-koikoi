@@ -1,20 +1,20 @@
 export const YAKU_LIB: YakuDetails[] = [
   {
     name: "gokou",
-    description: "Five Brights",
     points: 15,
+    description: ["Five Brights"],
     cards: [
       "matsu-ni-tsuru",
       "sakura-ni-maku",
       "susuki-ni-tsuki",
-      "yanagi-ni-ono-no-toufuu",
       "kiri-ni-ho-oh",
+      "yanagi-ni-ono-no-toufuu",
     ],
   },
   {
     name: "shikou",
-    description: "Four Brights",
     points: 8,
+    description: ["Four Brights"],
     cards: [
       "matsu-ni-tsuru",
       "sakura-ni-maku",
@@ -24,8 +24,8 @@ export const YAKU_LIB: YakuDetails[] = [
   },
   {
     name: "ame-shikou",
-    description: "Rainy Four Brights ( Any 3 + Rain Man )",
     points: 7,
+    description: ["Rainy Four Brights ( Any 3 + Rain Man )"],
     cards: [
       "matsu-ni-tsuru",
       "sakura-ni-maku",
@@ -36,7 +36,7 @@ export const YAKU_LIB: YakuDetails[] = [
   },
   {
     name: "sankou",
-    description: "Three Brights ( Any 3 )",
+    description: ["Three Brights ( Any 3 )"],
     points: 6,
     cards: [
       "matsu-ni-tsuru",
@@ -47,50 +47,50 @@ export const YAKU_LIB: YakuDetails[] = [
   },
   {
     name: "ino-shika-chou",
-    description: "Boar, Deer & Butterfly",
     points: 5,
-    cards: ["hagi-ni-inoshishi", "botan-ni-chou", "momiji-ni-shika"],
+    description: ["Boar, Deer & Butterfly"],
+    cards: ["hagi-ni-inoshishi", "momiji-ni-shika", "botan-ni-chou"],
   },
   {
     name: "hanami-zake",
-    description: "Flower Viewing",
     points: 5,
+    description: ["Flower Viewing"],
     cards: ["sakura-ni-maku", "kiku-ni-sakazuki"],
   },
   {
     name: "tsukimi-zake",
-    description: "Moon Viewing",
     points: 5,
+    description: ["Moon Viewing"],
     cards: ["susuki-ni-tsuki", "kiku-ni-sakazuki"],
   },
   {
     name: "aka-tan",
-    description: "Red Poetry Ribbons",
     points: 5,
+    description: ["Red Poetry Ribbons"],
     cards: ["matsu-no-tan", "ume-no-tan", "sakura-no-tan"],
   },
   {
     name: "ao-tan",
-    description: "Blue Ribbons",
     points: 5,
+    description: ["Blue Ribbons"],
     cards: ["botan-no-tan", "kiku-no-tan", "momiji-no-tan"],
   },
   {
     name: "tan-zaku",
-    description: "Any 5 Ribbons ( +1pt for each extra )",
     points: 1,
+    description: ["Any 5 Ribbons ( +1pt for each extra )"],
     cards: CARDS.filter(isRibbon),
   },
   {
     name: "tane-zaku",
-    description: "Any 5 Animals ( +1pt for each extra )",
     points: 1,
+    description: ["Any 5 Animals ( +1pt for each extra )"],
     cards: CARDS.filter(isAnimal),
   },
   {
     name: "kasu",
-    description: "Any 10 Plains ( +1pt for each extra )",
     points: 1,
+    description: ["Any 10 Plains ( +1pt for each extra )"],
     cards: CARDS.filter(isPlain),
   },
 ];

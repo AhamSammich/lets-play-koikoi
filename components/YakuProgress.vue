@@ -4,8 +4,8 @@ const yakuCompleted = STORE.useYaku1();
 const viewingsAllowed = RULES.useViewingsAllowed();
 
 function isComplete(yakuName: string) {
-    if (yakuCompleted.value[yakuName]) return "complete";
-    else return ""
+  if (yakuCompleted.value[yakuName]) return "complete";
+  else return "";
 }
 
 function allowedYaku(): YakuDetails[] {
@@ -18,9 +18,22 @@ function allowedYaku(): YakuDetails[] {
   <div class="w-full flex flex-col items-center overflow-y-scroll overflow-x-hidden">
     <div v-for="(yaku, index) in allowedYaku()" :key="index" class="yaku-progress">
       <h1 :class="`yaku-name ${isComplete(yaku.name)}`">{{ yaku.name }}</h1>
-      <h2 class="yaku-points">{{ yaku.points }} <span>{{ `${yaku.points === 1 ? " point" : " points"}` }}</span></h2>
-      <p class="yaku-description">{{ yaku.description }}</p>
-      <div class="yaku-cards">
+      <img
+        v-if="isComplete(yaku.name)"
+        src="~/assets/images/coin.png"
+        alt="coin for a completed yaku"
+        loading="lazy"
+        class="coin absolute"
+      />
+      <h2 class="yaku-points">
+        {{ yaku.points }} <span>{{ `${yaku.points === 1 ? " point" : " points"}` }}</span>
+      </h2>
+      <template v-if="yaku.description">
+        <p v-for="line in yaku.description" :key="line" class="yaku-description">
+          {{ line }}
+        </p>
+      </template>
+      <div v-if="yaku.cards" class="yaku-cards mt-1">
         <Card
           v-for="card in yaku.cards"
           :key="card"
@@ -40,8 +53,8 @@ function allowedYaku(): YakuDetails[] {
   padding: 2rem;
   font-size: small;
   color: white;
+  position: relative;
   display: grid;
-  gap: 0.5em;
   grid-template-columns: 1fr 100px;
   grid-template-areas:
     "name points"
@@ -57,6 +70,12 @@ function allowedYaku(): YakuDetails[] {
   }
 }
 
+.coin {
+  height: 20px;
+  width: 20px;
+  top: 32px;
+  right: 8rem;
+}
 .yaku-name {
   grid-area: name;
 }
@@ -105,23 +124,23 @@ function allowedYaku(): YakuDetails[] {
 }
 
 h1.complete {
-    background: var(--gradient-gold);
-    color: transparent;
-    background-clip: text;
-    position: relative;
+  background: var(--gradient-gold);
+  color: transparent;
+  background-clip: text;
+  position: relative;
 
-    &::after {
-      content: "";
-      background: url(coin.png);
-      background-size: contain;
-      width: 20px;
-      aspect-ratio: 1 / 1;
-      display: block;
-      position: absolute;
-      left: 90%;
-      top: 0;
-      margin-left: 1rem;
-    }
+  /* &::after {
+    content: "";
+    background: url(coin.png);
+    background-size: contain;
+    width: 20px;
+    aspect-ratio: 1 / 1;
+    display: block;
+    position: absolute;
+    left: 90%;
+    top: 0;
+    margin-left: 1rem;
+  } */
 }
 
 h2 span {
