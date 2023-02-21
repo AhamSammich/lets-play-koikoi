@@ -68,7 +68,7 @@ async function saveLocalData() {
 
 function endGame() {
   started.value = false;
-  localStorage.clear();
+  Object.keys(saveData).forEach(key => localStorage.removeItem(key));
   roundHistory.clear();
 }
 
