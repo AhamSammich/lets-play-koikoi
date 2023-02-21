@@ -18,6 +18,21 @@ function registerYaku(yakuArr: string[]) {
   emits("new-yaku", yakuArr, props.player);
 }
 
+function allowViewings(yakuArr: string[]): string[] {
+  switch (viewingsAllowed.value) {
+    case 0:  // 0 => never allowed
+      return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
+
+    case 1:  // 1 => limited allowance
+      // Yaku not allowed if players has no non-viewing yaku
+      if (yakuList.size === 0 && yakuArr.every(yaku => restrictedYaku.has(yaku)))
+        return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
+
+    default:  // 2 => allow always
+      return yakuArr;
+  }
+}
+
 onBeforeUpdate(() => {
   emits("collecting");
   if (props.cards.length === 0) yakuList.clear();
@@ -26,8 +41,8 @@ onBeforeUpdate(() => {
 
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
-  yakuArr = yakuArr.filter(yakuName => yakuName && !yakuList.has(yakuName));
-  if (!viewingsAllowed.value) yakuArr = yakuArr.filter(yakuName => !restrictedYaku.has(yakuName));
+  yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
+  yakuArr = allowViewings(yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
   else emits("no-yaku");
 });
@@ -84,7 +99,7 @@ onUpdated(() => {
   & > *:nth-child(6) {
     margin-left: calc(0.2 * var(--card-h));
   }
-  
+
   & > *:nth-child(n + 6) {
     margin-top: calc(-0.7 * var(--card-h));
   }

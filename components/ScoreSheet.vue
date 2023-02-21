@@ -15,13 +15,18 @@ function resetGame() {
   emits("reset", score);
 }
 
+function bonusAdded(baseScore: number): number {
+  let finalScore = baseScore;
+  if (doubledOverSeven.value && score >= 7) finalScore *= 2;
+  finalScore *= (1 + props.koikoi);
+  return finalScore;
+}
+
 onBeforeMount(() => {
   if (props.yakuList === null) return;
   finalList = processYakuList(props.yakuList);
-  score =
-    getYakuScore(finalList) *
-    (1 + props.koikoi) *
-    (doubledOverSeven.value && score >= 7 ? 2 : 1);
+  score = getYakuScore(finalList);
+  score = bonusAdded(score);
 });
 </script>
 
