@@ -3,18 +3,6 @@ import { Ref } from "vue";
 
 const started = STORE.useStart();
 
-onMounted(() => {
-  watchEffect(() => {
-    if (started.value) {
-      [...document.querySelectorAll("input")].forEach((input) => (input.disabled = true));
-    } else if (!started.value) {
-      [...document.querySelectorAll("input")].forEach(
-        (input) => (input.disabled = false)
-      );
-    }
-  });
-});
-
 const rules: Record<string, Ref> = {
   maxRounds: <Ref<number>>RULES.useMaxRounds(),
   viewingsAllowed: <Ref<number>>RULES.useViewingsAllowed(),
@@ -22,31 +10,69 @@ const rules: Record<string, Ref> = {
   doubledOverSeven: <Ref<boolean>>RULES.useDoubledOverSeven(),
 };
 
-// function applyOptions(e) {
-//   e.preventDefault();
-//   const formData = [...e.target.querySelectorAll("input:checked")].map(input => [input.name, input.value]);
-//   console.log(formData);
+const INPUTS: Map<string, any[]> = new Map();
 
-// }
-
-function updateNumberRule(e: Event) {
-  let target = <HTMLElement>e.target;
-  let key = target.getAttribute("name");
+function updateRuleSet(input: HTMLInputElement) {
+  let key = input.getAttribute("name");
   if (!key) return;
-  rules[key].value = Number(target.getAttribute("value"));
+  switch (input.type) {
+    case "radio":
+      rules[key].value = Number(input.getAttribute("value"));
+      break;
+    case "checkbox":
+      rules[key].value = input.checked;
+      break;
+    default:
+      rules[key].value = input.value;
+  }
 }
 
-// @ts-ignore
-function updateBooleanRule(e) {
-  rules[e.target.name].value = e.target.checked;
+async function loadRuleSet() {
+  // Load saved options from localStorage
+  if (!localStorage) return;
+  try {
+    Object.keys(rules).forEach((rule) => {
+      INPUTS.set(rule, [...document.querySelectorAll(`[name=${rule}]`)]);
+      if (!localStorage.getItem(rule)) return;
+      INPUTS.get(rule)?.forEach((input) => {
+        if (localStorage.getItem(rule) === input.value) {
+          input.checked = true;
+          updateRuleSet(input);
+        } else input.checked = false;
+      });
+    });
+  } catch (err) {
+    console.warn("Failed to apply saved options.");
+  }
 }
+
+onMounted(async () => {
+  await loadRuleSet();
+  watchEffect(() => {
+    // Options may only be changed from the title screen
+    INPUTS.forEach((inputArr) =>
+      inputArr.forEach((input) => (input.disabled = started.value))
+    );
+  });
+
+  // Update localStorage for changing options
+  if (!localStorage) return;
+  Object.keys(rules).forEach((key) => {
+    watchEffect(() => {
+      localStorage?.setItem(key, rules[key].value);
+    });
+  });
+});
 </script>
 
 <template>
   <form class="grid gap-1" @submit.prevent>
     <!-- choose number of rounds: 3 / 6 / 12 -->
     <fieldset>
-      <legend>Game Length <p class="inline">({{ rules.maxRounds }} rounds)</p></legend>
+      <legend>
+        Game Length
+        <p class="inline">({{ rules.maxRounds }} rounds)</p>
+      </legend>
       <div>
         <label for="length-season">Season</label>
         <input
@@ -54,7 +80,7 @@ function updateBooleanRule(e) {
           id="length-season"
           name="maxRounds"
           value="3"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
       </div>
       <div>
@@ -64,7 +90,7 @@ function updateBooleanRule(e) {
           id="length-half"
           name="maxRounds"
           value="6"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
       </div>
       <div>
@@ -74,18 +100,20 @@ function updateBooleanRule(e) {
           id="length-year"
           name="maxRounds"
           value="12"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
           checked
         />
       </div>
     </fieldset>
     <!-- allow hanami-zake/tsukimi-zake: always / limited / never -->
     <fieldset>
-      <legend>Allow "Flower/Moon Viewing"<a
+      <legend>
+        Allow "Flower/Moon Viewing"<a
           href="https://fudawiki.org/en/hanafuda/games/koi-koi#taming-the-sake-cup"
           target="_blank"
           ><Icon name="material-symbols:help-outline-rounded"
-        /></a></legend>
+        /></a>
+      </legend>
       <div>
         <label for="viewings-never">Never</label>
         <input
@@ -93,7 +121,7 @@ function updateBooleanRule(e) {
           id="viewings-never"
           name="viewingsAllowed"
           value="0"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
       </div>
       <div>
@@ -103,7 +131,7 @@ function updateBooleanRule(e) {
           id="viewings-limited"
           name="viewingsAllowed"
           value="1"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
       </div>
       <div>
@@ -113,7 +141,7 @@ function updateBooleanRule(e) {
           id="viewings-always"
           name="viewingsAllowed"
           value="2"
-          @change="updateNumberRule"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
           checked
         />
       </div>
@@ -132,7 +160,8 @@ function updateBooleanRule(e) {
           type="checkbox"
           id="scoring-double-any"
           name="bonusForAnyKoiKoi"
-          @change="updateBooleanRule"
+          value="true"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
         <label for="scoring-double-any">x2 for any koi-koi</label>
       </div>
@@ -141,7 +170,8 @@ function updateBooleanRule(e) {
           type="checkbox"
           id="scoring-double-seven"
           name="doubledOverSeven"
-          @change="updateBooleanRule"
+          value="true"
+          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
         <label for="scoring-double-seven">x2 for yaku >7 points</label>
       </div>
