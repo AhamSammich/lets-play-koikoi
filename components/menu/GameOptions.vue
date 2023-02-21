@@ -160,7 +160,7 @@ fieldset {
 
   &:has([type="checkbox"]) {
     flex-direction: column;
-    gap: 0.25em;
+    gap: 0.5em;
 
     & > div {
       width: 100%;
@@ -235,7 +235,6 @@ fieldset {
   }
 
   &:is(input[type="checkbox"]) {
-    --input-size: 0.8rem;
     border-radius: 0.2rem;
 
     &::after {
