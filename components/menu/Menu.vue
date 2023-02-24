@@ -59,6 +59,10 @@ h1 {
   color: var(--menu-accent2);
 }
 
+#menu {
+  height: 100dvh;
+}
+
 #menu-backdrop {
   background: var(--menu-black);
   height: 100dvh;
