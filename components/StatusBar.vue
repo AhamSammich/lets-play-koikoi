@@ -62,7 +62,7 @@ function pointToActive() {
   @media (orientation: landscape) {
     transform-origin: left;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 5rem;
     height: 100vh;
     height: 100dvh;
@@ -111,7 +111,7 @@ p {
   left: 50%;
   translate: -50% -50%;
   transform-origin: center top;
-  transition: all 1s;
+  transition: all 0.5s;
   opacity: 0.8;
   z-index: 20;
 
