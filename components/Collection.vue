@@ -82,6 +82,12 @@ onUpdated(() => {
   grid-template-columns: repeat(2, var(--row-w));
   grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));
   gap: 0.1rem;
+
+  @media (orientation: portrait) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
 }
 
 .subset {
