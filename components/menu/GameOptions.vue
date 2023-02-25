@@ -176,7 +176,6 @@ onMounted(async () => {
         <label for="scoring-double-seven">x2 for yaku >7 points</label>
       </div>
     </fieldset>
-    <!-- <button type="submit">Apply</button> -->
   </form>
 </template>
 
@@ -189,6 +188,7 @@ fieldset {
   justify-content: space-between;
   align-items: center;
   padding: 1.5em 0.5em;
+  max-width: 400px;
 
   &:has([type="checkbox"]) {
     flex-direction: column;

@@ -76,7 +76,7 @@ h1 {
 }
 
 #menu-container {
-  width: clamp(350px, 50vw, 500px);
+  width: 100vw;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
   color: white;
@@ -91,12 +91,7 @@ h1 {
 
 @media (orientation: landscape) {
   #menu {
-    width: 100vw;
     flex-direction: row;
-  }
-
-  #menu-container[aria-expanded="true"] {
-    width: 100vw;
   }
 
   #menu-foot {
