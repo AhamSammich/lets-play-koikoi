@@ -16,6 +16,7 @@ const isMatched = () =>
 
 // Mouseover to preview card matches
 function handleHover(e: Event) {
+  if (!props.interactive) return; // Prevent triggering effects hovering over cards not in hand
   previewCard.value = props.name;
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
