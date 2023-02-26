@@ -9,9 +9,9 @@ const emits = defineEmits(["match-select"]);
 </script>
 
 <template>
-  <dialog :open="showModal" aria-modal="true">
+  <dialog :open="showModal" aria-modal="true" class="gap-8">
     <template v-if="matchSrc">
-      <h1>{{ matchSrc.replace(/-\d?/g, " ") }}</h1>
+      <h1>{{ matchSrc.replace(/-\d?/g, " ").trim() }}</h1>
       <div id="match-src">
         <Card :name="matchSrc" />
       </div>
@@ -39,7 +39,7 @@ const emits = defineEmits(["match-select"]);
   flex-wrap: wrap;
 }
 
-#match-src {
+#match-src > * {
   pointer-events: none;
   animation: none;
   width: 50px;

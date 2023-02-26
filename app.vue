@@ -13,14 +13,15 @@ useSeoMeta({
 });
 
 const roundNum = STORE.useRoundNum();
-const score1 = STORE.useScore1();
-const score2 = STORE.useScore2();
+const score1: Ref<number> = STORE.useScore1();
+const score2: Ref<number> = STORE.useScore2();
 const started = STORE.useStart();
 const oya = STORE.useCurrentOya();
 const showProgress = ref(false);
 
 let roundHistory = new Map();
 const maxRounds = RULES.useMaxRounds();
+const finalScores: Ref<Record<string, number>> = ref({});
 
 const saveData: Record<string, Ref<number>> = {
   "lpk-round-num": roundNum,
@@ -67,9 +68,15 @@ async function saveLocalData() {
 }
 
 function endGame() {
+  finalScores.value = { p1: score1.value, p2: score2.value };
   started.value = false;
   Object.keys(saveData).forEach(key => localStorage.removeItem(key));
+}
+
+function clearHistory() {
+  finalScores.value = {};
   roundHistory.clear();
+  localStorage.removeItem("lpk-history");
 }
 
 function resetGame() {
@@ -79,19 +86,14 @@ function resetGame() {
   oya.value = Math.round(Math.random()) + 1;  // Randomize starting player for first round
 }
 
-function recordRound() {
+function recordRound(results: Results) {
   if (!roundNum.value) return;
-  roundHistory.set(roundNum.value, {
-    round: roundNum.value,
-    p1: score1.value,
-    p2: score2.value,
-    oya: `P${oya.value}`,
-  });
+  roundHistory.set(roundNum.value, results);
   localStorage.setItem("lpk-history", JSON.stringify(roundHistory, mapReplacer));
 }
 
-async function handleNext() {
-  recordRound();
+async function handleNext(results: Results) {
+  recordRound(results);
   await saveLocalData();
   if (roundNum.value >= maxRounds.value) {
     console.dir(JSON.parse(JSON.stringify(roundHistory, mapReplacer), mapReviver));
@@ -143,12 +145,18 @@ onMounted(async () => {
     />
     <Start />
     <template v-if="started">
-      <Table @next-round="handleNext()" @reset="resetGame()" />
+      <Table @next-round="(results) => handleNext(results)" @reset="resetGame()" />
       <StatusBar
         :round-num="roundNum"
         :score="{ p1: score1, p2: score2 }"
         :oya="`p${oya}`"
       />
+    </template>
+    <template v-if="finalScores">
+      <div class="w-8 h-8 absolute top-4 left-4 z-50">
+        <MenuButton ico-name="material-symbols:arrow-back" close-only @close-menu="clearHistory()"/>
+      </div>
+      <Results  :scoreboard="{ p1: score1, p2: score2 }" :show-modal="!!finalScores" :results-map="roundHistory" /> 
     </template>
   </main>
 </template>
