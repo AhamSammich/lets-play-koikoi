@@ -40,6 +40,7 @@ async function handlePointerDown(e: Event) {
   target.classList.add("selected");
   previewCard.value = "";
   emits("card-select", props.name);
+  cancelPointerDown(e);
 }
 
 // Remove selection effects
@@ -72,20 +73,25 @@ async function cancelPointerDown(e: Event) {
 </template>
 
 <style lang="postcss">
+:root {
+  --card-max-w: 75px;
+}
+
 .card,
 img {
   border-radius: 0.2rem;
 }
 .card {
   width: 75px;
+  max-width: var(--card-max-w);
   aspect-ratio: 2 / 3;
   outline: 0.05px solid lightgoldenrodyellow;
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
 
   &.down {
+    --card-max-w: 60px;
     background-color: rgb(220 38 38);
-    max-width: 60px;
   }
 
   &.selected {
@@ -103,8 +109,7 @@ img {
     width: 50px;
     background: linear-gradient(45deg, #eee, #ddd, white);
     border: 5px solid red;
-    transition: none;
-    opacity: 0.3;
+    opacity: 0.9;
   }
 }
 

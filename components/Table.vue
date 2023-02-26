@@ -514,6 +514,10 @@ async function runGame() {
     & #p1-hand {
       padding-bottom: 50px;
     }
+
+    & :is(.card) {
+      max-width: 50px;
+    }
   }
 }
 
@@ -535,8 +539,13 @@ async function runGame() {
 }
 
 #p1-hand {
+  --card-max-w: 60px;
   grid-area: p1;
   position: relative;
+  
+  & > * {
+    cursor: pointer;
+  }
 
   &.inactive {
     pointer-events: none;
@@ -544,6 +553,7 @@ async function runGame() {
 }
 
 #p2-hand {
+  --card-max-w: 60px;
   grid-area: p2;
   pointer-events: none;
   position: relative;
@@ -573,12 +583,12 @@ async function runGame() {
   z-index: 0;
 }
 
-@media (width < 500px) or (height < 500px) {
+/* @media (width < 500px) or (height < 500px) {
   #deck,
   #field {
     scale: 0.8;
   }
-}
+} */
 
 .collection {
   position: absolute;

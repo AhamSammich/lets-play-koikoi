@@ -76,7 +76,7 @@ function resetGame() {
   roundNum.value = 0;
   score1.value = 0;
   score2.value = 0;
-  oya.value = 1;
+  oya.value = Math.round(Math.random()) + 1;  // Randomize starting player for first round
 }
 
 function recordRound() {

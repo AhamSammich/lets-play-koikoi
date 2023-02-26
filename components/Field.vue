@@ -17,23 +17,24 @@ defineProps<{
 
 <style scoped lang="postcss">
 .field {
+  --card-max-w: 60px;
+  --gap: 0.3rem;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: 500px;
+  max-width: calc(var(--card-max-w) * 8);
   align-items: flex-start;
-  gap: 0.3rem;
+  gap: var(--gap);
   overflow: visible;
   pointer-events: none;
 
   @media (orientation: landscape) {
-    gap: 0.3rem;
 
-    & :nth-child(7) {
+    & :nth-child(9) {
       margin-left: 5%;
     }
 
-    & :nth-child(n+7) {
+    & :nth-child(n+9) {
       margin-top:  -10%;
     }
   }
