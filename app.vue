@@ -152,7 +152,7 @@ onMounted(async () => {
         :oya="`p${oya}`"
       />
     </template>
-    <template v-if="finalScores">
+    <template v-if="finalScores.length">
       <div class="w-8 h-8 absolute top-4 left-4 z-50">
         <MenuButton ico-name="material-symbols:arrow-back" close-only @close-menu="clearHistory()"/>
       </div>
