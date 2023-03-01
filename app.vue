@@ -69,7 +69,7 @@ async function saveLocalData() {
 
 function endGame() {
   started.value = false;
-  Object.keys(saveData).forEach(key => localStorage.removeItem(key));
+  Object.keys(saveData).forEach((key) => localStorage.removeItem(key));
 }
 
 function clearHistory() {
@@ -95,7 +95,7 @@ async function handleNext(results: Results) {
   recordRound(results);
   await saveLocalData();
   if (roundNum.value >= maxRounds.value) {
-    let [p1, p2] = [score1.value, score2.value]
+    let [p1, p2] = [score1.value, score2.value];
     finalScores.value = { p1, p2 };
     console.dir(JSON.parse(JSON.stringify(roundHistory, mapReplacer), mapReviver));
     endGame();
@@ -109,15 +109,12 @@ onMounted(async () => {
 
 <template>
   <header class="flex fixed top-0 justify-start w-max h-max z-20">
-    <button
-      id="back-btn"
-      :class="`${
-        started ? '' : 'hidden'
-      } px-4 py-1 opacity-25 font-black text-3xl text-white transition-all duration-500`"
-      @click="endGame()"
-    >
-      &larr;
-    </button>
+    <MenuButton
+      ico-name="material-symbols:arrow-back"
+      :class="`${started ? '' : 'hidden'} m-4 opacity-50`"
+      close-only
+      @close-menu="endGame()"
+    />
   </header>
 
   <Menu />
@@ -155,9 +152,17 @@ onMounted(async () => {
     </template>
     <template v-if="Object.keys(finalScores).length">
       <div class="w-8 h-8 absolute top-4 left-4 z-50">
-        <MenuButton ico-name="material-symbols:arrow-back" close-only @close-menu="clearHistory()"/>
+        <MenuButton
+          ico-name="material-symbols:arrow-back"
+          close-only
+          @close-menu="clearHistory()"
+        />
       </div>
-      <Results  :scoreboard="finalScores" :show-modal="!!Object.keys(finalScores).length" :results-map="roundHistory" /> 
+      <Results
+        :scoreboard="finalScores"
+        :show-modal="!!Object.keys(finalScores).length"
+        :results-map="roundHistory"
+      />
     </template>
   </main>
 </template>

@@ -60,13 +60,13 @@ function pointToActive() {
   }
 
   @media (orientation: landscape) {
-    transform-origin: left;
+    transform-origin: right;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 5rem;
     height: 100vh;
     height: 100dvh;
-    left: 100%;
+    right: 99%;
     rotate: 180deg;
     width: max-content;
 

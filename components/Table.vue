@@ -491,6 +491,7 @@ async function runGame() {
 
 <style lang="postcss">
 #tabletop {
+  --left-shift: 6rem;
   width: 100%;
   max-width: var(--tbl-w-max);
   min-height: 420px;
@@ -512,8 +513,10 @@ async function runGame() {
 
   @media (orientation: landscape) {
     grid-template-rows: 60px minmax(100px, 1fr) 150px;
+
     & #p1-hand {
       padding-bottom: 80px;
+      padding-left: var(--left-shift);
     }
   }
 }
@@ -579,6 +582,7 @@ async function runGame() {
 @media (width < 500px) or (height < 500px) {
   #deck,
   #field {
+    translate: var(--left-shift) 0;
     scale: 0.8;
   }
 }
@@ -611,7 +615,7 @@ async function runGame() {
   }
 
   &#p2-collection {
-    left: 0;
+    left: var(--left-shift);
     top: 0;
     transform-origin: top left;
 
