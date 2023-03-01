@@ -1,36 +1,20 @@
-# Let's Play Koi-Koi!
+# Let's Play Koi-Koi
+This is a Hanafuda game created using TypeScript, Vue.js, and Nuxt.js. Hanafuda is a traditional Japanese card game, also known as "flower cards". The objective of the game is to capture cards with matching symbols or create specific combinations of cards.
 
-## PROJECT UNDER CONSTRUCTION
+![screenshot of title](public/title-screen.png)
 
-### TO-DO
-- MATCHING ALGORITHM
-  - [x] First match
-  - [x] Multiple matches
-  - [x] Second match
-  - [x] Triplet on table
-  - [x] Yaku determination
-    - [x] FIX: Handle simultaneous yaku
-    - [x] FIX: Check for yaku after deck draw
-  - [x] Check for instant win(hand)/re-deal(field) (full suit or 4 pairs)
+🎴[Click here to play!](https://lets-play-koikoi.vercel.app)🎴
 
-- GAME STATE
-  - [x] Track active player
-  - [x] Track selected card
-  - [x] Call Koi-Koi
-    - [x] FIX: AI Koi-Koi decision
-  - [x] Start screen
-  - [x] End round
-  - [x] Reset
-  - [x] Track scoring
+## Gameplay
+The game is played with a deck of 48 cards, each with a unique symbol.
 
-- UI
-  - [x] Round number
-  - [x] Scoreboard
-    - [ ] Koi-Koi bonus & oya indicator
-  - [ ] Highlight possible match
-  - [ ] Yaku progress
-  - [ ] How To Play
-    - [ ] Yaku cheatsheat
-  - [x] Mobile layout
-  - [x] Message when calling koi-koi
-  - [ ] Sidebar/header menu
+The objective of the game is to capture cards with matching symbols or create specific combinations of cards. Each turn, players draw a card from the deck and play a card from their hand. If a player captures a card with a matching symbol, they can play another card. The game ends when the deck is depleted and all players have played their cards.
+
+## Technologies Used
+
+- TypeScript
+- Vue.js
+- Nuxt.js
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
