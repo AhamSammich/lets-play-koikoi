@@ -86,7 +86,7 @@ onBeforeMount(() => {
   flex-direction: column;
   gap: 0.2rem;
   padding-top: 20px;
-  /* padding-bottom: 5%; */
+  padding-bottom: 5%;
   justify-content: flex-start;
   align-items: flex-start;
   align-self: flex-start;
