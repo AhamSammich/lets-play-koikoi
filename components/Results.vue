@@ -23,8 +23,8 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
     </section>
     <div class="flex flex-wrap gap-4 items-start w-full">
         <section v-for="key in resultsMap.keys()" :key="key" class="round-result min-w-1/2 px-8">
-        <div :class="{ win: resultsMap.get(key)?.winner === 'p1' }">
-            <h1>ROUND {{ key }}</h1>
+        <div>
+            <h1 :class="{ win: resultsMap.get(key)?.winner === 'p1' }">ROUND {{ key }}</h1>
             <h2>{{ resultsMap.get(key)?.winner || "DRAW" }}</h2>
         </div>
         <div class="yaku-list flex flex-col gap-1">
