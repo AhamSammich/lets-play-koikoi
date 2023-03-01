@@ -42,7 +42,7 @@ onBeforeMount(() => {
       </h2>
       <div
         v-if="koikoi && yakuList"
-        class="flex items-center gap-2 absolute left-8 -top-1/2 w-full"
+        class="flex items-center gap-2 w-max absolute left-8 -top-1/2 md:static"
       >
         <p class="text-sm">KOI-KOI BONUS:</p>
         <div class="relative flex gap-1 w-max">

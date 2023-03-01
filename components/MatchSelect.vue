@@ -9,24 +9,20 @@ const emits = defineEmits(["match-select"]);
 </script>
 
 <template>
-  <dialog :open="showModal" aria-modal="true" class="gap-8">
+  <dialog :open="showModal" aria-modal="true" class="gap-4">
     <template v-if="matchSrc">
       <h1>{{ matchSrc.replace(/-\d?/g, " ").trim() }}</h1>
-      <div id="match-src">
-        <Card :name="matchSrc" />
-      </div>
+      <Card id="match-src" :name="matchSrc" />
     </template>
-    <h2>Select a card to match:</h2>
+    <h2>Pick a card:</h2>
     <div id="choose-match">
-      <template v-for="(card, index) in cards">
-        <div :id="`${index}`" class="cursor-pointer">
-          <!-- Get selected card details and check table for match -->
-          <Card
-            :name="card"
-            @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
-          />
-        </div>
-      </template>
+      <div v-for="(card, index) in cards" :id="`${index}`" class="cursor-pointer">
+        <!-- Get selected card details and check table for match -->
+        <Card
+          :name="card"
+          @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
+        />
+      </div>
     </div>
   </dialog>
 </template>
@@ -39,7 +35,12 @@ const emits = defineEmits(["match-select"]);
   flex-wrap: wrap;
 }
 
-#match-src > * {
+h2 {
+
+  letter-spacing: 0.05em;
+}
+
+#match-src {
   pointer-events: none;
   animation: none;
   width: 50px;

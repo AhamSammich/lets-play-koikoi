@@ -63,7 +63,7 @@ function pointToActive() {
     transform-origin: right;
     flex-direction: column;
     justify-content: center;
-    gap: 5rem;
+    gap: 4rem;
     height: 100vh;
     height: 100dvh;
     right: 99%;
