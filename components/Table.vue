@@ -511,9 +511,9 @@ async function runGame() {
   }
 
   @media (orientation: landscape) {
-    grid-template-rows: 60px minmax(100px, 1fr) 120px;
+    grid-template-rows: 60px minmax(100px, 1fr) 150px;
     & #p1-hand {
-      padding-bottom: 50px;
+      padding-bottom: 80px;
     }
   }
 }
@@ -545,14 +545,16 @@ async function runGame() {
 }
 
 #p2-hand {
+  --card-width: 50px;
   grid-area: p2;
   pointer-events: none;
   position: relative;
   opacity: 0.5;
+  margin-right: var(--card-width);
+  rotate: 180deg;
 
   & > * {
     position: absolute;
-    right: 0.5rem;
   }
 }
 
@@ -604,7 +606,7 @@ async function runGame() {
     transform-origin: bottom right;
 
     @media (orientation: landscape) {
-      right: 2.5rem;
+      right: 3rem;
     }
   }
 
