@@ -33,7 +33,11 @@ defineProps<{
     }
 
     & :nth-child(n+9) {
-      margin-top:  -10%;
+      margin-top:  -40px;
+    }
+
+    &:has(:nth-child(9)) .card {
+      width: 60px;
     }
   }
 

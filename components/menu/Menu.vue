@@ -18,7 +18,7 @@ const isOpen = ref(false);
     class="absolute right-0 top-0 translate-x-full scale-x-0 max-w-full h-screen"
     :aria-expanded="isOpen"
   >
-    <div id="menu" class="relative h-full py-4 flex flex-col justify-between items-start">
+    <div id="menu" class="relative h-full py-2 flex flex-col justify-between items-start">
       <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
           <li>
@@ -30,7 +30,7 @@ const isOpen = ref(false);
           </li>
         </ul>
       </nav>
-      <section id="menu-options" class="w-full px-8 py-4">
+      <section id="menu-options" class="w-full px-8 py-2">
         <h1>Options:</h1>
         <MenuGameOptions />
       </section>

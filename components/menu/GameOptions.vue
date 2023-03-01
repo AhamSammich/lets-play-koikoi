@@ -66,7 +66,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form class="grid gap-1" @submit.prevent>
+  <form class="grid gap-0" @submit.prevent>
     <!-- choose number of rounds: 3 / 6 / 12 -->
     <fieldset>
       <legend>
@@ -187,8 +187,10 @@ fieldset {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5em 0.5em;
-  max-width: 400px;
+  padding: 1em 0.5em;
+  padding-top: 1.5em;
+  max-width: 420px;
+  max-height: 100%;
 
   &:has([type="checkbox"]) {
     flex-direction: column;

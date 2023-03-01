@@ -518,6 +518,10 @@ async function runGame() {
       padding-bottom: 80px;
       padding-left: var(--left-shift);
     }
+
+    & :is(#deck, #field) {
+    translate: var(--left-shift) 0;
+    }
   }
 }
 
@@ -544,6 +548,10 @@ async function runGame() {
 
   &.inactive {
     pointer-events: none;
+  }
+
+  & .card {
+    cursor: pointer;
   }
 }
 
@@ -582,16 +590,15 @@ async function runGame() {
 @media (width < 500px) or (height < 500px) {
   #deck,
   #field {
-    translate: var(--left-shift) 0;
     scale: 0.8;
   }
 }
 
 .collection {
   position: absolute;
-  margin: 1rem 0.5rem;
-  transform: scale(0.65);
-  transition: all 0.5s;
+  margin: 0.5rem;
+  transform: scale(0.6);
+  transition: all 0.3s;
   opacity: 0.5;
 
   &:hover {
@@ -608,19 +615,19 @@ async function runGame() {
     right: 0;
     bottom: 0;
     transform-origin: bottom right;
-
-    @media (orientation: landscape) {
-      right: 3rem;
-    }
   }
 
   &#p2-collection {
-    left: var(--left-shift);
+    left: 0;
     top: 0;
     transform-origin: top left;
 
     @media (orientation: portrait) {
       top: 2.5rem;
+    }
+
+    @media (orientation: landscape) {
+      left: var(--left-shift);
     }
   }
 }
