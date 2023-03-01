@@ -56,7 +56,7 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
-  <div class="card down"></div>
+  <div class="deck bg-red-600"></div>
 </template>
 
 <style scoped lang="postcss">
@@ -70,5 +70,13 @@ onUpdated(async () => {
   transform-origin: center;
   transition: transform 0.5s;
   border-radius: 0.2rem;
+}
+
+.deck {
+  width: 75px;
+  aspect-ratio: 2 / 3;
+  outline: 0.05px solid lightgoldenrodyellow;
+  border-radius: 0.2rem;
+  position: relative;
 }
 </style>

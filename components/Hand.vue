@@ -41,9 +41,13 @@ function selectCard(cardName: string) {
   margin-left: 0.5rem;
   transform-origin: left;
 }
+.player-card > * {
+  max-width: 60px;
+}
 
-@media (orientation: portrait) and (width < 800px) {
+@media (width < 800px) {
   .player-card {
+    max-width: 60px;
 
     &:nth-child(5) {
       margin-left: 10%;
@@ -56,7 +60,7 @@ function selectCard(cardName: string) {
 
   .hand {
     flex-wrap: wrap;
-    max-width: calc(var(--card-max-w) * 5);
+    max-width: 350px;
     gap: 0.5rem;
     z-index: 1;
   }
