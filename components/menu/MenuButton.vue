@@ -1,13 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{
   icoName?: string;
+  closeOnly?: boolean;
 }>();
 const emits = defineEmits(["open-menu", "close-menu"]);
 
 const menuOpen = ref(false);
 function toggleBtn() {
-  menuOpen.value = !menuOpen.value;
-  menuOpen.value ? emits("open-menu") : emits("close-menu");
+  if (props.closeOnly) {
+    emits("close-menu");
+  } else {
+    menuOpen.value = !menuOpen.value;
+    menuOpen.value ? emits("open-menu") : emits("close-menu");
+  }
 }
 </script>
 
@@ -18,7 +23,7 @@ function toggleBtn() {
       <div class="middle bar"></div>
       <div class="bottom bar"></div>
     </template>
-    <Icon v-else name="mdi:cards" />
+    <Icon v-else :name="icoName" />
   </div>
 </template>
 
