@@ -50,7 +50,8 @@ onBeforeMount(() => {
             v-for="n in koikoi"
             src="~assets/images/coin.png" 
             alt="coin for koikoi"
-            class="w-6"
+            class="coin relative w-6"
+            :data-multiplier="`x${n + 1}` /* Display multiplier above image */"
           />
         </div>
       </div>
@@ -154,6 +155,16 @@ onBeforeMount(() => {
     }
   }
 }
+
+/* .coin::after {
+  content: attr(data-multiplier);
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  left: 100%;
+} */
 
 @media (width > 800px) or (orientation: landscape) {
   #scoresheet {
