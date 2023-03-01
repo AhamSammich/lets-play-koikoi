@@ -60,7 +60,7 @@ function selectCard(cardName: string) {
 
   .hand {
     flex-wrap: wrap;
-    max-width: 350px;
+    max-width: calc(var(--card-width) * 5);
     gap: 0.5rem;
     z-index: 1;
   }

@@ -73,12 +73,16 @@ async function cancelPointerDown(e: Event) {
 </template>
 
 <style lang="postcss">
+:root {
+  --card-width: 70px;
+}
+
 .card,
 img {
   border-radius: 0.2rem;
 }
 .card {
-  width: 75px;
+  width: var(--card-width);
   aspect-ratio: 2 / 3;
   outline: 0.05px solid lightgoldenrodyellow;
   transition: all 0.3s 0.1s;

@@ -20,26 +20,25 @@ defineProps<{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: 500px;
   align-items: flex-start;
-  gap: 0.3rem;
+  gap: 0.5rem;
   overflow: visible;
   pointer-events: none;
 
   @media (orientation: landscape) {
-    gap: 0.3rem;
+    max-width: calc(var(--card-width) * 9);
 
-    & :nth-child(7) {
+    & :nth-child(9) {
       margin-left: 5%;
     }
 
-    & :nth-child(n+7) {
+    & :nth-child(n+9) {
       margin-top:  -10%;
     }
   }
 
   @media (orientation: portrait) {
-    max-width: 350px;
+    max-width: calc(var(--card-width) * 5);
     flex-direction: row;
 
     & :nth-child(5) {
