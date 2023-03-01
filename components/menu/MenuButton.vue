@@ -6,18 +6,27 @@ const props = defineProps<{
 const emits = defineEmits(["open-menu", "close-menu"]);
 
 const menuOpen = ref(false);
+
 function toggleBtn() {
+  menuOpen.value = !menuOpen.value;
+  menuOpen.value ? emits("open-menu") : emits("close-menu");
+}
+
+function closeMenu() {
+  emits("close-menu");
+}
+
+function handleClick() {
   if (props.closeOnly) {
-    emits("close-menu");
+    closeMenu();
   } else {
-    menuOpen.value = !menuOpen.value;
-    menuOpen.value ? emits("open-menu") : emits("close-menu");
+    toggleBtn();
   }
 }
 </script>
 
 <template>
-  <div class="container" :class="{ 'menu-open': menuOpen }" @pointerup="toggleBtn()">
+  <div class="container" :class="{ 'menu-open': menuOpen }" @pointerup="handleClick()">
     <template v-if="!icoName || (icoName && menuOpen)">
       <div class="top bar"></div>
       <div class="middle bar"></div>
