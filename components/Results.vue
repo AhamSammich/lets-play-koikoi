@@ -32,7 +32,7 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
             <div v-for="card in yaku" :key="card" class="">
                 <Card :name="card" />
             </div>
-            <p class="absolute top-1/2 -right-1/4 bg-black bg-opacity-70 p-2 -translate-y-1/2 uppercase text-xs">{{ index }}</p>
+            <p class="absolute top-1/2 -right-4 bg-black bg-opacity-70 p-2 -translate-y-1/2 uppercase text-xs">{{ index }}</p>
             </div>
         </div>
         </section>
@@ -50,12 +50,12 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
   max-width: 800px;
   margin-bottom: 1rem;
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .yaku-list {
-  --card-max-w: 30px;
-  width: calc(var(--card-max-w) * 6);
+  --card-width: 30px;
+  width: calc(var(--card-width) * 6);
 
   & :nth-child(6) {
     margin-left: 1rem;
@@ -63,10 +63,6 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
 
   & :nth-child(n+6) {
     margin-top: -1rem;
-  }
-
-  & .card {
-    max-width: var(--card-max-w);
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useImage } from '@vueuse/core';
+import { useImage } from "@vueuse/core";
 const props = defineProps<{
   name: string;
   hide?: boolean;
@@ -52,7 +52,7 @@ async function cancelPointerDown(e: Event) {
 <template>
   <div v-if="hide" class="card down"></div>
 
-  <div v-else :class="`card glow ${isMatched() ? 'previewed' : ''}`">
+  <div v-else :class="{ card: true, glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
     <svg v-if="interactive" class="glow-container absolute">
       <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
@@ -84,9 +84,9 @@ img {
 .card {
   width: var(--card-width);
   aspect-ratio: 2 / 3;
-  outline: 0.05px solid lightgoldenrodyellow;
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
+  border: 0.5px solid #111;
 
   &.down {
     background-color: rgb(220 38 38);
