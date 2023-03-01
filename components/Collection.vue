@@ -77,7 +77,7 @@ onUpdated(() => {
 .collected {
   --card-w: 35px;
   --card-h: calc(var(--card-w) * 1.5);
-  --row-w: calc(5.2 * var(--card-w));
+  --row-w: calc(6 * var(--card-w));
   display: grid;
   grid-template-columns: repeat(2, var(--row-w));
   grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));

@@ -28,3 +28,8 @@ type Player = {
   score: Ref<number>;
   koikoi: number;
 };
+
+type Results = {
+  winner: string;
+  yaku: Dict;
+}

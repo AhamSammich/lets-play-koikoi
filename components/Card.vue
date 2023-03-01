@@ -40,6 +40,7 @@ async function handlePointerDown(e: Event) {
   target.classList.add("selected");
   previewCard.value = "";
   emits("card-select", props.name);
+  cancelPointerDown(e);
 }
 
 // Remove selection effects

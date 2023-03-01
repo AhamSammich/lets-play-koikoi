@@ -124,7 +124,8 @@ async function resetRefs() {
 async function newGame(score?: number) {
   if (score && winner.value) scoreboard[winner.value].value += score;
   if (winner.value) activeP.value = winner.value;
-  emits("next-round", winner.value);
+  let roundResults = { winner: winner.value, yaku: winningYaku.value }
+  emits("next-round", roundResults);
   await resetRefs();
   TABLE.selectedCard.value = "";
   WAIT.value = false;

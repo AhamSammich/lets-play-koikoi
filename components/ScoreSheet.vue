@@ -8,6 +8,9 @@ const props = defineProps<{
 
 const emits = defineEmits(["reset", "next"]);
 const doubledOverSeven = RULES.useDoubledOverSeven();
+const roundNum = STORE.useRoundNum();
+const maxRounds = RULES.useMaxRounds();
+
 let score = 0;
 let finalList: Dict;
 
@@ -18,7 +21,7 @@ function resetGame() {
 function bonusAdded(baseScore: number): number {
   let finalScore = baseScore;
   if (doubledOverSeven.value && score >= 7) finalScore *= 2;
-  finalScore *= (1 + props.koikoi);
+  finalScore *= 1 + props.koikoi;
   return finalScore;
 }
 
@@ -32,31 +35,45 @@ onBeforeMount(() => {
 
 <template>
   <dialog :open="showModal" aria-modal="true">
-    <div id="points">
+    <div id="points" class="relative">
       <h1>{{ player || "draw" }}</h1>
       <h2 :class="{ bonus: koikoi && score > 0 }">
         {{ score + `${score === 1 ? " point" : " points"}` }}
       </h2>
-    </div>
-    <template v-if="player && yakuList">
-      <div id="scoresheet">
-        <template v-for="yaku in Object.keys(finalList)" :key="yaku">
-          <div class="yaku">
-            <h2>{{ yaku }}</h2>
-            <div class="yaku-cards">
-              <template v-for="card in finalList[yaku]">
-                <div class="card">
-                  <Card :name="card" />
-                </div>
-              </template>
-            </div>
-          </div>
-        </template>
+      <div
+        v-if="koikoi && yakuList"
+        class="flex items-center gap-2 absolute left-8 -top-1/2 w-full"
+      >
+        <p class="text-sm">KOI-KOI BONUS:</p>
+        <div class="relative flex gap-1 w-max">
+          <img
+            v-for="n in koikoi"
+            src="~assets/images/coin.png" 
+            alt="coin for koikoi"
+            class="w-6"
+          />
+        </div>
       </div>
-    </template>
+    </div>
+    <div v-if="player && yakuList" id="scoresheet">
+      <div v-for="yaku in Object.keys(finalList)" :key="yaku" class="yaku">
+        <h2>{{ yaku }}</h2>
+        <div class="yaku-cards">
+          <div v-for="card in finalList[yaku]" class="card">
+            <Card :name="card" />
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="btn-bar">
-      <!-- <button @click="">END GAME</button> -->
-      <button @click="resetGame()" autofocus="true" tabindex="1">NEXT ROUND</button>
+      <button @click="resetGame()" autofocus="true" tabindex="1">
+        <template v-if="roundNum === maxRounds">
+          RETURN TO TITLE
+        </template>
+        <template v-else>
+          NEXT ROUND
+        </template>
+      </button>
     </div>
   </dialog>
 </template>
@@ -86,10 +103,10 @@ onBeforeMount(() => {
 
   & * {
     animation: none;
+    transition: none;
   }
 
   & .yaku {
-    /* width: 45vw; */
     padding-left: 2rem;
   }
 
@@ -121,7 +138,7 @@ onBeforeMount(() => {
   }
 
   & h2 {
-    font-family: 'Potta One';
+    font-family: "Potta One";
     letter-spacing: 0.05em;
   }
 }
