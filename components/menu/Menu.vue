@@ -1,10 +1,12 @@
 <script setup lang="ts">
 const isOpen = ref(false);
-
 </script>
 
 <template>
-  <div id="menu-btn" :class="`absolute z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`">
+  <div
+    id="menu-btn"
+    :class="`absolute z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
+  >
     <MenuButton @open-menu="isOpen = true" @close-menu="isOpen = false" />
   </div>
   <div
@@ -20,7 +22,9 @@ const isOpen = ref(false);
       <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
           <li>
-            <a href="https://fudawiki.org/en/hanafuda/games/koi-koi#gameplay" target="_blank"
+            <a
+              href="https://fudawiki.org/en/hanafuda/games/koi-koi#gameplay"
+              target="_blank"
               >How To Play<Icon name="mi:external-link"
             /></a>
           </li>
@@ -32,11 +36,11 @@ const isOpen = ref(false);
       </section>
       <nav id="menu-foot" class="w-full flex justify-center items-end pb-4">
         <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
-              ><Icon name="mdi:github"
-            /></a>
+          ><Icon name="mdi:github"
+        /></a>
         <a href="https://www.twitter.com/hammons_dev" target="_blank"
-              ><Icon name="mdi:twitter"
-            /></a>
+          ><Icon name="mdi:twitter"
+        /></a>
       </nav>
     </div>
   </menu>
@@ -53,7 +57,7 @@ const isOpen = ref(false);
 }
 
 h1 {
-  font-family: 'Potta One';
+  font-family: "Potta One";
   margin-bottom: 0.5em;
   letter-spacing: 0.05em;
   color: var(--menu-accent2);
@@ -94,14 +98,18 @@ h1 {
     flex-direction: row;
   }
 
+  #menu-options {
+    max-height: 100svh;
+  }
+
   #menu-foot {
     height: 100%;
-
+    max-height: 100svw;
   }
 }
 
 li {
-  font-family: 'Potta One';
+  font-family: "Potta One";
   width: 100%;
   padding: 0.75rem 2rem;
   letter-spacing: 0.05em;
