@@ -68,7 +68,7 @@ onBeforeMount(() => {
     <div class="btn-bar">
       <button @click="resetGame()" autofocus="true" tabindex="1">
         <template v-if="roundNum === maxRounds">
-          RETURN TO TITLE
+          VIEW RESULTS
         </template>
         <template v-else>
           NEXT ROUND
@@ -81,25 +81,17 @@ onBeforeMount(() => {
 <style scoped lang="postcss">
 #scoresheet {
   width: 100vw;
+  max-height: 60vh;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding-top: 25px;
-  padding-bottom: 5%;
+  gap: 0.2rem;
+  padding-top: 20px;
+  /* padding-bottom: 5%; */
   justify-content: flex-start;
   align-items: flex-start;
   align-self: flex-start;
-  mask-image: linear-gradient(180deg, transparent, #111 25px 95%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #111 25px 90%, transparent);
   overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    width: 0.2rem;
-    background: none;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, goldenrod, palegoldenrod);
-  }
 
   & * {
     animation: none;
@@ -144,16 +136,16 @@ onBeforeMount(() => {
 }
 
 #points {
-  width: 100vw;
+  width: 100%;
   display: flex;
   padding: 0 2rem;
   justify-content: flex-start;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   transition: all 0.5s;
 
   & h2 {
-    font-size: 40px;
+    font-size: 32px;
 
     &.bonus {
       color: transparent;
@@ -171,7 +163,7 @@ onBeforeMount(() => {
   }
 
   #points h2 {
-    font-size: 32px;
+    margin: 0 1rem;
   }
 
   .yaku {

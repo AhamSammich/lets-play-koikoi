@@ -265,6 +265,7 @@ dialog {
   transition: all 0.1s;
 
   & .btn-bar {
+    margin-top: 0.5rem;
     width: 360px;
     display: flex;
     justify-content: space-around;
