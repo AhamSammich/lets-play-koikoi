@@ -130,7 +130,7 @@ onMounted(async () => {
       @close-menu="showProgress = false"
     />
   </div>
-  <dialog v-if="showProgress && started" id="current-progress" class="z-30">
+  <dialog v-show="showProgress && started" id="current-progress" class="z-30">
     <YakuProgress @close-progress="showProgress = false" />
   </dialog>
 

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-const collection1 = STORE.useCollection1();
-const collection2 = STORE.useCollection2();
-const yakuCompleted = STORE.useYaku1();
-const viewingsAllowed = RULES.useViewingsAllowed();
+import { Ref } from "vue";
+
+const collection1: Ref<string[]> = STORE.useCollection1();
+const collection2: Ref<string[]> = STORE.useCollection2();
+const completedYaku: Ref<Dict> = STORE.useYaku1();
+const viewingsAllowed: Ref<number> = RULES.useViewingsAllowed();
 const viewingsLimited = viewingsAllowed.value === 1;
 const restrictedSet = new Set(["hanami-zake", "tsukimi-zake"]);
-
 function isComplete(yakuName: string) {
-  if (yakuCompleted.value[yakuName]) return "complete";
+  if (completedYaku.value[yakuName]) return "complete";
   else return "";
 }
 
@@ -18,9 +19,13 @@ function allowedYaku(): YakuDetails[] {
 </script>
 
 <template>
-  <div class="relative w-full flex flex-col items-center overflow-y-scroll overflow-x-hidden">
+  <div
+    class="relative w-full flex flex-col items-center overflow-y-scroll overflow-x-hidden"
+  >
     <div v-for="(yaku, index) in allowedYaku()" :key="index" class="yaku-progress">
-      <h1 :class="`yaku-name ${isComplete(yaku.name)} text-yellow-100`">{{ yaku.name }}</h1>
+      <h1 :class="`yaku-name ${isComplete(yaku.name)} text-yellow-100`">
+        {{ yaku.name }}
+      </h1>
       <img
         v-if="isComplete(yaku.name)"
         src="~/assets/images/coin.png"
@@ -31,22 +36,11 @@ function allowedYaku(): YakuDetails[] {
       <h2 class="yaku-points">
         {{ yaku.points }} <span>{{ `${yaku.points === 1 ? " point" : " points"}` }}</span>
       </h2>
-      <div v-if="yaku.description" class="yaku-description">
-        <p v-for="line in yaku.description" :key="line">
+      <template v-if="yaku.description">
+        <p v-for="line in yaku.description" :key="line" class="yaku-description">
           {{ line }}
         </p>
-        <p
-          v-if="viewingsLimited && restrictedSet.has(yaku.name)"
-          class="mt-1 text-xs max-w-prose whitespace-nowrap font-mono"
-        >
-          <Icon name="mdi:info-outline" class="pointer-events-none mr-1" />
-          Requires at least one other completed yaku<br /><span class="pl-4"
-            >( not
-            {{ [...restrictedSet].filter((name) => name != yaku.name)[0].toUpperCase() }}
-            )</span
-          >
-        </p>
-      </div>
+      </template>
       <div v-if="yaku.cards" class="yaku-cards mt-1">
         <Card
           v-for="card in yaku.cards"
@@ -59,11 +53,35 @@ function allowedYaku(): YakuDetails[] {
           :data-name="getName(card)"
         />
       </div>
+      <p
+        v-if="
+          viewingsLimited &&
+          restrictedSet.has(yaku.name) &&
+          Object.keys(completedYaku).length === 0
+        "
+        class="note mt-4 text-sm max-w-prose whitespace-nowrap font-mono"
+      >
+        <Icon name="mdi:info-outline" class="pointer-events-none mr-1" />
+        Requires at least one other<br /><span class="pl-6"
+          >completed yaku ( not
+          {{ [...restrictedSet].filter((name) => name != yaku.name)[0].toUpperCase() }}
+          )</span
+        >
+      </p>
     </div>
-    <div id="legend" class="fixed top-28 right-4 flex flex-col gap-2 items-center">
-      <p>uncollectible</p><Card name="kiri-no-kasu-1" class="opacity-30 unavailable" />
-      <p>collectible</p><Card name="kiri-no-kasu-1" class="opacity-30" />
-      <p>collected</p><Card name="kiri-no-kasu-1" />
+    <div id="legend" class="fixed bottom-4 right-4 flex flex-col gap-1 items-center">
+      <div>
+        <Card name="kiri-no-kasu-1" class="opacity-30 unavailable" />
+        <p>uncollectible</p>
+      </div>
+      <div>
+        <Card name="kiri-no-kasu-1" class="opacity-30" />
+        <p>collectible</p>
+      </div>
+      <div>
+        <Card name="kiri-no-kasu-1" />
+        <p>collected</p>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +100,8 @@ function allowedYaku(): YakuDetails[] {
   grid-template-areas:
     "name points"
     "desc desc"
-    "cards cards";
+    "cards cards"
+    "note note";
 }
 
 @media (orientation: landscape) {
@@ -94,13 +113,24 @@ function allowedYaku(): YakuDetails[] {
 }
 
 #legend {
+  transform-origin: center;
+
   & .card {
     --card-width: 30px;
+  }
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   & p {
     font-size: x-small;
     font-family: Consolas;
+    margin-top: -0.5rem;
+    background: var(--tbl-black);
+    z-index: 1;
   }
 }
 
@@ -112,6 +142,9 @@ function allowedYaku(): YakuDetails[] {
 }
 .yaku-name {
   grid-area: name;
+}
+.note {
+  grid-area: note;
 }
 .yaku-points {
   grid-area: points;
