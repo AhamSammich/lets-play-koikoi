@@ -19,6 +19,7 @@ function allowedYaku(): YakuDetails[] {
 
 <template>
   <div
+    id="progress-screen"
     class="relative w-full flex flex-col items-center overflow-y-scroll overflow-x-hidden"
   >
     <div v-for="(yaku, index) in allowedYaku()" :key="index" class="yaku-progress">
@@ -86,6 +87,10 @@ function allowedYaku(): YakuDetails[] {
 </template>
 
 <style scoped lang="postcss">
+#progress-screen {
+  --menu-gray: rgba(36, 43, 61, 0.9); 
+  background: var(--menu-gray);
+}
 .yaku-progress {
   width: 400px;
   height: max-content;
@@ -131,7 +136,7 @@ function allowedYaku(): YakuDetails[] {
 
   & p {
     margin-top: -0.5rem;
-    background: var(--tbl-black);
+    background: var(--menu-gray);
     z-index: 1;
   }
 }
@@ -161,7 +166,7 @@ function allowedYaku(): YakuDetails[] {
 }
 .yaku-description {
   grid-area: desc;
-  color: rgb(255 255 255 / 0.9);
+  color: rgb(255 255 255 / 1);
 }
 
 .yaku-cards {
@@ -195,7 +200,7 @@ function allowedYaku(): YakuDetails[] {
 
     &[data-name]:hover::after {
       content: attr(data-name);
-      background-color: var(--tbl-black);
+      background-color: var(--menu-gray);
       opacity: 1;
     }
   }

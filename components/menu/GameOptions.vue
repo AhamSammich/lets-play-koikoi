@@ -163,7 +163,7 @@ onMounted(async () => {
           value="true"
           @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
-        <label for="scoring-double-any">x2 for koi-koi called by any player</label>
+        <label for="scoring-double-any">x2 for koi-koi by any player</label>
       </div>
       <div>
         <input
@@ -173,7 +173,7 @@ onMounted(async () => {
           value="true"
           @change="e => updateRuleSet(<HTMLInputElement>e.target)"
         />
-        <label for="scoring-double-seven">x2 for yaku greater than 7 points</label>
+        <label for="scoring-double-seven">x2 for yaku more than 7 points</label>
       </div>
     </fieldset>
   </form>
