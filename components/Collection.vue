@@ -8,14 +8,39 @@ const emits = defineEmits(["collecting", "new-yaku", "no-yaku"]);
 const viewingsAllowed = RULES.useViewingsAllowed();
 const restrictedYaku = new Set(["hanami-zake", "tsukimi-zake"]);
 
-const yakuList = new Map();
+const yakuMap: Map<string, string[]> = new Map();
 let sortedCards = sortCardsByType(props.cards);
 
 function registerYaku(yakuArr: string[]) {
   yakuArr.forEach((yakuName) =>
-    yakuList.set(yakuName, getCardsInYaku(yakuName, props.cards))
+    yakuMap.set(yakuName, getCardsInYaku(yakuName, props.cards))
   );
   emits("new-yaku", yakuArr, props.player);
+}
+
+// Filter given array for yaku already attained
+// Resubmit tan-zaku, tane-zaku, and kasu if improved
+function filterYaku(yakuArr: string[]) {
+  for (let yakuName of yakuArr) {
+    // Find yaku already attained in yakuMap
+    let arrFromMap = yakuMap.get(yakuName);
+    if (arrFromMap === undefined) continue;
+    // Remove yaku from yakuMap if improved
+    switch (yakuName) {
+      case "tan-zaku":
+        if (arrFromMap.length < sortedCards["ribbons"].length) yakuMap.delete(yakuName);
+        break;
+      case "tane-zaku":
+        if (arrFromMap.length < sortedCards["animals"].length) yakuMap.delete(yakuName);
+        break;
+      case "kasu":
+        if (arrFromMap.length < sortedCards["plains"].length) yakuMap.delete(yakuName);
+        break;
+    }
+  }
+  // Filter given array for names not in yakuMap
+  // Return new array
+  return yakuArr.filter((yakuName) => yakuName && !yakuMap.has(yakuName));
 }
 
 function allowViewings(yakuArr: string[]): string[] {
@@ -25,7 +50,7 @@ function allowViewings(yakuArr: string[]): string[] {
 
     case 1:  // 1 => limited allowance
       // Yaku not allowed if players has no non-viewing yaku
-      if (yakuList.size === 0 && yakuArr.every(yaku => restrictedYaku.has(yaku)))
+      if (yakuMap.size === 0 && yakuArr.every(yaku => restrictedYaku.has(yaku)))
         return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
 
     default:  // 2 => allow always
@@ -35,13 +60,13 @@ function allowViewings(yakuArr: string[]): string[] {
 
 onBeforeUpdate(() => {
   emits("collecting");
-  if (props.cards.length === 0) yakuList.clear();
+  if (props.cards.length === 0) yakuMap.clear();
   sortedCards = sortCardsByType(props.cards);
 });
 
 onUpdated(() => {
   let yakuArr = checkForYaku(props.cards);
-  yakuArr = yakuArr.filter((yakuName) => yakuName && !yakuList.has(yakuName));
+  yakuArr = filterYaku(yakuArr);
   yakuArr = allowViewings(yakuArr);
   if (yakuArr.length) registerYaku(yakuArr);
   else emits("no-yaku");

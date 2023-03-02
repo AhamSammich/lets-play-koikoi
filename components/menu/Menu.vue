@@ -80,6 +80,7 @@ h1 {
 }
 
 #menu-container {
+  width: clamp(350px, 75vw, 1200px);
   transform-origin: right;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
