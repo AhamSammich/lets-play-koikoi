@@ -92,7 +92,8 @@ h1 {
 
 @media (orientation: landscape) {
   #menu {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
   }
 
   #menu-options {
@@ -122,7 +123,6 @@ a:not(li a):hover {
   color: var(--menu-accent1);
 }
 .icon {
-  font-size: 1.2em;
   margin-left: 0.5em;
   margin-bottom: 0.2em;
 
