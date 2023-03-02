@@ -54,7 +54,7 @@ function allowedYaku(): YakuDetails[] {
       </div>
       <p
         v-if="
-          viewingsAllowed.value === 1 &&
+          viewingsAllowed === 1 &&
           restrictedSet.has(yaku.name) &&
           Object.keys(completedYaku).length === 0
         "
