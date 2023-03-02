@@ -78,19 +78,19 @@ export const YAKU_LIB: YakuDetails[] = [
   {
     name: "tan-zaku",
     points: 1,
-    description: ["Any 5 Ribbons ( +1pt for each extra )"],
+    description: ["Any 5 Ribbons ( + 1pt / extra )"],
     cards: CARDS.filter(isRibbon),
   },
   {
     name: "tane-zaku",
     points: 1,
-    description: ["Any 5 Animals ( +1pt for each extra )"],
+    description: ["Any 5 Animals ( + 1pt / extra )"],
     cards: CARDS.filter(isAnimal),
   },
   {
     name: "kasu",
     points: 1,
-    description: ["Any 10 Plains ( +1pt for each extra )"],
+    description: ["Any 10 Plains ( + 1pt / extra )"],
     cards: CARDS.filter(isPlain),
   },
 ];
