@@ -58,7 +58,7 @@ function allowedYaku(): YakuDetails[] {
           restrictedSet.has(yaku.name) &&
           Object.keys(completedYaku).length === 0
         "
-        class="note mt-4 text-sm max-w-prose whitespace-nowrap font-mono"
+        class="note mt-4 text-xs max-w-prose whitespace-nowrap font-mono"
       >
         <Icon name="mdi:info-outline" class="pointer-events-none mr-1" />
         Requires at least one other<br /><span class="pl-6"
@@ -112,7 +112,12 @@ function allowedYaku(): YakuDetails[] {
 }
 
 #legend {
-  transform-origin: center;
+  transform-origin: bottom right;
+  transition: scale 0.3s;
+
+  &:hover {
+    scale: 1.5;
+  }
 
   & .card {
     --card-width: 30px;
@@ -144,6 +149,12 @@ function allowedYaku(): YakuDetails[] {
 }
 .note {
   grid-area: note;
+  transition: scale 0.3s;
+  transform-origin: left;
+
+  &:hover {
+    scale: 1.3;
+  }
 }
 .yaku-points {
   grid-area: points;
