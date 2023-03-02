@@ -5,7 +5,6 @@ const collection1: Ref<string[]> = STORE.useCollection1();
 const collection2: Ref<string[]> = STORE.useCollection2();
 const completedYaku: Ref<Dict> = STORE.useYaku1();
 const viewingsAllowed: Ref<number> = RULES.useViewingsAllowed();
-const viewingsLimited = viewingsAllowed.value === 1;
 const restrictedSet = new Set(["hanami-zake", "tsukimi-zake"]);
 function isComplete(yakuName: string) {
   if (completedYaku.value[yakuName]) return "complete";
@@ -55,7 +54,7 @@ function allowedYaku(): YakuDetails[] {
       </div>
       <p
         v-if="
-          viewingsLimited &&
+          viewingsAllowed.value === 1 &&
           restrictedSet.has(yaku.name) &&
           Object.keys(completedYaku).length === 0
         "
