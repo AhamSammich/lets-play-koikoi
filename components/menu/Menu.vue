@@ -15,7 +15,7 @@ const isOpen = ref(false);
   ></div>
   <menu
     id="menu-container"
-    class="absolute right-0 top-0 translate-x-full scale-x-0 max-w-full h-screen"
+    class="font-mono text-white absolute right-0 top-0 translate-x-full scale-x-0 h-screen w-screen"
     :aria-expanded="isOpen"
   >
     <div id="menu" class="relative h-full py-2 flex flex-col justify-between items-start">
@@ -80,12 +80,9 @@ h1 {
 }
 
 #menu-container {
-  width: 100vw;
+  transform-origin: right;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
-  color: white;
-  font-family: Consolas, sans-serif;
-  transform-origin: right;
   z-index: 49;
 
   &[aria-expanded="true"] {

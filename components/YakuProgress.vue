@@ -68,7 +68,7 @@ function allowedYaku(): YakuDetails[] {
         >
       </p>
     </div>
-    <div id="legend" class="fixed bottom-4 right-4 flex flex-col gap-1 items-center">
+    <div id="legend" class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center">
       <div>
         <Card name="kiri-no-kasu-1" class="opacity-30 unavailable" />
         <p>uncollectible</p>
@@ -130,8 +130,6 @@ function allowedYaku(): YakuDetails[] {
   }
 
   & p {
-    font-size: x-small;
-    font-family: Consolas;
     margin-top: -0.5rem;
     background: var(--tbl-black);
     z-index: 1;
