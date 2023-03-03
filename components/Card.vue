@@ -40,19 +40,23 @@ async function handlePointerDown(e: Event) {
   target.classList.add("selected");
   previewCard.value = "";
   emits("card-select", props.name);
-  cancelPointerDown(e);
 }
 
 // Remove selection effects
 async function cancelPointerDown(e: Event) {
-  (<HTMLElement>e.target).classList.remove("selecting", "selected");
+  let target = <HTMLElement>e.target;
+  target.classList.remove("selecting");
+  if (target.classList.contains("selected")) {
+    await sleep(1800);
+    target.classList.remove("selected");
+  }
 }
 </script>
 
 <template>
   <div v-if="hide" class="card down"></div>
 
-  <div v-else :class="{ card: true, glow: interactive, previewed: isMatched() }">
+  <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
     <svg v-if="interactive" class="glow-container absolute">
       <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
@@ -63,8 +67,8 @@ async function cancelPointerDown(e: Event) {
     <img
       v-else
       :src="`cards/${props.name}.png`"
-      loading="lazy"
-      @touchstart.prevent
+      loading="eager"
+      :class="{ card: true, loaded: !isLoading }"
       @touchend.prevent
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
@@ -79,8 +83,9 @@ async function cancelPointerDown(e: Event) {
 
 .card,
 img {
-  border-radius: 0.2rem;
+  border-radius: 0.3rem;
 }
+
 .card {
   width: var(--card-width);
   aspect-ratio: 2 / 3;
@@ -95,22 +100,26 @@ img {
 
   &.selected {
     transform-origin: bottom;
-    outline: none;
+    translate: 0 -10%;
     opacity: 0;
   }
 
-  &.previewed {
-    position: relative;
-    scale: 1.1;
+  &.loading {
+    /* width: 50px;
+    background: linear-gradient(45deg, #eee, #ddd, white);
+    border: 5px solid red; */
+    opacity: 0;
   }
 
-  &.loading {
-    width: 50px;
-    background: linear-gradient(45deg, #eee, #ddd, white);
-    border: 5px solid red;
-    transition: none;
-    opacity: 0.3;
+  &.loaded {
+    scale: 1 1;
   }
+}
+
+.previewed {
+  transition: all 0.3s 0.1s;
+  position: relative;
+  scale: 1.1;
 }
 
 .previewed,

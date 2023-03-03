@@ -7,51 +7,49 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(["koi-koi"]);
+const tableVisible = ref(false);
 
 function callKoiKoi() {
   emits("koi-koi", true, props.player);
 }
 
-function endGame() {
+function callShoubu() {
   emits("koi-koi", false, props.player);
 }
 
 onMounted(async () => {
   if (props.player === "p1") return;
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  endGame();
+  await sleep(2000);
+  callShoubu();
 });
 </script>
 
 <template>
   <dialog :open="showModal" aria-modal="true">
-    <div id="new-yaku">
-      <template v-for="yaku in Object.keys(yakuList)" :key="yaku">
-        <div class="yaku">
-          <h1>{{ yaku }}</h1>
-          <div class="yaku-cards">
-            <template v-for="card in yakuList[yaku]">
-              <div class="card">
-                <Card :name="card" />
-              </div>
-            </template>
-          </div>
+    <!-- Toggle button to reveal the table behind the modal -->
+    <div id="new-yaku" :class="{ invisible: tableVisible }">
+      <div class="yaku" v-for="yaku in Object.keys(yakuList)" :key="yaku">
+        <h1>{{ yaku }}</h1>
+        <div class="yaku-cards">
+            <Card v-for="card in yakuList[yaku]" :name="card" />
         </div>
-      </template>
-    </div>
-    <template v-if="player === 'p1'">
-      <div class="btn-bar">
-        <template v-if="koikoiAllowed">
-          <button @click="callKoiKoi()">KOI KOI</button>
-        </template>
-        <button @click="endGame()">END ROUND</button>
       </div>
-    </template>
+    </div>
+    <div v-if="player === 'p1'" class="btn-bar">
+      <button v-if="koikoiAllowed" @click="callKoiKoi()">KOI KOI</button>
+      <button @click="callShoubu()">END ROUND</button>
+    </div>
+    <MenuButton v-show="player === 'p1'" id="toggle-btn" ico-name="mdi:eye" 
+    class="top-4 opacity-50 z-50"
+    @open-menu="tableVisible = true"
+    @close-menu="tableVisible = false"
+    />
   </dialog>
 </template>
 
 <style scoped lang="postcss">
 #new-yaku {
+  transition: opacity 0.3s;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -83,6 +81,7 @@ onMounted(async () => {
   }
 
   & .yaku-cards {
+    --card-width: 60px;
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -93,9 +92,7 @@ onMounted(async () => {
     animation: spreadLeft 0.5s;
   }
 
-  & .card {
-    max-width: 60px;
-    aspect-ratio: 2 / 3;
+  & :has(.card) {
 
     &:nth-child(n+6) {
       transform: translate3d(0, -20%, 0);
@@ -112,11 +109,53 @@ onMounted(async () => {
   }
 }
 
+dialog, .btn-bar, button {
+  transition: all 0.3s;
+}
+
+dialog:has(#new-yaku.invisible) {
+  background: none;
+
+  #new-yaku {
+    transition: none;
+    opacity: 0;
+  }
+
+  #toggle-btn {
+    opacity: 1;
+  }
+
+  .btn-bar button {
+    box-shadow: 0 0 1rem 0.1rem lightgoldenrodyellow;
+  }
+
+  @media (orientation: landscape) {
+
+    & .btn-bar {
+      flex-direction: column;
+      max-width: max-content;
+      gap: 1rem;
+      position: absolute;
+      right: 1rem;
+    }
+
+    & #toggle-btn {
+      translate: 0 1.75rem;
+    }
+  }
+}
+
 @media (width > 800px) or (orientation: landscape) {
   #new-yaku { 
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  #toggle-btn {
+    align-self: flex-end;
+    top: -2.5rem;
+    right: 1rem;
   }
 
   .yaku {

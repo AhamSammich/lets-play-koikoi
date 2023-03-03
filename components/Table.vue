@@ -451,17 +451,15 @@ async function runGame() {
       </div>
     </template>
 
-    <template v-if="Object.keys(newYaku).length">
-      <div id="yaku-modal">
-        <NewYaku
-          :show-modal="!!Object.keys(newYaku).length"
-          :player="<string>newYaku.player"
-          :yakuList="<Dict>newYaku.newList"
-          :koikoi-allowed="!!(activeHand().value.length || draw)"
-          @koi-koi="async (bool, player) => await continueGame(bool, player)"
-        />
-      </div>
-    </template>
+    <div v-if="Object.keys(newYaku).length" id="yaku-modal">
+      <NewYaku
+        :show-modal="!!Object.keys(newYaku).length"
+        :player="<string>newYaku.player"
+        :yakuList="<Dict>newYaku.newList"
+        :koikoi-allowed="!!(activeHand().value.length || draw)"
+        @koi-koi="async (bool, player) => await continueGame(bool, player)"
+      />
+    </div>
 
     <template v-if="winner !== '' && (winningYaku || winningYaku === null)">
       <div id="end-screen">
@@ -597,13 +595,13 @@ async function runGame() {
 .collection {
   position: absolute;
   margin: 0.5rem;
-  transform: scale(0.6);
+  scale: 0.6;
   transition: all 0.3s;
   opacity: 0.5;
 
   &:hover {
     opacity: 1;
-    transform: scale(0.9);
+    scale: 0.9;
     z-index: 30;
   }
 
@@ -614,8 +612,14 @@ async function runGame() {
   &#p1-collection {
     right: 0;
     bottom: 0;
-    transform-origin: bottom right;
-  }
+    transform-origin: bottom center;
+    transform: scaleX(-1);
+
+    & .card {
+      transition: transform 1s;
+      transform: scaleX(-1);
+    }
+ }
 
   &#p2-collection {
     left: 0;
@@ -623,7 +627,7 @@ async function runGame() {
     transform-origin: top left;
 
     @media (orientation: portrait) {
-      top: 2.5rem;
+      top: 3rem;
     }
 
     @media (orientation: landscape) {
