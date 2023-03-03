@@ -51,7 +51,6 @@ section {
 #hero-cards > * {
   transform-origin: bottom;
   max-width: 50px;
-  outline: 1px solid var(--tbl-black);
 
   &:nth-child(1) {
     rotate: -30deg;

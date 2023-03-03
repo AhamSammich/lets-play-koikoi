@@ -47,7 +47,7 @@ function allowedYaku(): YakuDetails[] {
           :key="card"
           :name="card"
           :class="{
-            'opacity-30 translate-y-1': !collection1.includes(card),
+            'opacity-40 translate-y-1': !collection1.includes(card),
             unavailable: collection2.includes(card),
           }"
           :data-name="getName(card)"
@@ -71,11 +71,11 @@ function allowedYaku(): YakuDetails[] {
     </div>
     <div id="legend" class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center">
       <div>
-        <Card name="kiri-no-kasu-1" class="opacity-30 unavailable" />
+        <Card name="kiri-no-kasu-1" class="opacity-40 unavailable" />
         <p>uncollectible</p>
       </div>
       <div>
-        <Card name="kiri-no-kasu-1" class="opacity-30" />
+        <Card name="kiri-no-kasu-1" class="opacity-40" />
         <p>collectible</p>
       </div>
       <div>
@@ -117,15 +117,12 @@ function allowedYaku(): YakuDetails[] {
 }
 
 #legend {
+  --card-width: 30px;
   transform-origin: bottom right;
   transition: scale 0.3s;
 
   &:hover {
     scale: 1.5;
-  }
-
-  & .card {
-    --card-width: 30px;
   }
 
   & > div {
@@ -217,7 +214,7 @@ function allowedYaku(): YakuDetails[] {
     display: block;
     width: var(--card-width);
     aspect-ratio: 2/3;
-    background: rgb(0 0 0 / 0.7);
+    background: rgb(0 0 0 / 0.65);
     border: 1px solid red;
     border-radius: 0.3rem;
     position: absolute;
