@@ -15,28 +15,42 @@ const emits = defineEmits(["match-select"]);
       <Card id="match-src" :name="matchSrc" />
     </template>
     <h2>Pick a card:</h2>
+    <!-- Get selected card details and check table for match -->
     <div id="choose-match">
-      <div v-for="(card, index) in cards" :id="`${index}`" class="cursor-pointer">
-        <!-- Get selected card details and check table for match -->
-        <Card
-          :name="card"
-          @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
-        />
-      </div>
+      <Card
+        v-for="(card, index) in cards"
+        :id="`${index}`"
+        class="cursor-pointer"
+        :name="card"
+        @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
+      />
     </div>
   </dialog>
 </template>
 
 <style scoped lang="postcss">
 #choose-match {
+  --plus-angle: 10deg;
+  --minus-angle: calc(-1 * var(--plus-angle));
   width: 300px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+
+  & > :first-child {
+    rotate: var(--minus-angle);
+  }
+
+  & > :last-child {
+    rotate: var(--plus-angle);
+  }
+
+  & > :hover {
+    translate: 0 -3%;
+  }
 }
 
 h2 {
-
   letter-spacing: 0.05em;
 }
 
