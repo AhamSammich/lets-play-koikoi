@@ -128,6 +128,7 @@ onMounted(async () => {
       ico-name="mdi:cards"
       @open-menu="showProgress = true"
       @close-menu="showProgress = false"
+      class="text-white"
     />
   </div>
   <dialog v-show="showProgress && started" id="current-progress" class="z-30">
@@ -266,9 +267,10 @@ dialog {
 
   & .btn-bar {
     margin-top: 0.5rem;
-    width: 360px;
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    gap: 2rem;
+    justify-content: center;
     pointer-events: all;
 
     & button {
