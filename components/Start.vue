@@ -15,7 +15,7 @@ function startGame() {
       id="hero-cards"
       class="flex justify-center z-0 -rotate-12"
     >
-      <Card v-for="card in BRIGHTS" :key="card" :name="card" />
+      <Card v-for="n in 5" :key="n" :name="pickCardFromArr(CARDS)" />
     </div>
     <h1 id="hero-title" class="text-center"><span>Let's Play!</span>花札 KOI-KOI</h1>
     <button id="start-btn" @click="startGame()">START</button>

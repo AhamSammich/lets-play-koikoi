@@ -46,11 +46,12 @@ async function handlePointerDown(e: Event) {
 async function cancelPointerDown(e: Event) {
   let target = <HTMLElement>e.target;
   target.classList.remove("selecting");
-  if (target.classList.contains("selected")) {
-    await sleep(1800);
-    target.classList.remove("selected");
-  }
 }
+
+onUpdated(async () => {
+  await sleep(1800);
+  [...document.querySelectorAll(".selected")].forEach(target => target.classList.remove("selected", "selecting"));
+})
 </script>
 
 <template>
@@ -67,7 +68,7 @@ async function cancelPointerDown(e: Event) {
     <img
       v-else
       :src="`cards/${props.name}.png`"
-      loading="eager"
+      loading="lazy"
       :class="{ card: true, loaded: !isLoading }"
       @touchend.prevent
       @pointerenter="handleHover"
@@ -108,7 +109,7 @@ img {
     /* width: 50px;
     background: linear-gradient(45deg, #eee, #ddd, white);
     border: 5px solid red; */
-    opacity: 0;
+    opacity: 0.1;
   }
 
   &.loaded {
