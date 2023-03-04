@@ -24,7 +24,7 @@ function startGame() {
   >
     <div
       id="hero-cards"
-      class="flex justify-center z-0 -rotate-12"
+      :class="{'flex justify-center z-0 -rotate-12': true, 'opacity-0': started}"
     >
       <Card v-for="cardName in randomCards()" :key="cardName" :name="cardName" />
     </div>
