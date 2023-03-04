@@ -1,6 +1,17 @@
 <script setup lang="ts">
 const started = STORE.useStart();
 
+function randomCards(): string[] {
+  let randomArr: string[] = [];
+  for (let i = 0; i < 5; i++) {
+    let randomCard = pickCardFromArr(CARDS);
+    randomArr.includes(randomCard)
+      ? i--
+      : randomArr.push(randomCard);
+  }
+  return randomArr;
+}
+
 function startGame() {
   started.value = true;
 }
@@ -15,7 +26,7 @@ function startGame() {
       id="hero-cards"
       class="flex justify-center z-0 -rotate-12"
     >
-      <Card v-for="n in 5" :key="n" :name="pickCardFromArr(CARDS)" />
+      <Card v-for="cardName in randomCards()" :key="cardName" :name="cardName" />
     </div>
     <h1 id="hero-title" class="text-center"><span>Let's Play!</span>花札 KOI-KOI</h1>
     <button id="start-btn" @click="startGame()">START</button>
