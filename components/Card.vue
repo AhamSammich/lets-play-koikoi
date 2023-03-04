@@ -30,6 +30,7 @@ async function cancelHover() {
 
 // Click (and hold for touchscreen) to play a card
 async function handlePointerDown(e: Event) {
+  if (!props.interactive) return;  // Prevent events on cards not in hand
   e.preventDefault();
   let target = <HTMLElement>e.target;
   target.classList.add("selecting");
@@ -70,6 +71,7 @@ onUpdated(async () => {
       :src="`cards/${props.name}.png`"
       loading="lazy"
       :class="{ card: true, loaded: !isLoading }"
+      draggable="false"
       @touchend.prevent
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
@@ -106,13 +108,25 @@ img {
   }
 
   &.loading {
-    /* width: 50px;
+    width: 50px;
     background: linear-gradient(45deg, #eee, #ddd, white);
-    border: 5px solid red; */
-    opacity: 0.1;
+    box-shadow: inset 0 0 0 5px red;
+    opacity: 0.3;
+    animation: twirl 1s infinite alternate ease-in-out;
   }
 
   &.loaded {
+    scale: 1 1;
+  }
+}
+
+@keyframes twirl {
+  from {
+    scale: -1 1;
+    background: white;
+  }
+  to {
+    background: rgb(64, 73, 90);
     scale: 1 1;
   }
 }
