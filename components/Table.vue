@@ -616,7 +616,6 @@ async function runGame() {
     transform: scaleX(-1);
 
     & .card {
-      transition: transform 1s;
       transform: scaleX(-1);
     }
  }

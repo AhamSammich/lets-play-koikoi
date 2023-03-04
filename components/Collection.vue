@@ -76,24 +76,16 @@ onUpdated(() => {
 <template>
   <div :id="`${player}-collected`" class="collected">
     <div :id="`${player}-brights`" class="subset">
-      <template v-for="card in sortedCards['brights']" :key="card">
-        <Card :name="card" />
-      </template>
+      <Card v-for="card in sortedCards['brights']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-animals`" class="subset">
-      <template v-for="card in sortedCards['animals']" :key="card">
-        <Card :name="card" />
-      </template>
+      <Card v-for="card in sortedCards['animals']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-ribbons`" class="subset">
-      <template v-for="card in sortedCards['ribbons']" :key="card">
-        <Card :name="card" />
-      </template>
+      <Card v-for="card in sortedCards['ribbons']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-plains`" class="subset">
-      <template v-for="card in sortedCards['plains']" :key="card">
-        <Card :name="card" />
-      </template>
+      <Card v-for="card in sortedCards['plains']" :key="card" :name="card" />
     </div>
   </div>
 </template>
@@ -121,6 +113,11 @@ onUpdated(() => {
   max-width: var(--row-w);
   min-height: 50px;
   overflow: hidden;
+
+  & * {
+    transition: none;
+    animation: none;
+  }
 
   & > * {
     width: var(--card-w);
