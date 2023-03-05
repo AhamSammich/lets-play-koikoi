@@ -22,6 +22,7 @@ const emits = defineEmits(["match-select"]);
         :id="`${index}`"
         class="cursor-pointer"
         :name="card"
+        :interactive="true"
         @card-select="(cardName: string) => $emit('match-select', [matchSrc, cardName])"
       />
     </div>
