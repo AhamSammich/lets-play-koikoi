@@ -50,7 +50,7 @@ function closeMenu() {
       </nav>
 
       <!-- HOW-TO-PLAY GUIDE -->
-      <section v-if="guideOpen" id="menu-guide" class="absolute top-0 w-full h-full pr-6">
+      <section v-if="guideOpen" id="menu-guide" class="absolute top-0 w-full h-full pr-4">
         <div class="absolute top-16 right-4">
           <MenuButton
             ico-name="material-symbols:arrow-back"
