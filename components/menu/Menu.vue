@@ -25,6 +25,7 @@ function closeMenu() {
   <div
     id="menu-backdrop"
     class="absolute transform-none top-0 left-0 h-screen w-screen opacity-0"
+    @click="closeMenu()"
   ></div>
   <menu
     id="menu-container"
@@ -136,6 +137,7 @@ h1 {
 
   &:has(~ [aria-expanded="true"]) {
     opacity: 0.9;
+    pointer-events: visible;
   }
 }
 
@@ -144,7 +146,7 @@ h1 {
   transform-origin: right;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
-  box-shadow: -0.1rem 0 0.3rem 0 var(--menu-black);
+  box-shadow: 0 0 0.3rem 0 var(--menu-black);
   z-index: 49;
 
   &[aria-expanded="true"] {
