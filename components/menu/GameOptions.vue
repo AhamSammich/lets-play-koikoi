@@ -44,10 +44,10 @@ async function loadRuleSet() {
             if (localStorage.getItem(rule) === input.value) {
               input.checked = true;
             } else input.checked = false;
-            updateRuleSet(input);
-          default:
-            input.value = localStorage.getItem(rule);
+            default:
+              input.value = localStorage.getItem(rule);
         }
+        updateRuleSet(input);
       });
     });
   } catch (err) {
@@ -195,7 +195,7 @@ onMounted(async () => {
         <select
           id="card-style"
           name="cardStyle"
-          class="px-4 py-1 rounded-md bg-transparent outline outline-yellow-200 focus:text-black"
+          class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus:text-black"
           @change="(e) => updateRuleSet(e.target)"
         >
           <option value="ramen-red">Ramen Red</option>
@@ -217,7 +217,7 @@ fieldset {
   --input-color: var(--menu-accent2);
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 1em 2em;
   padding-top: 2em;
@@ -255,12 +255,11 @@ fieldset {
 
     &:has([type="checkbox"]) {
       flex-direction: row;
+      & label {
+        margin-bottom: 0;
+      }
     }
 
-    &:has(:disabled) > * {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
   }
 
   & legend {
@@ -271,18 +270,27 @@ fieldset {
     font-weight: bold;
     white-space: nowrap;
   }
+
+  & :has([disabled]) {
+    opacity: 0.5;
+
+    &:has(label, input):hover,
+    & :is(label, input) {
+      cursor: not-allowed;
+    }
+  }
 }
 
 @media (orientation: landscape) {
   fieldset {
-    width: (300px, 30%, 400px);
+    width: clamp(300px, 45%, 400px);
   }
 
   form {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-height: 100svh;
+    max-height: 100%;
   }
 }
 
@@ -330,6 +338,11 @@ fieldset {
   &:checked::after {
     scale: 2.5;
   }
+}
+
+select {
+  cursor: pointer;
+  border-radius: 0.2rem;
 }
 
 .icon {
