@@ -186,6 +186,7 @@ li {
 
   & span {
     cursor: pointer;
+    white-space: nowrap;
   }
 
   &:has(:hover) {
