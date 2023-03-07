@@ -64,10 +64,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
       <div>
         <h1>Complete a winning hand!</h1>
         <p>
-          Your goal is to collect cards to complete a set, called a "yaku", and score
+          Collect cards to complete a set, called a "yaku", and score
           points before your opponent.
         </p>
-        <p>Check your progress toward possible yaku using the button below the menu.</p>
+        <p>Check your progress toward possible yaku under the menu button.</p>
       </div>
       <img
         src="~/assets/gifs/lpk-how-to-check-progress.gif"
@@ -136,7 +136,6 @@ article {
   min-width: 300px;
   height: 100vh;
   height: 100dvh;
-  padding: 1rem;
   background: var(--menu-gray2);
   z-index: 60;
 }
@@ -152,7 +151,9 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 2rem;
+  padding-top: 1.5rem;
+  padding-left: 0.5rem;
+  padding-right: 1rem;
   position: absolute;
   top: 0;
   right: 0;
