@@ -558,7 +558,7 @@ async function runGame() {
   grid-area: p2;
   pointer-events: none;
   position: relative;
-  opacity: 0.5;
+  opacity: 0.8;
   margin-right: var(--card-width);
   rotate: 180deg;
 

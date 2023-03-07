@@ -48,11 +48,6 @@ function pointToActive() {
   transition: all 0.5s;
   scale: 0.8;
 
-  &:hover {
-    scale: none;
-    opacity: 1;
-  }
-
   @media (orientation: portrait) {
     width: 100vw;
     max-width: var(--tbl-w-max);
@@ -70,6 +65,11 @@ function pointToActive() {
     rotate: 180deg;
     width: max-content;
 
+    &:hover {
+      scale: none;
+      opacity: 1;
+    }
+    
     & > * {
       rotate: 180deg;
     }

@@ -114,8 +114,8 @@ button {
   background: firebrick;
   padding: 0.5em 1em;
   font-weight: bold;
-  width: 150px;
-  height: 75px;
+  width: 120px;
+  height: 60px;
   margin: 0 auto;
   color: #eee;
   text-align: center;
