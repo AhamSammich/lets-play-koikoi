@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const isOpen = ref(false);
+const guideOpen = ref(true);
 </script>
 
 <template>
@@ -19,17 +20,30 @@ const isOpen = ref(false);
     :aria-expanded="isOpen"
   >
     <div id="menu" class="relative h-full py-2 flex flex-col justify-between items-start">
-      <nav id="menu-nav" class="w-full">
+      <nav id="menu-nav" class="pt-12 w-full">
         <ul class="w-full list-none">
           <li>
             <a
               href="https://fudawiki.org/en/hanafuda/games/koi-koi#gameplay"
               target="_blank"
-              >How To Play<Icon name="mi:external-link"
+              >Fuda Wiki<Icon name="mi:external-link"
             /></a>
+          </li>
+          <li>
+            <span @click="guideOpen = true">How To Play</span>
           </li>
         </ul>
       </nav>
+      <section v-if="guideOpen" id="menu-guide" class="absolute -top-4 w-full h-full">
+        <MenuButton
+          ico-name="material-symbols:arrow-back"
+          :class="`${guideOpen ? '' : 'hidden'} absolute top-8 left-4 opacity-50`"
+          style="z-index: 70"
+          close-only
+          @close-menu="guideOpen = false"
+        />
+        <MenuGuide :is-open="guideOpen" />
+      </section>
       <section id="menu-options" class="w-full px-8 py-2">
         <h1>Options:</h1>
         <MenuGameOptions />
@@ -91,7 +105,15 @@ h1 {
   }
 }
 
+#menu-guide {
+  /* animation: fadeIn 0.5s 0.5s; */
+}
+
 @media (orientation: landscape) {
+  #menu-container {
+    width: 100vw;
+  }
+  
   #menu {
     display: grid;
     grid-template-columns: 25% 50% 25%;
