@@ -58,7 +58,7 @@ onUpdated(async () => {
 </script>
 
 <template>
-  <div v-if="hide" :class="`card ${cardStyle}`"></div>
+  <div v-if="hide" :class="`card down ${cardStyle}`"></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
@@ -94,8 +94,12 @@ img {
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
   border: 0.5px solid var(--card-border-color);
-  background-color: var(--card-bg-color);
 
+  &.down {
+    background-color: var(--card-bg-color);
+
+  }
+  
   &.selected {
     transform-origin: bottom;
     translate: 0 -10%;
