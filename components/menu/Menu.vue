@@ -1,6 +1,18 @@
 <script setup lang="ts">
 const isOpen = ref(false);
-const guideOpen = ref(true);
+const guideOpen = ref(false);
+const showOptions = ref(false);
+
+function openMenu() {
+  isOpen.value = true;
+}
+
+function closeMenu() {
+  isOpen.value = false;
+  guideOpen.value = false;
+  showOptions.value = false;
+}
+
 </script>
 
 <template>
@@ -8,7 +20,7 @@ const guideOpen = ref(true);
     id="menu-btn"
     :class="`absolute z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
   >
-    <MenuButton @open-menu="isOpen = true" @close-menu="isOpen = false" />
+    <MenuButton @open-menu="openMenu()" @close-menu="closeMenu()" />
   </div>
   <div
     id="menu-backdrop"
@@ -20,35 +32,53 @@ const guideOpen = ref(true);
     :aria-expanded="isOpen"
   >
     <div id="menu" class="relative h-full py-2 flex flex-col justify-between items-start">
-      <nav id="menu-nav" class="pt-12 w-full">
+
+      <!-- MENU ITEMS -->
+      <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
-          <li>
-            <a
-              href="https://fudawiki.org/en/hanafuda/games/koi-koi#gameplay"
-              target="_blank"
-              >Fuda Wiki<Icon name="mi:external-link"
-            /></a>
-          </li>
           <li>
             <span @click="guideOpen = true">How To Play</span>
           </li>
+          <li class="opacity-30 pointer-events-none">
+            <span class="relative under-construction">Hanafuda Gallery</span>
+          </li>
+          <li>
+            <span @click="showOptions = true">Game Options</span>
+          </li>
         </ul>
       </nav>
-      <section v-if="guideOpen" id="menu-guide" class="absolute -top-4 w-full h-full">
-        <MenuButton
-          ico-name="material-symbols:arrow-back"
-          :class="`${guideOpen ? '' : 'hidden'} absolute top-8 left-4 opacity-50`"
-          style="z-index: 70"
-          close-only
-          @close-menu="guideOpen = false"
-        />
+
+      <!-- HOW-TO-PLAY GUIDE -->
+      <section v-if="guideOpen" id="menu-guide" class="absolute top-0 w-full h-full pr-6">
+        <div class="absolute top-16 right-4">
+          <MenuButton
+            ico-name="material-symbols:arrow-back"
+            :class="{ hidden: !guideOpen }"
+            style="z-index: 70"
+            close-only
+            @close-menu="guideOpen = false"
+          />
+        </div>
         <MenuGuide :is-open="guideOpen" />
       </section>
-      <section id="menu-options" class="w-full px-8 py-2">
-        <h1>Options:</h1>
+
+      <!-- GAME OPTIONS -->
+      <section v-show="showOptions" id="menu-options" class="w-full h-full absolute pl-6 pr-16 py-2">
+        <div class="absolute top-16 right-4">
+          <MenuButton
+            ico-name="material-symbols:arrow-back"
+            :class="{ hidden: !showOptions }"
+            style="z-index: 70"
+            close-only
+            @close-menu="showOptions = false"
+          />
+        </div>
+        <h1 class="py-2">Options:</h1>
         <MenuGameOptions />
       </section>
-      <nav id="menu-foot" class="w-full flex justify-center items-end pb-4">
+
+      <!-- SOCIAL LINK ICONS -->
+      <nav v-if="!guideOpen" id="menu-foot" class="w-full flex justify-center items-end pb-4">
         <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
           ><Icon name="mdi:github"
         /></a>
@@ -56,6 +86,7 @@ const guideOpen = ref(true);
           ><Icon name="mdi:twitter"
         /></a>
       </nav>
+
     </div>
   </menu>
 </template>
@@ -68,6 +99,21 @@ const guideOpen = ref(true);
   --menu-accent1: firebrick;
   --menu-accent2: lightgoldenrodyellow;
   --menu-speed: 0.5s;
+}
+
+.under-construction::after {
+  content: "under construction";
+  display: block;
+  position: absolute;
+  top: 95%;
+  right: 0;
+  font-size: xx-small;
+  width: max-content;
+  padding: 0.1rem 0.3rem;
+  background: var(--gradient-gold);
+  color: var(--menu-black);
+  text-transform: uppercase;
+  border-radius: 0.3rem;
 }
 
 h1 {
@@ -98,6 +144,7 @@ h1 {
   transform-origin: right;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
+  box-shadow: -0.1rem 0 0.3rem 0 var(--menu-black);
   z-index: 49;
 
   &[aria-expanded="true"] {
@@ -105,8 +152,8 @@ h1 {
   }
 }
 
-#menu-guide {
-  /* animation: fadeIn 0.5s 0.5s; */
+#menu-options {
+  background: var(--menu-gray2);
 }
 
 @media (orientation: landscape) {
@@ -132,11 +179,17 @@ h1 {
 li {
   font-family: "Potta One";
   width: 100%;
-  padding: 0.75rem 2rem;
+  padding: 1rem 2rem;
   letter-spacing: 0.05em;
 
+  & span {
+    cursor: pointer;
+  }
+
   &:has(:hover) {
-    background: var(--menu-accent1);
+    transition: all 0.1s;
+    background: var(--menu-black);
+    color: var(--menu-accent2);
     box-shadow: -0.1rem 0 0 var(--menu-accent2);
   }
 }

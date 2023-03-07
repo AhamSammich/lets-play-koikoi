@@ -8,11 +8,14 @@ const rules: Record<string, Ref> = {
   viewingsAllowed: <Ref<number>>RULES.useViewingsAllowed(),
   bonusForAnyKoiKoi: <Ref<boolean>>RULES.useBonusForAnyKoiKoi(),
   doubledOverSeven: <Ref<boolean>>RULES.useDoubledOverSeven(),
+  cardStyle: <Ref<string>>RULES.useCardStyle(),
 };
 
 const INPUTS: Map<string, any[]> = new Map();
 
-function updateRuleSet(input: HTMLInputElement) {
+function updateRuleSet(target: any) {
+  if (target === null) return;
+  const input: HTMLInputElement = target;
   let key = input.getAttribute("name");
   if (!key) return;
   switch (input.type) {
@@ -35,10 +38,16 @@ async function loadRuleSet() {
       INPUTS.set(rule, [...document.querySelectorAll(`[name=${rule}]`)]);
       if (!localStorage.getItem(rule)) return;
       INPUTS.get(rule)?.forEach((input) => {
-        if (localStorage.getItem(rule) === input.value) {
-          input.checked = true;
-          updateRuleSet(input);
-        } else input.checked = false;
+        switch (input.type) {
+          case "radio":
+          case "checkbox":
+            if (localStorage.getItem(rule) === input.value) {
+              input.checked = true;
+            } else input.checked = false;
+            updateRuleSet(input);
+          default:
+            input.value = localStorage.getItem(rule);
+        }
       });
     });
   } catch (err) {
@@ -51,7 +60,9 @@ onMounted(async () => {
   watchEffect(() => {
     // Options may only be changed from the title screen
     INPUTS.forEach((inputArr) =>
-      inputArr.forEach((input) => (input.disabled = started.value))
+      inputArr
+        .filter((input) => input.name != "cardStyle")  // Allow style change mid-game
+        .forEach((input) => (input.disabled = started.value))
     );
   });
 
@@ -66,7 +77,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form class="grid gap-0" @submit.prevent>
+  <form @submit.prevent>
     <!-- choose number of rounds: 3 / 6 / 12 -->
     <fieldset>
       <legend>
@@ -80,7 +91,7 @@ onMounted(async () => {
           id="length-season"
           name="maxRounds"
           value="3"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
       </div>
       <div>
@@ -90,7 +101,7 @@ onMounted(async () => {
           id="length-half"
           name="maxRounds"
           value="6"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
       </div>
       <div>
@@ -100,7 +111,7 @@ onMounted(async () => {
           id="length-year"
           name="maxRounds"
           value="12"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
           checked
         />
       </div>
@@ -121,7 +132,7 @@ onMounted(async () => {
           id="viewings-never"
           name="viewingsAllowed"
           value="0"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
       </div>
       <div>
@@ -131,7 +142,7 @@ onMounted(async () => {
           id="viewings-limited"
           name="viewingsAllowed"
           value="1"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
       </div>
       <div>
@@ -141,7 +152,7 @@ onMounted(async () => {
           id="viewings-always"
           name="viewingsAllowed"
           value="2"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
           checked
         />
       </div>
@@ -161,7 +172,7 @@ onMounted(async () => {
           id="scoring-double-any"
           name="bonusForAnyKoiKoi"
           value="true"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
         <label for="scoring-double-any">x2 for koi-koi by any player</label>
       </div>
@@ -171,15 +182,36 @@ onMounted(async () => {
           id="scoring-double-seven"
           name="doubledOverSeven"
           value="true"
-          @change="e => updateRuleSet(<HTMLInputElement>e.target)"
+          @change="(e) => updateRuleSet(e.target)"
         />
         <label for="scoring-double-seven">x2 for yaku more than 7 points</label>
+      </div>
+    </fieldset>
+
+    <!-- choose style/design of cards -->
+    <fieldset>
+      <legend>Card Style</legend>
+      <div>
+        <select
+          id="card-style"
+          name="cardStyle"
+          class="px-4 py-1 rounded-md bg-transparent outline outline-yellow-200 focus:text-black"
+          @change="(e) => updateRuleSet(e.target)"
+        >
+          <option value="ramen-red">Ramen Red</option>
+          <option value="flash-black">Flash Black</option>
+        </select>
       </div>
     </fieldset>
   </form>
 </template>
 
 <style scoped lang="postcss">
+form {
+  display: grid;
+  gap: 1rem;
+}
+
 fieldset {
   --input-size: 1rem;
   --input-color: var(--menu-accent2);
@@ -187,14 +219,14 @@ fieldset {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em 0.5em;
-  padding-top: 1.5em;
-  max-width: 420px;
+  padding: 1em 2em;
+  padding-top: 2em;
+  width: clamp(350px, max-content, 420px);
   max-height: 100%;
 
   &:has([type="checkbox"]) {
     flex-direction: column;
-    gap: 0.5em;
+    gap: 1em;
 
     & > div {
       width: 100%;
@@ -213,7 +245,7 @@ fieldset {
 
     & label {
       font-size: small;
-      margin-bottom: 0.2em;
+      margin-bottom: 0.5em;
       cursor: pointer;
     }
 
@@ -237,6 +269,20 @@ fieldset {
     left: 0;
     font-size: smaller;
     font-weight: bold;
+    white-space: nowrap;
+  }
+}
+
+@media (orientation: landscape) {
+  fieldset {
+    width: (300px, 30%, 400px);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 100svh;
   }
 }
 
