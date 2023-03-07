@@ -58,7 +58,7 @@ onUpdated(async () => {
 </script>
 
 <template>
-  <div v-if="hide" :class="`card down ${cardStyle}`"></div>
+  <div v-if="hide" :class="`card ${cardStyle}`"></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
@@ -83,14 +83,9 @@ onUpdated(async () => {
 
 <style lang="postcss">
 @import "~/assets/css/card-styles.css";
-
-:root {
-  --card-width: 70px;
-}
-
 .card,
 img {
-  border-radius: 0.3rem;
+  border-radius: var(--card-radius);
 }
 
 .card {
@@ -98,12 +93,8 @@ img {
   aspect-ratio: 2 / 3;
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
-  border: 0.5px solid #111;
-
-  &.down {
-    /* background-color: rgb(220 38 38); */
-    max-width: 60px;
-  }
+  border: 0.5px solid var(--card-border-color);
+  background-color: var(--card-bg-color);
 
   &.selected {
     transform-origin: bottom;
@@ -113,8 +104,7 @@ img {
 
   &.loading {
     width: 50px;
-    background: linear-gradient(45deg, #eee, #ddd, white);
-    box-shadow: inset 0 0 0 5px red;
+    box-shadow: inset 0 0 0 3px var(--card-bg-color);
     opacity: 0.3;
     animation: twirl 1s infinite alternate ease-in-out;
   }

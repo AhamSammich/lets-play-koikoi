@@ -61,8 +61,6 @@ onUpdated(async () => {
 </template>
 
 <style scoped lang="postcss">
-@import "~/assets/css/card-styles.css";
-
 #deck-progress {
   float: right;
   margin-left: 0.2rem;
