@@ -26,4 +26,5 @@ export const RULES: Record<string, () => Ref> = {
     useViewingsAllowed: () => useState("viewingsAllowed", () => 2),
     useBonusForAnyKoiKoi: () => useState("bonusForAnyKoiKoi", () => false),
     useDoubledOverSeven: () => useState("doubledOverSeven", () => false),
+    useCardStyle: () => useState("cardStyle", () => "ramen-red"),
 }
