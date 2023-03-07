@@ -3,6 +3,7 @@ const props = defineProps<{
   drawCard: boolean | null;
 }>();
 const emits = defineEmits(["deal", "draw"]);
+const cardStyle = RULES.useCardStyle();
 
 let remainingCards: string[];
 let progressBar: HTMLElement;
@@ -56,10 +57,12 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
-  <div class="card down"></div>
+  <div :class="`ml-1 card ${cardStyle}`"></div>
 </template>
 
 <style scoped lang="postcss">
+@import "~/assets/css/card-styles.css";
+
 #deck-progress {
   float: right;
   margin-left: 0.2rem;

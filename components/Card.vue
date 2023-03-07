@@ -6,7 +6,9 @@ const props = defineProps<{
   interactive?: boolean;
 }>();
 
-const { isLoading } = useImage({ src: `cards/${props.name}.png` });
+const cardStyle = RULES.useCardStyle();
+const backColor = () => cardStyle.value.split("-")[1];
+const { isLoading } = useImage({ src: `cards-${cardStyle.value || "ramen-red"}/${props.name}.png` });
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -56,7 +58,7 @@ onUpdated(async () => {
 </script>
 
 <template>
-  <div v-if="hide" class="card down"></div>
+  <div v-if="hide" :class="`card down ${cardStyle}`"></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
@@ -68,7 +70,7 @@ onUpdated(async () => {
     <div v-if="isLoading" class="card loading"></div>
     <img
       v-else
-      :src="`cards/${props.name}.png`"
+      :src="`cards-${cardStyle || 'ramen-red'}/${props.name}.png`"
       loading="lazy"
       :class="{ card: true, loaded: !isLoading }"
       draggable="false"
@@ -80,6 +82,8 @@ onUpdated(async () => {
 </template>
 
 <style lang="postcss">
+@import "~/assets/css/card-styles.css";
+
 :root {
   --card-width: 70px;
 }
@@ -97,7 +101,7 @@ img {
   border: 0.5px solid #111;
 
   &.down {
-    background-color: rgb(220 38 38);
+    /* background-color: rgb(220 38 38); */
     max-width: 60px;
   }
 
