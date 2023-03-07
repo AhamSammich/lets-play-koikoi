@@ -29,8 +29,8 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
   <article id="how-to-play" v-if="isOpen">
     <section :class="{ active: currentIndex === 0 }">
       <div>
-        <h1>You've been dealt 8 cards...</h1>
-        <p>Pick a card from your hand to match one of the cards on the table.</p>
+        <h1>Find the matching flowers...</h1>
+        <p>Play a card from your hand to match the flower/suit with a card on the table.</p>
         <p>If none of your cards match, pick one to add to the table.</p>
       </div>
       <img
@@ -40,7 +40,7 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
     </section>
     <section :class="{ active: currentIndex === 1 }">
       <div>
-        <h1>Draw the top card off the deck...</h1>
+        <h1>Draw from the deck...</h1>
         <p>Match the revealed card with a card on the table.</p>
         <p>Again, if there's no match, just add the card to the table.</p>
       </div>
@@ -82,8 +82,7 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
           (calling "Koi Koi").
         </p>
         <p>
-          This gives you the opportunity to score more points by improving your yaku or
-          completing more.
+          Take this chance to score more points by completing more yaku!
         </p>
       </div>
       <img
@@ -140,7 +139,6 @@ article {
   padding: 1rem;
   background: var(--menu-gray2);
   z-index: 60;
-  overflow-y: scroll;
 }
 
 h1 {
@@ -180,11 +178,12 @@ section {
 
 img {
   max-height: 100%;
+  max-width: 80%;
   border-radius: 0.3rem;
   position: absolute;
   margin: 0 auto;
-  bottom: -30px;
-  mask-image: linear-gradient(180deg, transparent 25%, white, transparent 90%);
+  bottom: 0px;
+  mask-image: linear-gradient(180deg, transparent 15%, white, transparent 90%);
   z-index: 0;
   pointer-events: all;
 }
