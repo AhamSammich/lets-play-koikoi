@@ -57,7 +57,6 @@ async function cancelPointerDown(e: Event) {
 async function setGlowRadius() {
   // Set the glowing border radius
   glowRadius.value = getComputedStyle(document.body).getPropertyValue('--card-radius');
-  // if (rx) [...document.querySelectorAll("rect")].forEach((rect: SVGRectElement) => rect?.setAttribute("rx", rx));
 }
 
 onUpdated(async () => {
