@@ -235,7 +235,7 @@ fieldset {
 
   &:has([type="checkbox"]) {
     flex-direction: column;
-    gap: 1em;
+    gap: 0.75em;
 
     & > div {
       width: 100%;
@@ -355,7 +355,7 @@ select {
 }
 
 .icon {
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin-left: 0.5em;
   margin-bottom: 0.2em;
 }

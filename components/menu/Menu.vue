@@ -74,7 +74,7 @@ function closeMenu() {
             @close-menu="showOptions = false"
           />
         </div>
-        <h1 class="py-2">Options:</h1>
+        <h1 class="py-1 text-xs underline underline-offset-1">Game Options</h1>
         <MenuGameOptions />
       </section>
 
