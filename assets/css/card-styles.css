@@ -19,7 +19,7 @@ body {
         --card-bg-color: #333;
     }
     
-    &.koinobori {
+    &.nobori-blue {
         --card-bg-color: skyblue;
         --card-border-color: #333;
         --card-radius: 0.5rem;
