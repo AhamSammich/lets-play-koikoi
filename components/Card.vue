@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { set, useImage } from "@vueuse/core";
+import { useImage } from "@vueuse/core";
 const props = defineProps<{
   name: string;
   hide?: boolean;
   interactive?: boolean;
 }>();
 
+const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
 let previousStyle = cardStyle.value;
 const glowRadius = ref("0.3rem");
 
-const { isLoading } = useImage({ src: `cards/${cardStyle.value || "ramen-red"}/${props.name}.png` });
+const { isLoading } = useImage({ src: `cards/${cardStyle.value}/${imgFormat}/${props.name}.${imgFormat}` });
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -89,7 +90,7 @@ onMounted(() => {
     <div v-if="isLoading" class="card loading"></div>
     <img
       v-else
-      :src="`cards/${cardStyle || 'ramen-red'}/${props.name}.png`"
+      :src="`cards/${cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"
       class="card"
       draggable="false"
