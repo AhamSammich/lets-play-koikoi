@@ -44,9 +44,12 @@ async function loadRuleSet() {
           case "checkbox":
             if (localStorage.getItem(rule) === input.value) {
               input.checked = true;
-            } else input.checked = false;
-            default:
-              input.value = localStorage.getItem(rule);
+            } else {
+              input.checked = false;
+            }
+            break;
+          default:
+            input.value = localStorage.getItem(rule);
         }
         updateRuleSet(input);
       });

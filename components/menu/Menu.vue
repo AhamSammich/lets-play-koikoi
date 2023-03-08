@@ -142,7 +142,7 @@ h1 {
 }
 
 #menu-container {
-  width: clamp(350px, 75vw, 1200px);
+  width: clamp(350px, 75vw, 680px);
   transform-origin: right;
   transition: all var(--menu-speed);
   background: var(--menu-gray2);
@@ -158,7 +158,7 @@ h1 {
   background: var(--menu-gray2);
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (height < 480px) {
   #menu-container {
     width: 100vw;
   }
