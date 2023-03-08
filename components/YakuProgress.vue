@@ -4,6 +4,7 @@ import { Ref } from "vue";
 const collection1: Ref<string[]> = STORE.useCollection1();
 const collection2: Ref<string[]> = STORE.useCollection2();
 const completedYaku: Ref<Dict> = STORE.useYaku1();
+const cardStyle: Ref<string> = RULES.useCardStyle();
 const viewingsAllowed: Ref<number> = RULES.useViewingsAllowed();
 const restrictedSet = new Set(["hanami-zake", "tsukimi-zake"]);
 function isComplete(yakuName: string) {
@@ -215,8 +216,8 @@ function allowedYaku(): YakuDetails[] {
     width: var(--card-width);
     aspect-ratio: 2/3;
     background: rgb(0 0 0 / 0.65);
-    border: 1px solid red;
-    border-radius: 0.3rem;
+    box-shadow: 0 0 0.1rem 0 red;
+    border-radius: var(--card-radius);
     position: absolute;
     top: 0;
     left: 0;

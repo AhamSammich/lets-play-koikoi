@@ -200,6 +200,7 @@ onMounted(async () => {
         >
           <option value="ramen-red">Ramen Red</option>
           <option value="flash-black">Flash Black</option>
+          <option value="koinobori">Koinobori</option>
         </select>
       </div>
     </fieldset>
