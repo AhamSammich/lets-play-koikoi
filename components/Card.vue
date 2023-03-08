@@ -185,22 +185,22 @@ onMounted(() => {
 }
 
 .glow-container {
-  width: calc(99% + var(--container-offset));
-  height: calc(99% + var(--container-offset));
-  inset: calc(var(--container-offset) / -2);
+  width: calc(100% + var(--container-offset));
+  height: calc(100% + var(--container-offset));
+  inset: calc((var(--container-offset)) / -2);
   pointer-events: none;
   z-index: 5;
 }
 
 .glow-blur,
 .glow-line {
-  width: calc(99% - var(--container-offset));
-  height: calc(99% - var(--container-offset));
+  width: calc(100% - var(--container-offset));
+  height: calc(100% - var(--container-offset));
   x: calc(var(--container-offset) / 2);
   y: calc(var(--container-offset) / 2);
   fill: transparent;
   stroke: lightgoldenrodyellow;
-  stroke-width: 3px;
+  stroke-width: 1px;
   stroke-dasharray: var(--glow-line-length) calc(50px - var(--glow-line-length));
   transition: stroke-dashoffset var(--duration), stroke-dasharray var(--duration);
   /* Provides better touchscreen long-press feedback */
