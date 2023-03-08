@@ -3,16 +3,25 @@
 :root {
     --card-width: 70px;
     --card-border-color: #111;
+    --card-border-w: 0.5px;
     --card-radius: 0.3rem;
     --card-bg-color: rgb(185 28 28 / 1);
 }
 
-.ramen-red {
-    @apply bg-red-700;
-}
+body {
 
-.flash-black {
-    --card-border-color: slategray;
-    --card-radius: 0.1rem;
-    --card-bg-color: #333;
+    &.ramen-red {
+    }
+    
+    &.flash-black {
+        --card-border-color: slategray;
+        --card-radius: 0.1rem;
+        --card-bg-color: #333;
+    }
+    
+    &.koinobori {
+        --card-bg-color: skyblue;
+        --card-border-color: #333;
+        --card-radius: 0.5rem;
+    }
 }

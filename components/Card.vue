@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useImage } from "@vueuse/core";
+import { set, useImage } from "@vueuse/core";
 const props = defineProps<{
   name: string;
   hide?: boolean;
@@ -7,8 +7,10 @@ const props = defineProps<{
 }>();
 
 const cardStyle = RULES.useCardStyle();
-const backColor = () => cardStyle.value.split("-")[1];
-const { isLoading } = useImage({ src: `cards-${cardStyle.value || "ramen-red"}/${props.name}.png` });
+let previousStyle = cardStyle.value;
+const glowRadius = ref("0.3rem");
+
+const { isLoading } = useImage({ src: `cards/${cardStyle.value || "ramen-red"}/${props.name}.png` });
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -51,28 +53,45 @@ async function cancelPointerDown(e: Event) {
   target.classList.remove("selecting");
 }
 
+async function setGlowRadius() {
+  // Set the glowing border radius
+  glowRadius.value = getComputedStyle(document.body).getPropertyValue('--card-radius');
+  // if (rx) [...document.querySelectorAll("rect")].forEach((rect: SVGRectElement) => rect?.setAttribute("rx", rx));
+}
+
 onUpdated(async () => {
   await sleep(1800);
   [...document.querySelectorAll(".selected")].forEach(target => target.classList.remove("selected", "selecting"));
 })
+
+onMounted(() => {
+  // Apply styles for specific designs by toggling body class
+  watchEffect(() => {
+    let newStyle = cardStyle.value;
+    document.body.classList.remove(previousStyle);
+    document.body.classList.add(newStyle);
+    previousStyle = newStyle;
+    setGlowRadius();
+  })
+})
 </script>
 
 <template>
-  <div v-if="hide" :class="`card down ${cardStyle}`"></div>
+  <div v-if="hide" class="card down"></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
     <svg v-if="interactive" class="glow-container absolute">
-      <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
-      <rect rx="0.2rem" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
+      <rect :rx="glowRadius" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
+      <rect :rx="glowRadius" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
     </svg>
     <!-- Prevent long-press menu on touchscreen -->
     <div v-if="isLoading" class="card loading"></div>
     <img
       v-else
-      :src="`cards-${cardStyle || 'ramen-red'}/${props.name}.png`"
+      :src="`cards/${cardStyle || 'ramen-red'}/${props.name}.png`"
       loading="lazy"
-      :class="{ card: true, loaded: !isLoading }"
+      class="card"
       draggable="false"
       @touchend.prevent
       @pointerenter="handleHover"
@@ -83,17 +102,17 @@ onUpdated(async () => {
 
 <style lang="postcss">
 @import "~/assets/css/card-styles.css";
-.card,
-img {
-  border-radius: var(--card-radius);
-}
-
 .card {
+  border-radius: var(--card-radius);
   width: var(--card-width);
   aspect-ratio: 2 / 3;
   transition: all 0.3s 0.1s;
   animation: dropIn 0.5s;
-  border: 0.5px solid var(--card-border-color);
+  border: var(--card-border-w) solid var(--card-border-color);
+
+  &:is(img) {
+    box-shadow: 0.1rem 0.1rem 0.3rem 0 #111;
+  }
 
   &.down {
     background-color: var(--card-bg-color);
@@ -166,16 +185,17 @@ img {
 }
 
 .glow-container {
-  width: calc(100% + var(--container-offset));
-  height: calc(100% + var(--container-offset));
+  width: calc(99% + var(--container-offset));
+  height: calc(99% + var(--container-offset));
   inset: calc(var(--container-offset) / -2);
   pointer-events: none;
+  z-index: 5;
 }
 
 .glow-blur,
 .glow-line {
-  width: calc(100% - var(--container-offset));
-  height: calc(100% - var(--container-offset));
+  width: calc(99% - var(--container-offset));
+  height: calc(99% - var(--container-offset));
   x: calc(var(--container-offset) / 2);
   y: calc(var(--container-offset) / 2);
   fill: transparent;

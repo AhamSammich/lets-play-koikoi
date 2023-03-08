@@ -57,7 +57,7 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
-  <div :class="`ml-1 card down ${cardStyle}`"></div>
+  <div class="ml-1 card down"></div>
 </template>
 
 <style scoped lang="postcss">
