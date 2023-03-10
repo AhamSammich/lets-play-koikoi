@@ -40,8 +40,10 @@ function closeMenu() {
           <li>
             <span @click="guideOpen = true">How To Play</span>
           </li>
-          <li class="opacity-30 pointer-events-none">
-            <span class="relative under-construction">Hanafuda Gallery</span>
+          <li>
+            <NuxtLink to="/hanafuda-gallery" @click="closeMenu()">
+              <span class="relative under-construction">Hanafuda Gallery</span>
+            </NuxtLink>
           </li>
           <li>
             <span @click="showOptions = true">Game Options</span>
@@ -93,13 +95,18 @@ function closeMenu() {
 </template>
 
 <style scoped lang="postcss">
-* {
+:global(:root) {
   --menu-black: rgb(14, 20, 34);
   --menu-gray1: rgb(64, 73, 90);
   --menu-gray2: rgb(36, 43, 61);
   --menu-accent1: firebrick;
   --menu-accent2: lightgoldenrodyellow;
   --menu-speed: 0.5s;
+}
+
+li:has(.under-construction) {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .under-construction::after {
