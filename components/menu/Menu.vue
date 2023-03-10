@@ -118,7 +118,7 @@ function closeMenu() {
 }
 
 h1 {
-  font-family: "Potta One";
+  font-family: "Potta One", cursive;
   margin-bottom: 0.5em;
   letter-spacing: 0.05em;
   color: var(--menu-accent2);
@@ -179,7 +179,7 @@ h1 {
 }
 
 li {
-  font-family: "Potta One";
+  font-family: "Potta One", cursive;
   width: 100%;
   padding: 1rem 2rem;
   letter-spacing: 0.05em;

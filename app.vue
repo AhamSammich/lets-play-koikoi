@@ -169,8 +169,6 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Potta+One&display=swap");
-
 * {
   --tbl-black: rgb(14, 20, 34);
   --gradient-gold: linear-gradient(15deg, lightgoldenrodyellow, gold, palegoldenrod);
@@ -195,15 +193,6 @@ body {
   width: 100vw;
   font-family: "Mochiy Pop One", sans-serif;
   user-select: none;
-}
-
-#back-btn {
-  font-family: "Potta One";
-
-  &:hover {
-    translate: -5% 0;
-    opacity: 1;
-  }
 }
 
 #current-progress {
@@ -297,7 +286,7 @@ dialog {
   }
 
   & h1 {
-    font-family: "Potta One";
+    font-family: "Potta One", cursive;
     letter-spacing: 0.05em;
   }
 
