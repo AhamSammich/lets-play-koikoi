@@ -92,7 +92,8 @@ section {
   background: var(--gradient-gold);
   background-clip: text;
   color: transparent;
-  font-family: "Potta One", "Mochiy Pop One", Verdana, sans-serif;
+  font-family: "Potta One", cursive;
+  font-weight: 700;
   font-size: 56px;
   max-width: 500px;
   margin: 0 auto;
