@@ -13,7 +13,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/png",
-          href: "~/assets/images/coin.png",
+          href: "coin.png",
         },
         {
           rel: "preconnect",
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  pages: false,
+  pages: true,
   ssr: true,
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@vueuse/nuxt", "nuxt-vitest"],
   tailwindcss: {},

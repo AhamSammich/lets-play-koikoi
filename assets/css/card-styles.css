@@ -8,7 +8,7 @@
     --card-bg-color: rgb(185 28 28 / 1);
 }
 
-body {
+* {
 
     &.ramen-red {
     }

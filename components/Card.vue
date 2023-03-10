@@ -4,6 +4,7 @@ const props = defineProps<{
   name: string;
   hide?: boolean;
   interactive?: boolean;
+  forcedStyle?: string;
 }>();
 
 const imgFormat = "webp";
@@ -11,7 +12,7 @@ const cardStyle = RULES.useCardStyle();
 let previousStyle = cardStyle.value;
 const glowRadius = ref("0.3rem");
 
-const { isLoading } = useImage({ src: `cards/${cardStyle.value}/${imgFormat}/${props.name}.${imgFormat}` });
+const { isLoading } = useImage({ src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${props.name}.${imgFormat}` });
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -67,7 +68,7 @@ onUpdated(async () => {
 onMounted(() => {
   // Apply styles for specific designs by toggling body class
   watchEffect(() => {
-    let newStyle = cardStyle.value;
+    let newStyle = props.forcedStyle || cardStyle.value;
     document.body.classList.remove(previousStyle);
     document.body.classList.add(newStyle);
     previousStyle = newStyle;
@@ -89,7 +90,7 @@ onMounted(() => {
     <div v-if="isLoading" class="card loading"></div>
     <img
       v-else
-      :src="`cards/${cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
+      :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"
       class="card"
       draggable="false"
