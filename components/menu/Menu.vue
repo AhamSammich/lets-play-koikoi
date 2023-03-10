@@ -18,21 +18,21 @@ function closeMenu() {
 <template>
   <div
     id="menu-btn"
-    :class="`absolute z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
+    :class="`fixed z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
   >
     <MenuButton @open-menu="openMenu()" @close-menu="closeMenu()" />
   </div>
   <div
     id="menu-backdrop"
-    class="absolute transform-none top-0 left-0 h-screen w-screen opacity-0"
+    class="fixed transform-none top-0 left-0 h-screen w-screen opacity-0"
     @click="closeMenu()"
   ></div>
   <menu
     id="menu-container"
-    class="font-mono text-white absolute right-0 top-0 translate-x-full scale-x-0 h-screen w-screen"
+    class="font-mono text-white fixed right-0 top-0 translate-x-full scale-x-0 max-h-screen w-screen"
     :aria-expanded="isOpen"
   >
-    <div id="menu" class="relative h-full py-2 flex flex-col justify-between items-start">
+    <div id="menu" class="relative max-h-full py-2 flex flex-col justify-between items-start">
 
       <!-- MENU ITEMS -->
       <nav id="menu-nav" class="w-full">
@@ -42,7 +42,7 @@ function closeMenu() {
           </li>
           <li>
             <NuxtLink to="/hanafuda-gallery" @click="closeMenu()">
-              <span class="relative under-construction">Hanafuda Gallery</span>
+              <span>Hanafuda Gallery</span>
             </NuxtLink>
           </li>
           <li>

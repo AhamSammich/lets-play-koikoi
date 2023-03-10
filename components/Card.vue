@@ -94,7 +94,6 @@ onMounted(() => {
       loading="lazy"
       class="card"
       draggable="false"
-      @touchend.prevent
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
     />
@@ -116,7 +115,7 @@ onMounted(() => {
   }
 
   &.down {
-    background-color: var(--card-bg-color);
+    background: var(--card-bg-color);
 
   }
   
@@ -130,7 +129,10 @@ onMounted(() => {
     width: 50px;
     box-shadow: inset 0 0 0 3px var(--card-bg-color);
     opacity: 0.3;
-    animation: twirl 1s infinite alternate ease-in-out;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: twirl 2s infinite alternate ease-in-out;
+    }
   }
 
   &.loaded {
@@ -159,10 +161,10 @@ onMounted(() => {
 .card:hover {
   /* Used for calc */
   --container-offset: 50px;
-  --glow-line-color: lightgoldenrodyellow;
+  --glow-line-color: var(--card-glow-color);
   --glow-line-thickness: 1.5px;
   --glow-line-length: 20px;
-  --glow-blur-color: lightgoldenrodyellow;
+  --glow-blur-color: var(--card-glow-color);
   --glow-blur-size: 5px;
   --duration: 1s;
   position: relative;

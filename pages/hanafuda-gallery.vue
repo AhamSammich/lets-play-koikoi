@@ -1,18 +1,70 @@
+<script setup lang="ts">
+import { useDesignStore } from "../stores/designStore";
+
+const designStore = useDesignStore();
+const cardStyle = RULES.useCardStyle();
+
+function applyTheme(styleName: string) {
+  cardStyle.value = styleName;
+  document.body.className = styleName;
+  if (localStorage) localStorage.setItem("cardStyle", styleName);
+}
+</script>
+
 <template>
-    <article class="grid overflow-y-scroll text-white p-4">
-        <section class="min-h-1/4 w-full grid gap-2 grid-cols-2 grid-rows-2 px-8 mb-4">
-            <h2>Title</h2>
-            <p>Description</p>
-            <p>Link</p>
-        </section>
-        <section class="w-full h-full flex justify-center">
-            <GalleryCardSheet style-name="nobori-blue"/>
-        </section>
+  <div id="fuda-gallery" class="h-max w-screen overflow-y-scroll">
+    <article
+      v-for="(design, key) in designStore.cardDesigns"
+      :key="key"
+      class="flex flex-col h-max text-white px-4 py-8"
+    >
+      <section class="h-max w-full grid px-8 mb-4">
+        <div class="flex justify-between">
+          <h2>"{{ design.name }}"</h2>
+          <NuxtLink class="text-yellow-200" to="/" @click="applyTheme(key)">Play using this design!</NuxtLink>
+        </div>
+        <p>{{ design.attribution }}</p>
+        <a class="w-max text-yellow-200" :href="design.url" target="_blank"
+          >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
+        /></a>
+      </section>
+      <section class="w-full h-max flex justify-center">
+        <GalleryCardSheet :style-name="key" :reversed="design.reversed" />
+      </section>
     </article>
+  </div>
 </template>
 
 <style scoped lang="postcss">
-body {
-    background-color: gray;
+#fuda-gallery {
+  font-family: Consolas, monospace, system-ui;
+  overflow-y: scroll;
 }
+
+h1,
+h2 {
+  font-family: "Potta One", cursive;
+}
+
+article:nth-child(2n + 1) {
+  background-color: lightgray;
+  color: var(--tbl-black);
+
+  & a {
+    color: red;
+  }
+}
+
+article:nth-child(2n) {
+  background-color: var(--menu-gray1);
+}
+
+a {
+  transition: translate 0.5s;
+  
+  &:hover {
+    translate: 3% 0;
+  }
+}
+
 </style>

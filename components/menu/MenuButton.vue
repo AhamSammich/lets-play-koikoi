@@ -39,7 +39,7 @@ function handleClick() {
 <style scoped lang="postcss">
 .container {
   --color1: white;
-  --color2: transparent;
+  --color2: var(--menu-gray2);
   width: clamp(28px, 2svw, 40px);
   aspect-ratio: 1 / 1;
   border: 0.1rem solid var(--color1);
