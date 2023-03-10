@@ -6,6 +6,7 @@
     --card-border-w: 0.5px;
     --card-radius: 0.3rem;
     --card-bg-color: rgb(185 28 28 / 1);
+    --card-glow-color: lightgoldenrodyellow;
 }
 
 * {
@@ -23,5 +24,12 @@
         --card-bg-color: skyblue;
         --card-border-color: #333;
         --card-radius: 0.5rem;
+    }
+
+    &.sabling-silver {
+        --card-bg-color: linear-gradient(225deg, red 25%, black, silver 40%, slategray);
+        --card-radius: 10%;
+        --card-glow-color: red;
+        /* --card-border-color: silver; */
     }
 }

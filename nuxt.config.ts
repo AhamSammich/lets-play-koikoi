@@ -33,7 +33,13 @@ export default defineNuxtConfig({
   },
   pages: true,
   ssr: true,
-  modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@vueuse/nuxt", "nuxt-vitest"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "nuxt-icon",
+    "@vueuse/nuxt",
+    "nuxt-vitest",
+    "@pinia/nuxt",
+  ],
   tailwindcss: {},
   postcss: {
     plugins: {

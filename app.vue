@@ -19,9 +19,12 @@ useSeoMeta({
 </template>
 
 <style lang="postcss">
-* {
+:root {
   --tbl-black: rgb(14, 20, 34);
   --gradient-gold: linear-gradient(15deg, lightgoldenrodyellow, gold, palegoldenrod);
+}
+
+* {
   --tbl-w-max: 1000px;
   box-sizing: border-box;
   margin: 0;
@@ -40,7 +43,7 @@ useSeoMeta({
 body {
   background-color: var(--tbl-black);
   overflow-x: hidden;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   width: 100vw;
   font-family: "Mochiy Pop One", sans-serif;
   user-select: none;

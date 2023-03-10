@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useDesignStore } from "~~/stores/designStore";
 
+// @ts-ignore
+const designStore = useDesignStore();
+const designs = (): Record<string, Record<string, any>> => designStore.cardDesigns;
 const started = STORE.useStart();
 
 const rules: Record<string, Ref> = {
@@ -12,7 +16,7 @@ const rules: Record<string, Ref> = {
 };
 
 const INPUTS: Map<string, any[]> = new Map();
-const cardStyle = rules.cardStyle;
+const cardStyle: Ref<string> = rules.cardStyle;
 
 function updateRuleSet(target: any) {
   if (target === null) return;
@@ -74,6 +78,7 @@ onMounted(async () => {
   if (!localStorage) return;
   Object.keys(rules).forEach((key) => {
     watchEffect(() => {
+      console.log(`Updated ${key} -> ${rules[key].value}`);
       localStorage?.setItem(key, rules[key].value);
     });
   });
@@ -202,13 +207,13 @@ onMounted(async () => {
           class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus:text-black"
           @change="(e) => updateRuleSet(e.target)"
         >
-          <option value="ramen-red">Ramen Red</option>
-          <option value="flash-black">Flash Black</option>
-          <option value="nobori-blue">Nobori Blue</option>
+          <option v-for="design, key in designs()" :key="key" :value="key">{{ design.name }}</option>
+          <!-- <option value="flash-black">Flash Black</option>
+          <option value="nobori-blue">Nobori Blue</option> -->
         </select>
         <div id="attribution" class="text-sm">
-          <p class="mb-1">{{ DESIGNS[cardStyle].attribution }}</p>
-          <a class="text-yellow-200" :href="DESIGNS[cardStyle].url" target="_blank">{{ DESIGNS[cardStyle].urlDescription }}<Icon name="mi:external-link" /></a>
+          <p class="mb-1">{{ designs()[cardStyle].attribution }}</p>
+          <a class="text-yellow-200" :href="designs()[cardStyle].url" target="_blank">{{ designs()[cardStyle].urlDescription }}<Icon name="mi:external-link" /></a>
         </div>
       </div>
     </fieldset>

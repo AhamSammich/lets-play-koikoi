@@ -49,6 +49,57 @@ export const CARDS = [
   "kiri-no-kasu-3",
 ];
 
+export const CARDS_REV = [
+  "matsu-no-kasu-2",
+  "matsu-no-kasu-1",
+  "matsu-no-tan",
+  "matsu-ni-tsuru",
+  "ume-no-kasu-2",
+  "ume-no-kasu-1",
+  "ume-no-tan",
+  "ume-ni-uguisu",
+  "sakura-no-kasu-2",
+  "sakura-no-kasu-1",
+  "sakura-no-tan",
+  "sakura-ni-maku",
+  "fuji-no-kasu-2",
+  "fuji-no-kasu-1",
+  "fuji-no-tan",
+  "fuji-ni-kakku",
+  "ayame-no-kasu-2",
+  "ayame-no-kasu-1",
+  "ayame-no-tan",
+  "ayame-ni-yatsuhashi",
+  "botan-no-kasu-2",
+  "botan-no-kasu-1",
+  "botan-no-tan",
+  "botan-ni-chou",
+  "hagi-no-kasu-2",
+  "hagi-no-kasu-1",
+  "hagi-no-tan",
+  "hagi-ni-inoshishi",
+  "susuki-no-kasu-2",
+  "susuki-no-kasu-1",
+  "susuki-ni-kari",
+  "susuki-ni-tsuki",
+  "kiku-no-kasu-2",
+  "kiku-no-kasu-1",
+  "kiku-no-tan",
+  "kiku-ni-sakazuki",
+  "momiji-no-kasu-2",
+  "momiji-no-kasu-1",
+  "momiji-no-tan",
+  "momiji-ni-shika",
+  "yanagi-no-kasu",
+  "yanagi-no-tan",
+  "yanagi-ni-tsubame",
+  "yanagi-ni-ono-no-toufuu",
+  "kiri-no-kasu-3",
+  "kiri-no-kasu-2",
+  "kiri-no-kasu-1",
+  "kiri-ni-ho-oh",
+];
+
 export const SPECIAL_YAKU: Record<string, string[]> = {
   "ino-shika-chou": ["hagi-ni-inoshishi", "botan-ni-chou", "momiji-ni-shika"],
   "hanami-zake": ["sakura-ni-maku", "kiku-ni-sakazuki"],
@@ -89,7 +140,8 @@ export const isRibbon: CheckCardType = (cardName) => /-no-tan/.test(cardName);
 export const isPlain: CheckCardType = (cardName) => /-no-kasu/.test(cardName);
 
 export const getFlower = (cardName: string): string => cardName?.split("-")[0];
-export const getName = (cardName: string): string => cardName?.replace(/-\d?/g," ").trim();
+export const getName = (cardName: string): string =>
+  cardName?.replace(/-\d?/g, " ").trim();
 
 // Emit card details when element is clicked
 export function addDetails(cardName: string): Card {
@@ -125,21 +177,20 @@ export function checkForWinOrVoid(cardArr: string[]): string | null {
 
 export function processYakuList(yakuList: Dict): Dict {
   let yakuArr = Object.keys(yakuList);
-  if (yakuArr.filter(yakuName => yakuName.endsWith("kou")).length < 2) return yakuList;
+  if (yakuArr.filter((yakuName) => yakuName.endsWith("kou")).length < 2)
+    return yakuList;
 
   if (yakuArr.includes("gokou")) {
-    ["ame-shikou", "shikou", "sankou"].forEach(yaku => delete yakuList[yaku]);
+    ["ame-shikou", "shikou", "sankou"].forEach((yaku) => delete yakuList[yaku]);
   } else if (yakuArr.includes("shikou")) {
-    ["ame-shikou", "sankou"].forEach(yaku => delete yakuList[yaku]);
+    ["ame-shikou", "sankou"].forEach((yaku) => delete yakuList[yaku]);
   } else if (yakuArr.includes("ame-shikou")) {
     delete yakuList["sankou"];
   }
   return yakuList;
 }
 
-export function getYakuScore(
-  yakuList: Record<string, string[]>,
-): number {
+export function getYakuScore(yakuList: Record<string, string[]>): number {
   let total = 0;
   for (let yaku in yakuList) {
     let points = POINTS[yaku];
