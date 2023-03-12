@@ -1,9 +1,12 @@
 <script setup lang="ts">
-const props = defineProps<{
-  forceState?: boolean;
-  icoName?: string;
-  closeOnly?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    forceState: boolean | null;
+    icoName?: string;
+    closeOnly: boolean;
+  }>(),
+  { forceState: null, closeOnly: false }
+);
 const emits = defineEmits(["open-menu", "close-menu"]);
 
 const menuOpen = ref(false);
@@ -26,9 +29,9 @@ function handleClick() {
 }
 
 onUpdated(() => {
-  if (typeof props.forceState === "undefined") return;
+  if (typeof props.forceState !== "boolean") return;
   menuOpen.value = props.forceState;
-})
+});
 </script>
 
 <template>
