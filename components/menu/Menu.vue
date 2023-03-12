@@ -2,6 +2,7 @@
 const isOpen = ref(false);
 const guideOpen = ref(false);
 const showOptions = ref(false);
+const started = STORE.useStart();
 
 function openMenu() {
   isOpen.value = true;
@@ -13,6 +14,10 @@ function closeMenu() {
   showOptions.value = false;
 }
 
+function goToGallery() {
+  started.value = false;
+  closeMenu();
+}
 </script>
 
 <template>
@@ -20,7 +25,11 @@ function closeMenu() {
     id="menu-btn"
     :class="`fixed z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
   >
-    <MenuButton @open-menu="openMenu()" @close-menu="closeMenu()" />
+    <MenuButton
+      :forceState="isOpen"
+      @open-menu="openMenu()"
+      @close-menu="closeMenu()"
+    />
   </div>
   <div
     id="menu-backdrop"
@@ -32,8 +41,10 @@ function closeMenu() {
     class="font-mono text-white fixed right-0 top-0 translate-x-full scale-x-0 max-h-screen w-screen"
     :aria-expanded="isOpen"
   >
-    <div id="menu" class="relative max-h-full py-2 flex flex-col justify-between items-start">
-
+    <div
+      id="menu"
+      class="relative max-h-full py-2 flex flex-col justify-between items-start"
+    >
       <!-- MENU ITEMS -->
       <nav id="menu-nav" class="w-full">
         <ul class="w-full list-none">
@@ -41,7 +52,7 @@ function closeMenu() {
             <span @click="guideOpen = true">How To Play</span>
           </li>
           <li>
-            <NuxtLink to="/hanafuda-gallery" @click="closeMenu()">
+            <NuxtLink :class="{ 'opacity-50 pointer-events-none': started }" to="/hanafuda-gallery" @click="goToGallery()">
               <span>Hanafuda Gallery</span>
             </NuxtLink>
           </li>
@@ -66,7 +77,11 @@ function closeMenu() {
       </section>
 
       <!-- GAME OPTIONS -->
-      <section v-show="showOptions" id="menu-options" class="w-full h-full absolute pl-6 pr-16 py-2">
+      <section
+        v-show="showOptions"
+        id="menu-options"
+        class="w-full h-full absolute pl-6 pr-16 py-2"
+      >
         <div class="absolute top-16 right-4">
           <MenuButton
             ico-name="material-symbols:arrow-back"
@@ -81,7 +96,11 @@ function closeMenu() {
       </section>
 
       <!-- SOCIAL LINK ICONS -->
-      <nav v-if="!guideOpen" id="menu-foot" class="w-full flex justify-center items-end pb-4">
+      <nav
+        v-if="!guideOpen"
+        id="menu-foot"
+        class="w-full flex justify-center items-end pb-4"
+      >
         <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
           ><Icon name="mdi:github"
         /></a>
@@ -89,7 +108,6 @@ function closeMenu() {
           ><Icon name="mdi:twitter"
         /></a>
       </nav>
-
     </div>
   </menu>
 </template>
@@ -169,7 +187,7 @@ h1 {
   #menu-container {
     width: 100vw;
   }
-  
+
   #menu {
     display: grid;
     grid-template-columns: 25% 50% 25%;
