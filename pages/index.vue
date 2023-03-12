@@ -83,6 +83,7 @@ function resetGame() {
   score1.value = 0;
   score2.value = 0;
   oya.value = 1;
+  clearHistory();
 }
 
 function recordRound(results: Results) {

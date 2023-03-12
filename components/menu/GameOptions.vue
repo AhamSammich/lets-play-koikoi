@@ -48,14 +48,15 @@ async function loadRuleSet() {
           case "checkbox":
             if (localStorage.getItem(rule) === input.value) {
               input.checked = true;
+              updateRuleSet(input);
             } else {
               input.checked = false;
             }
             break;
           default:
             input.value = localStorage.getItem(rule);
+            updateRuleSet(input);
         }
-        updateRuleSet(input);
       });
     });
   } catch (err) {
@@ -203,6 +204,7 @@ onMounted(async () => {
       <div class="flex flex-col gap-2">
         <select
           id="card-style"
+          title="Select a design"
           name="cardStyle"
           class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus:text-black"
           @change="(e) => updateRuleSet(e.target)"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
+  forceState?: boolean;
   icoName?: string;
   closeOnly?: boolean;
 }>();
@@ -23,6 +24,11 @@ function handleClick() {
     toggleBtn();
   }
 }
+
+onUpdated(() => {
+  if (typeof props.forceState === "undefined") return;
+  menuOpen.value = props.forceState;
+})
 </script>
 
 <template>

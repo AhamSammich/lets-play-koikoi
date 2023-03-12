@@ -14,7 +14,6 @@ useSeoMeta({
 
 <template>
   <Menu />
-
   <NuxtPage />
 </template>
 
