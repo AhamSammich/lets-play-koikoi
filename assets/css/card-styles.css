@@ -1,35 +1,39 @@
 @tailwind base;
 
 :root {
-    --card-width: 70px;
-    --card-border-color: #111;
-    --card-border-w: 0.5px;
-    --card-radius: 0.3rem;
-    --card-bg-color: rgb(185 28 28 / 1);
-    --card-glow-color: lightgoldenrodyellow;
+  --card-width: 70px;
+  --card-border-color: #111;
+  --card-border-w: 0.5px;
+  --card-radius: 0.3rem;
+  --card-bg-color: rgb(185 28 28 / 1);
+  --card-glow-color: lightgoldenrodyellow;
 }
 
 * {
+  &.ramen-red {
+  }
 
-    &.ramen-red {
-    }
-    
-    &.flash-black {
-        --card-border-color: slategray;
-        --card-radius: 0.1rem;
-        --card-bg-color: #333;
-    }
-    
-    &.nobori-blue {
-        --card-bg-color: skyblue;
-        --card-border-color: #333;
-        --card-radius: 0.5rem;
-    }
+  &.flash-black {
+    --card-border-color: slategray;
+    --card-radius: 0.1rem;
+    --card-bg-color: #333;
+  }
 
-    &.sabling-silver {
-        --card-bg-color: linear-gradient(225deg, red 25%, black, silver 40%, slategray);
-        --card-radius: 10%;
-        --card-glow-color: red;
-        /* --card-border-color: silver; */
-    }
+  &.nobori-blue {
+    --card-bg-color: skyblue;
+    --card-border-color: #333;
+    --card-radius: 0.5rem;
+  }
+
+  &.sabling-silver {
+    --card-bg-color: linear-gradient(
+      225deg,
+      red 15%,
+      #333,
+      silver 30%,
+      slategray
+    );
+    --card-radius: 10%;
+    --card-glow-color: red;
+  }
 }

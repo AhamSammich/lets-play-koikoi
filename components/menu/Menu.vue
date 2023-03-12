@@ -3,6 +3,7 @@ const isOpen = ref(false);
 const guideOpen = ref(false);
 const showOptions = ref(false);
 const started = STORE.useStart();
+const route = useRoute();
 
 function openMenu() {
   isOpen.value = true;
@@ -12,6 +13,10 @@ function closeMenu() {
   isOpen.value = false;
   guideOpen.value = false;
   showOptions.value = false;
+}
+
+function goToStart() {
+  closeMenu();
 }
 
 function goToGallery() {
@@ -25,11 +30,7 @@ function goToGallery() {
     id="menu-btn"
     :class="`fixed z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
   >
-    <MenuButton
-      :forceState="isOpen"
-      @open-menu="openMenu()"
-      @close-menu="closeMenu()"
-    />
+    <MenuButton :forceState="isOpen" @open-menu="openMenu()" @close-menu="closeMenu()" />
   </div>
   <div
     id="menu-backdrop"
@@ -51,8 +52,17 @@ function goToGallery() {
           <li>
             <span @click="guideOpen = true">How To Play</span>
           </li>
-          <li>
-            <NuxtLink :class="{ 'opacity-50 pointer-events-none': started }" to="/hanafuda-gallery" @click="goToGallery()">
+          <li v-if="route.name !== 'index'">
+            <NuxtLink to="/" @click="goToStart()">
+              <span>Play Koi-Koi</span>
+            </NuxtLink>
+          </li>
+          <li v-if="route.name !== 'hanafuda-gallery'">
+            <NuxtLink
+              :class="{ 'opacity-50 pointer-events-none': started }"
+              to="/hanafuda-gallery"
+              @click="goToGallery()"
+            >
               <span>Hanafuda Gallery</span>
             </NuxtLink>
           </li>
