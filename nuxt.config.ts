@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         {
           rel: "preconnect",
           href: "https://fonts.gstatic.com",
-          crossorigin: true,
+          crossorigin: "",
         },
         {
           rel: "stylesheet",
@@ -39,6 +39,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-vitest",
     "@pinia/nuxt",
+    "@nuxt/image-edge",
   ],
   tailwindcss: {},
   postcss: {

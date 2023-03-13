@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    forceState: boolean | null;
+    forceState?: boolean | null;
     icoName?: string;
-    closeOnly: boolean;
+    closeOnly?: boolean;
   }>(),
   { forceState: null, closeOnly: false }
 );
