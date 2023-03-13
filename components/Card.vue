@@ -90,6 +90,8 @@ onMounted(() => {
     <div v-if="isLoading" class="card loading"></div>
     <nuxt-img
       v-else
+      preset="card"
+      fit="cover"
       :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"
       class="card"
