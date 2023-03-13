@@ -28,9 +28,20 @@ let cards = props.reversed ? CARDS_REV : CARDS;
   --card-width: 80px;
   --card-height: calc(var(--card-width) * 1.5);
   --row-size: 4;
-  grid-template-columns: repeat(var(--row-size), minmax(var(--card-width), 1fr));
+  grid-template-columns: repeat(var(--row-size), minmax(calc(var(--card-width) + var(--card-border-w)), 1fr));
   min-height: var(--card-height);
-  max-height: calc(var(--card-height) * var(--display-rows));
+  max-height: calc(var(--card-height) * var(--display-rows) + 2rem);
+
+  &::-webkit-scrollbar {
+    width: 0.4rem;
+    margin-left: 0.1rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 0.5px solid  var(--menu-gray1);
+    border-radius: 0.2rem;
+    width: 0.4rem;
+  }
 }
 
 @media (orientation: landscape) and (width > 768px) {

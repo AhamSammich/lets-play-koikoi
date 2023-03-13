@@ -33,7 +33,7 @@
       silver 30%,
       slategray
     );
-    --card-radius: 1rem;
+    --card-radius: 0.75rem;
     --card-glow-color: red;
   }
 }

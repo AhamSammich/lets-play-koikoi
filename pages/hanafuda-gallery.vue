@@ -21,7 +21,7 @@ function applyTheme(styleName: string) {
       <section class="h-max w-full grid md:px-8 mb-4">
         <div class="grid grid-cols-2">
           <h2>"{{ design.name }}"</h2>
-          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"><p class="text-right mr-2">Play using this design!</p></NuxtLink>
+          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"><p class="text-center mr-2">Play using this design!</p></NuxtLink>
         </div>
         <p>{{ design.attribution }}</p>
         <a class="w-max text-yellow-200" :href="design.url" target="_blank"

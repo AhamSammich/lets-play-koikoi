@@ -32,6 +32,9 @@ export const useDesignStore = defineStore("design", {
         reversed: true,
       },
     },
+    cardBacks: {
+      "sabling-silver": "cards/sabling-silver/webp/card-back.webp"
+    },
     activeDesign: "flash-black",
   }),
 });

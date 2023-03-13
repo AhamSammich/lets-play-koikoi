@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useImage } from "@vueuse/core";
+import { useDesignStore } from "../stores/designStore";
 const props = defineProps<{
   name: string;
   hide?: boolean;
@@ -9,6 +10,7 @@ const props = defineProps<{
 
 const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
+const cardBacks: Record<string, string> = useDesignStore().cardBacks;
 const glowRadius = ref("0.3rem");
 
 const { isLoading } = useImage({
@@ -76,7 +78,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="hide" class="card down"></div>
+  <div
+    v-if="hide"
+    class="card down rotate-180"
+    :style="`background-image: url(${
+      cardBacks[cardStyle] // Applies a card-back image if provided in the designStore.
+    });`"
+  ></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
@@ -98,7 +106,6 @@ onMounted(() => {
     <nuxt-img
       v-else
       preset="card"
-      fit="cover"
       :alt="`Card image for ${getName(props.name).toUpperCase()}`"
       :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"
@@ -120,15 +127,16 @@ onMounted(() => {
   border: var(--card-border-w) solid var(--card-border-color);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: dropIn 0.75s; 
+    animation: dropIn 0.75s;
   }
 
-  &:is(img) {
+  &:is(img, .down) {
     box-shadow: 0.1rem 0.1rem 0.3rem 0 #111;
   }
 
   &.down {
     background: var(--card-bg-color);
+    background-size: cover;
   }
 
   &.selected {

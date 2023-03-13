@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { useDesignStore } from "../stores/designStore";
+
 const props = defineProps<{
   drawCard: boolean | null;
 }>();
 const emits = defineEmits(["deal", "draw"]);
 const cardStyle = RULES.useCardStyle();
-
+const cardBacks: Record<string, string> = useDesignStore().cardBacks;
 let remainingCards: string[];
 let progressBar: HTMLElement;
 
@@ -57,7 +59,12 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
-  <div class="ml-1 card down"></div>
+  <div
+    class="ml-1 card down"
+    :style="`background-image: url(${
+      cardBacks[cardStyle] // Applies a card-back image if provided in the designStore.
+    });`"
+  ></div>
 </template>
 
 <style scoped lang="postcss">
