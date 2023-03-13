@@ -88,7 +88,7 @@ onMounted(() => {
     </svg>
     <!-- Prevent long-press menu on touchscreen -->
     <div v-if="isLoading" class="card loading"></div>
-    <img
+    <nuxt-img
       v-else
       :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"

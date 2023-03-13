@@ -122,7 +122,7 @@ onMounted(async () => {
     <div
       v-if="started"
       id="progress-btn"
-      :class="`z-40 absolute top-16 right-4 ${
+      :class="`z-40 fixed top-16 right-4 ${
         showProgress ? 'opacity-100' : 'opacity-50'
       }`"
     >
