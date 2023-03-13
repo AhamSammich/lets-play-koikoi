@@ -94,7 +94,7 @@ section {
   color: transparent;
   font-family: "Potta One", cursive;
   font-weight: 700;
-  font-size: 56px;
+  font-size: 48px;
   max-width: 500px;
   margin: 0 auto;
   z-index: 1;

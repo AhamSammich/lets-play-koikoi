@@ -18,10 +18,10 @@ function applyTheme(styleName: string) {
       :key="key"
       class="flex flex-col h-max text-white px-4 py-8"
     >
-      <section class="h-max w-full grid px-8 mb-4">
-        <div class="flex justify-between">
+      <section class="h-max w-full grid md:px-8 mb-4">
+        <div class="grid grid-cols-2">
           <h2>"{{ design.name }}"</h2>
-          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"><p class="w-3/4">Play using this design!</p></NuxtLink>
+          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"><p class="text-right mr-2">Play using this design!</p></NuxtLink>
         </div>
         <p>{{ design.attribution }}</p>
         <a class="w-max text-yellow-200" :href="design.url" target="_blank"

@@ -55,6 +55,7 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
 
 .yaku-list {
   --card-width: 30px;
+  --card-radius: 0.5rem;
   width: calc(var(--card-width) * 6);
 
   & :nth-child(6) {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useGameStore } from "~~/stores/gameStore";
 
 const emits = defineEmits([
   "match-select",
@@ -124,7 +125,7 @@ async function resetRefs() {
 async function newGame(score?: number) {
   if (score && winner.value) scoreboard[winner.value].value += score;
   if (winner.value) activeP.value = winner.value;
-  let roundResults = { winner: winner.value, yaku: winningYaku.value }
+  let roundResults = { winner: winner.value, yaku: winningYaku.value };
   emits("next-round", roundResults);
   await resetRefs();
   TABLE.selectedCard.value = "";
@@ -422,8 +423,36 @@ async function runGame() {
     </div>
 
     <!-- BOTTOM ROW -->
-    <div id="p1-hand" :class="{ inactive: activeP != 'p1' || draw }">
+    <div
+      id="p1-hand"
+      :class="{ 'flex flex-col': true, inactive: activeP != 'p1' || draw }"
+    >
+      <div
+        id="help"
+        class="font-mono text-white text-xs ml-2 mb-2 self-start w-full"
+      >
+        <Icon
+          name="material-symbols:tips-and-updates"
+          :class="{ 'text-sm float-left mr-1 cursor-help': true, 'text-yellow-200': useGameStore().showHelp }"
+          @click="useGameStore().toggleHelp()"
+        />
+        <template v-if="useGameStore().showHelp">
+          <template v-if="isTouchScreen()">
+            <p v-if="!STORE.usePreview().value">
+              Tap a card to preview possible matches.
+            </p>
+            <p v-if="STORE.usePreview().value">Tap the card again to play it.</p>
+          </template>
+          <template v-else>
+            <p v-if="!STORE.usePreview().value">
+              Hover over cards to preview possible matches.
+            </p>
+            <p v-if="STORE.usePreview().value">Click the card to play it.</p>
+          </template>
+        </template>
+      </div>
       <Hand
+        class="self-start"
         player="p1"
         :cards="P1.hand.value"
         @check-match="(cardName: string) => setSelectedCard(cardName)"
@@ -518,7 +547,7 @@ async function runGame() {
     }
 
     & :is(#deck, #field) {
-    translate: var(--left-shift) 0;
+      translate: var(--left-shift) 0;
     }
   }
 }
@@ -617,7 +646,7 @@ async function runGame() {
     & .card {
       transform: scaleX(-1);
     }
- }
+  }
 
   &#p2-collection {
     left: 0;
