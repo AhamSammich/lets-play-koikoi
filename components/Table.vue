@@ -425,21 +425,34 @@ async function runGame() {
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
-      :class="{ 'flex flex-col relative': true, inactive: activeP != 'p1' || draw }"
+      :class="{
+        'flex flex-col relative': true,
+        inactive: activeP != 'p1' || draw,
+      }"
     >
-      <div id="help" class="h-max font-mono text-white text-xs ml-4 mb-2 self-start w-full">
+      <div
+        id="help"
+        class="xl:absolute xl:top-full xl:text-lg h-max w-full font-mono text-white text-xs ml-4 mb-2 self-start"
+      >
         <!-- Click light-bulb icon to toggle hints. -->
         <Icon
           name="material-symbols:tips-and-updates"
           :class="{
-            'float-left mr-2 pb-1 cursor-help transition-all': true,
+            'float-left mr-2 cursor-help transition-all': true,
             'text-xl text-yellow-200': useGameStore().showHelp,
             'text-lg': !useGameStore().showHelp,
           }"
           @click="useGameStore().toggleHelp()"
         />
         <!-- Hide hints if it's not Player 1's turn. -->
-        <template v-if="useGameStore().showHelp && activeP === 'p1' && !draw">
+        <template
+          v-if="
+            useGameStore().showHelp &&
+            activeP === 'p1' &&
+            !draw &&
+            !TABLE.selectedCard.value
+          "
+        >
           <!-- Show different control hints for mobile/touchscreen or desktop. -->
           <p v-if="STORE.usePreview().value">
             <span v-if="isTouchScreen()"> Tap the card again </span>
