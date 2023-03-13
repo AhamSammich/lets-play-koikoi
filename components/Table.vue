@@ -425,16 +425,16 @@ async function runGame() {
     <!-- BOTTOM ROW -->
     <div
       id="p1-hand"
-      :class="{ 'flex flex-col': true, inactive: activeP != 'p1' || draw }"
+      :class="{ 'flex flex-col relative': true, inactive: activeP != 'p1' || draw }"
     >
-      <div id="help" class="font-mono text-white text-xs ml-2 mb-2 self-start w-full">
+      <div id="help" class="h-max font-mono text-white text-xs ml-4 mb-2 self-start w-full">
         <!-- Click light-bulb icon to toggle hints. -->
         <Icon
           name="material-symbols:tips-and-updates"
           :class="{
-            'float-left mr-1 cursor-help transition-all': true,
-            'text-sm text-yellow-200': useGameStore().showHelp,
-            'text-base': !useGameStore().showHelp,
+            'float-left mr-2 pb-1 cursor-help transition-all': true,
+            'text-xl text-yellow-200': useGameStore().showHelp,
+            'text-lg': !useGameStore().showHelp,
           }"
           @click="useGameStore().toggleHelp()"
         />
