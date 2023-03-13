@@ -427,28 +427,30 @@ async function runGame() {
       id="p1-hand"
       :class="{ 'flex flex-col': true, inactive: activeP != 'p1' || draw }"
     >
-      <div
-        id="help"
-        class="font-mono text-white text-xs ml-2 mb-2 self-start w-full"
-      >
+      <div id="help" class="font-mono text-white text-xs ml-2 mb-2 self-start w-full">
+        <!-- Click light-bulb icon to toggle hints. -->
         <Icon
           name="material-symbols:tips-and-updates"
-          :class="{ 'text-sm float-left mr-1 cursor-help': true, 'text-yellow-200': useGameStore().showHelp }"
+          :class="{
+            'float-left mr-1 cursor-help transition-all': true,
+            'text-sm text-yellow-200': useGameStore().showHelp,
+            'text-base': !useGameStore().showHelp,
+          }"
           @click="useGameStore().toggleHelp()"
         />
-        <template v-if="useGameStore().showHelp">
-          <template v-if="isTouchScreen()">
-            <p v-if="!STORE.usePreview().value">
-              Tap a card to preview possible matches.
-            </p>
-            <p v-if="STORE.usePreview().value">Tap the card again to play it.</p>
-          </template>
-          <template v-else>
-            <p v-if="!STORE.usePreview().value">
-              Hover over cards to preview possible matches.
-            </p>
-            <p v-if="STORE.usePreview().value">Click the card to play it.</p>
-          </template>
+        <!-- Hide hints if it's not Player 1's turn. -->
+        <template v-if="useGameStore().showHelp && activeP === 'p1' && !draw">
+          <!-- Show different control hints for mobile/touchscreen or desktop. -->
+          <p v-if="STORE.usePreview().value">
+            <span v-if="isTouchScreen()"> Tap the card again </span>
+            <span v-else> Click the card </span>
+            to play {{ getName(STORE.usePreview().value).toUpperCase() }}.
+          </p>
+          <p v-else>
+            <span v-if="isTouchScreen()"> Tap a card </span>
+            <span v-else> Hover over cards </span>
+            to preview possible matches.
+          </p>
         </template>
       </div>
       <Hand
@@ -567,6 +569,12 @@ async function runGame() {
   opacity: 0;
   animation: pickUp 1s 0.5s;
   z-index: 1;
+}
+
+#help {
+  & p {
+    animation: fadeIn 2s ease-in, dropIn 1s;
+  }
 }
 
 #p1-hand {
