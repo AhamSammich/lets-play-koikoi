@@ -18,6 +18,7 @@ let cards = props.reversed ? CARDS_REV : CARDS;
       :key="cardName"
       :name="cardName"
       :forced-style="styleName"
+      class="pointer-events-none"
     />
   </div>
 </template>
@@ -37,27 +38,4 @@ let cards = props.reversed ? CARDS_REV : CARDS;
     --row-size: 8;
   }
 }
-
-/* @media (prefers-reduced-motion: no-preference) {
-  .card-sheet {
-    * {
-      transition: translate 0.3s;
-      animation: slowScroll 30s infinite alternate;
-    }
-
-    &:hover * {
-      translate: 0 0;
-      animation-duration: 0s;
-    }
-  }
-}
-
-@keyframes slowScroll {
-  from {
-    translate: 0 0;
-  }
-  to {
-    translate: 0 -100%;
-  }
-} */
 </style>

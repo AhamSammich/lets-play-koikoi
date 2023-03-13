@@ -19,7 +19,6 @@ const { isLoading } = useImage({
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
-const isTouchScreen = () => window.matchMedia("(pointer:coarse)").matches;
 const isMatched = () =>
   props.interactive && getFlower(props.name) === getFlower(previewCard.value);
 

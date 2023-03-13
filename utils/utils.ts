@@ -2,6 +2,8 @@ export async function sleep(ms = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export const isTouchScreen = () => window.matchMedia("(pointer:coarse)").matches;
+
 export function mapReplacer(key: any, value: any) {
   if (value instanceof Map) {
     return {

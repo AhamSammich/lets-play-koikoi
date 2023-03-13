@@ -57,6 +57,12 @@ export default defineNuxtConfig({
           width: 100,
           height: 150,
         }
+      },
+      screenshot: {
+        modifiers: {
+          width: 285,
+          height: 640
+        }
       }
     }
   }
