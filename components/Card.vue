@@ -99,6 +99,7 @@ onMounted(() => {
       v-else
       preset="card"
       fit="cover"
+      :alt="`Card image for ${getName(props.name).toUpperCase()}`"
       :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
       loading="lazy"
       class="card"
@@ -137,16 +138,13 @@ onMounted(() => {
   }
 
   &.loading {
+    max-width: 50px;
     box-shadow: inset 0 0 0 3px var(--card-bg-color);
     opacity: 0.3;
 
     @media (prefers-reduced-motion: no-preference) {
       animation: twirl 2s infinite alternate ease-in-out;
     }
-  }
-
-  &.loaded {
-    scale: 1 1;
   }
 }
 
