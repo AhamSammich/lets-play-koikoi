@@ -137,9 +137,9 @@ onMounted(async () => {
       <YakuProgress @close-progress="showProgress = false" />
     </dialog>
 
-    <img
+    <nuxt-img
       id="hero"
-      src="~/assets/images/grey-hills.jpg"
+      src="bg/grey-hills-1280.jpg"
       loading="lazy"
       :class="{ 'scroll-up': started }"
     />

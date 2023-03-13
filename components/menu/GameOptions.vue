@@ -7,7 +7,7 @@ const designStore = useDesignStore();
 const designs = (): Record<string, Record<string, any>> => designStore.cardDesigns;
 const started = STORE.useStart();
 
-const rules: Record<string, Ref> = {
+const settings: Record<string, Ref> = {
   maxRounds: <Ref<number>>RULES.useMaxRounds(),
   viewingsAllowed: <Ref<number>>RULES.useViewingsAllowed(),
   bonusForAnyKoiKoi: <Ref<boolean>>RULES.useBonusForAnyKoiKoi(),
@@ -16,7 +16,7 @@ const rules: Record<string, Ref> = {
 };
 
 const INPUTS: Map<string, any[]> = new Map();
-const cardStyle: Ref<string> = rules.cardStyle;
+const cardStyle: Ref<string> = settings.cardStyle;
 
 function updateRuleSet(target: any) {
   if (target === null) return;
@@ -25,13 +25,13 @@ function updateRuleSet(target: any) {
   if (!key) return;
   switch (input.type) {
     case "radio":
-      rules[key].value = Number(input.getAttribute("value"));
+      settings[key].value = Number(input.getAttribute("value"));
       break;
     case "checkbox":
-      rules[key].value = input.checked;
+      settings[key].value = input.checked;
       break;
     default:
-      rules[key].value = input.value;
+      settings[key].value = input.value;
   }
 }
 
@@ -39,7 +39,7 @@ async function loadRuleSet() {
   // Load saved options from localStorage
   if (!localStorage) return;
   try {
-    Object.keys(rules).forEach((rule) => {
+    Object.keys(settings).forEach((rule) => {
       INPUTS.set(rule, [...document.querySelectorAll(`[name=${rule}]`)]);
       if (!localStorage.getItem(rule)) return;
       INPUTS.get(rule)?.forEach((input) => {
@@ -77,10 +77,10 @@ onMounted(async () => {
 
   // Update localStorage for changing options
   if (!localStorage) return;
-  Object.keys(rules).forEach((key) => {
+  Object.keys(settings).forEach((key) => {
     watchEffect(() => {
-      console.log(`Updated ${key} -> ${rules[key].value}`);
-      localStorage?.setItem(key, rules[key].value);
+      console.log(`Updated ${key} -> ${settings[key].value}`);
+      localStorage?.setItem(key, settings[key].value);
     });
   });
 });
@@ -92,7 +92,7 @@ onMounted(async () => {
     <fieldset>
       <legend>
         Game Length
-        <p class="inline">({{ rules.maxRounds }} rounds)</p>
+        <p class="inline">({{ settings.maxRounds }} rounds)</p>
       </legend>
       <div>
         <label for="length-season">Season</label>
