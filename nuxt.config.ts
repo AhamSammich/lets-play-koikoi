@@ -54,7 +54,6 @@ export default defineNuxtConfig({
     presets: {
       card: {
         modifiers: {
-          format: 'webp',
           width: 100,
           height: 150,
         }

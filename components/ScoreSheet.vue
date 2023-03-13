@@ -94,11 +94,6 @@ onBeforeMount(() => {
   mask-image: linear-gradient(180deg, transparent, #111 25px 90%, transparent);
   overflow-y: scroll;
 
-  & * {
-    animation: none;
-    transition: none;
-  }
-
   & .yaku {
     padding-left: 2rem;
   }

@@ -9,10 +9,13 @@ const props = defineProps<{
 
 const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
-let previousStyle = cardStyle.value;
 const glowRadius = ref("0.3rem");
 
-const { isLoading } = useImage({ src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${props.name}.${imgFormat}` });
+const { isLoading } = useImage({
+  src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${
+    props.name
+  }.${imgFormat}`,
+});
 const emits = defineEmits(["card-select"]);
 const previewCard = STORE.usePreview();
 
@@ -22,7 +25,7 @@ const isMatched = () =>
 
 // Mouseover to preview card matches
 function handleHover(e: Event) {
-  if (!props.interactive) return; // Prevent triggering effects hovering over cards not in hand
+  if (!props.interactive || isTouchScreen()) return; // Prevent triggering effects hovering over cards not in hand
   previewCard.value = props.name;
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
@@ -36,45 +39,41 @@ async function cancelHover() {
 
 // Click (and hold for touchscreen) to play a card
 async function handlePointerDown(e: Event) {
-  if (!props.interactive) return;  // Prevent events on cards not in hand
+  if (!props.interactive) return; // Prevent events on cards not in hand
   e.preventDefault();
   let target = <HTMLElement>e.target;
   target.classList.add("selecting");
-  target.addEventListener("pointerup", cancelPointerDown, { once: true });
-  if (isTouchScreen()) await sleep(300);
-
-  if (!target.classList.contains("selecting")) return;
-  target.classList.add("selected");
-  previewCard.value = "";
-  emits("card-select", props.name);
-}
-
-// Remove selection effects
-async function cancelPointerDown(e: Event) {
-  let target = <HTMLElement>e.target;
-  target.classList.remove("selecting");
+  if (previewCard.value === props.name) {
+    previewCard.value = "";
+    emits("card-select", props.name);
+  } else {
+    previewCard.value = props.name;
+  }
 }
 
 async function setGlowRadius() {
   // Set the glowing border radius
-  glowRadius.value = getComputedStyle(document.body).getPropertyValue('--card-radius');
+  glowRadius.value = getComputedStyle(document.body).getPropertyValue("--card-radius");
 }
 
 onUpdated(async () => {
-  await sleep(1800);
-  [...document.querySelectorAll(".selected")].forEach(target => target.classList.remove("selected", "selecting"));
-})
+  // await sleep(1800);
+  [...document.querySelectorAll(".selected")].forEach((target) =>
+    target.classList.remove("selected")
+  );
+});
 
 onMounted(() => {
   // Apply styles for specific designs by toggling body class
   watchEffect(() => {
     let newStyle = props.forcedStyle || cardStyle.value;
-    document.body.classList.remove(previousStyle);
-    document.body.classList.add(newStyle);
-    previousStyle = newStyle;
+    if (!document.body.classList.contains(newStyle)) {
+      console.log(`Applied style: ${newStyle}.`);
+      document.body.className = newStyle;
+    }
     setGlowRadius();
-  })
-})
+  });
+});
 </script>
 
 <template>
@@ -83,10 +82,19 @@ onMounted(() => {
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
     <svg v-if="interactive" class="glow-container absolute">
-      <rect :rx="glowRadius" pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
-      <rect :rx="glowRadius" pathLength="100" stroke-linecap="round" class="glow-line"></rect>
+      <rect
+        :rx="glowRadius"
+        pathLength="100"
+        stroke-linecap="round"
+        class="glow-blur"
+      ></rect>
+      <rect
+        :rx="glowRadius"
+        pathLength="100"
+        stroke-linecap="round"
+        class="glow-line"
+      ></rect>
     </svg>
-    <!-- Prevent long-press menu on touchscreen -->
     <div v-if="isLoading" class="card loading"></div>
     <nuxt-img
       v-else
@@ -109,8 +117,11 @@ onMounted(() => {
   width: var(--card-width);
   aspect-ratio: 2 / 3;
   transition: all 0.3s 0.1s;
-  animation: dropIn 0.5s;
   border: var(--card-border-w) solid var(--card-border-color);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: dropIn 0.75s; 
+  }
 
   &:is(img) {
     box-shadow: 0.1rem 0.1rem 0.3rem 0 #111;
@@ -118,9 +129,8 @@ onMounted(() => {
 
   &.down {
     background: var(--card-bg-color);
-
   }
-  
+
   &.selected {
     transform-origin: bottom;
     translate: 0 -10%;
@@ -128,7 +138,6 @@ onMounted(() => {
   }
 
   &.loading {
-    width: 50px;
     box-shadow: inset 0 0 0 3px var(--card-bg-color);
     opacity: 0.3;
 
@@ -170,19 +179,6 @@ onMounted(() => {
   --glow-blur-size: 5px;
   --duration: 1s;
   position: relative;
-
-  /* Visual feedback for card selection */
-  &:has(.selecting) {
-    --glow-line-color: gold;
-    --glow-blur-color: gold;
-    --duration: 500ms;
-    opacity: 0.2;
-
-    /* Provides better touchscreen long-press feedback */
-    @media (pointer: coarse) {
-      --glow-line-length: 50px;
-    }
-  }
 
   &:has(.selected) {
     opacity: 0;
@@ -246,11 +242,11 @@ onMounted(() => {
 
 @keyframes dropIn {
   from {
-    opacity: 0;
-    transform: scale(1.5) translate3d(0, -10%, 0);
+    /* opacity: 0.5; */
+    transform: translate3d(10%, 0, 0);
   }
   to {
-    opacity: 1;
+    /* opacity: 1; */
     transform: none;
   }
 }
