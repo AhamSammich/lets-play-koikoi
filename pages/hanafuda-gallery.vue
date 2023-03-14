@@ -6,7 +6,7 @@ useServerSeoMeta({
   ogTitle: "Hanafuda Gallery | Let's Play Koi-Koi!",
   description: "Play Koi-Koi with amazing designs by talented artists!",
   ogDescription: "Play Koi-Koi with amazing designs by talented artists!",
-  ogImage: "/screenshots/png/gallery-hanami.png",
+  ogImage: "https://assets.codepen.io/8543383/gallery-hanami_1.png",
   twitterCard: "summary_large_image",
 });
 
