@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useDesignStore } from "../stores/designStore";
 
-useSeoMeta({
+useServerSeoMeta({
   title: "Hanafuda Gallery | Let's Play Koi-Koi!",
   ogTitle: "Hanafuda Gallery | Let's Play Koi-Koi!",
   description: "Play Koi-Koi with amazing designs by talented artists!",
   ogDescription: "Play Koi-Koi with amazing designs by talented artists!",
+  ogImage: "/screenshots/png/gallery-hanami.png",
+  twitterCard: "summary_large_image",
 });
 
 const designStore = useDesignStore();

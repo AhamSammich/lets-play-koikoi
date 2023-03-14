@@ -1,12 +1,3 @@
-<script setup lang="ts">
-import { useSeoMeta } from "@vueuse/head";
-
-useSeoMeta({
-  ogImage: "https://assets.codepen.io/8543383/Screenshot_20230221_204527_Chrome.jpg",
-  twitterCard: "summary_large_image",
-});
-</script>
-
 <template>
   <Menu />
   <NuxtPage />
