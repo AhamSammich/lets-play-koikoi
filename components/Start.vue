@@ -1,13 +1,34 @@
 <script setup lang="ts">
+import { useImage } from "@vueuse/core";
 const started = STORE.useStart();
+const cardStyle = RULES.useCardStyle();
+
+const cards = randomCards();
+const ready = ref(false);
+
+const loadArr = () => {
+  let i = 0;
+  let arr = [
+    useImage({ src: `cards/${cardStyle.value}/webp/${cards[0]}.webp` }),
+    useImage({ src: `cards/${cardStyle.value}/webp/${cards[1]}.webp` }),
+    useImage({ src: `cards/${cardStyle.value}/webp/${cards[2]}.webp` }),
+    useImage({ src: `cards/${cardStyle.value}/webp/${cards[3]}.webp` }),
+    useImage({ src: `cards/${cardStyle.value}/webp/${cards[4]}.webp` }),
+  ];
+  // while (i < 5) {
+  //   i = arr.filter(img => img.isReady).length;
+  //   console.log(i);
+  // }
+  console.log(i = arr.filter(img => img.isReady).length);
+
+  ready.value = true;
+};
 
 function randomCards(): string[] {
   let randomArr: string[] = [];
   for (let i = 0; i < 5; i++) {
     let randomCard = pickCardFromArr(CARDS);
-    randomArr.includes(randomCard)
-      ? i--
-      : randomArr.push(randomCard);
+    randomArr.includes(randomCard) ? i-- : randomArr.push(randomCard);
   }
   return randomArr;
 }
@@ -15,6 +36,8 @@ function randomCards(): string[] {
 function startGame() {
   started.value = true;
 }
+
+onMounted(() => loadArr());
 </script>
 
 <template>
@@ -24,12 +47,18 @@ function startGame() {
   >
     <div
       id="hero-cards"
-      :class="{'flex justify-center z-0 -rotate-12': true, 'opacity-0': started}"
+      :class="{ 'flex justify-center z-0 -rotate-12': true, 'opacity-0': started }"
     >
-      <Card v-for="cardName in randomCards()" :key="cardName" :name="cardName" />
+      <Card v-for="cardName in cards" :key="cardName" :name="cardName" />
     </div>
-    <h1 id="hero-title" class="text-center"><span>Let's Play!</span>花札 KOI-KOI</h1>
-    <button id="start-btn" @click="startGame()">START</button>
+    <h1 id="hero-title" :class="{'text-center opacity-0': true, 'ready': ready }"><span>Let's Play!</span>花札 KOI-KOI</h1>
+    <button
+      :class="{ 'opacity-0': true, 'ready': ready }"
+      id="start-btn"
+      @click="startGame()"
+    >
+      START
+    </button>
   </section>
 </template>
 
@@ -49,12 +78,15 @@ section {
   }
 
   &.show #hero-title {
-    translate: 0 0;
-    transition: opacity 0.5s;
-    opacity: 1;
+    transition: opacity 1s;
+    
+    &.ready {
+      translate: 0 0;
+      opacity: 1;
+    }
   }
 
-  &.show #hero-cards>* {
+  &.show #hero-cards > * {
     opacity: 1;
   }
 }
@@ -98,7 +130,6 @@ section {
   max-width: 500px;
   margin: 0 auto;
   z-index: 1;
-  opacity: 0;
 
   & span {
     text-align: right;
@@ -121,6 +152,11 @@ button {
   color: #eee;
   text-align: center;
   z-index: 1;
+
+  &:is(#start-btn.ready) {   
+    transition: opacity 1s;
+    opacity: 1;
+  }
 
   &:hover,
   &:focus {
@@ -153,7 +189,7 @@ button {
     & > * {
       transform-origin: center;
       opacity: 0;
-      
+
       &:nth-child(1) {
         rotate: 50deg;
         translate: 25px 230%;

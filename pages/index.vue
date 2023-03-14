@@ -144,8 +144,7 @@ onMounted(async () => {
 
     <nuxt-img
       id="hero"
-      src="bg/grey-hills-1280.jpg"
-      format="webp"
+      src="bg/webp/grey-hills-1024.webp"
       loading="lazy"
       :class="{ 'scroll-up': started }"
     />

@@ -147,12 +147,13 @@ onMounted(() => {
 
   &.loading {
     max-width: 50px;
-    opacity: 0;
-    /* box-shadow: inset 0 0 0 3px var(--card-bg-color);
+    /* background: var(--card-bg-color); */
+    opacity: 0.3;
+    box-shadow: inset 0 0 0 3px var(--card-bg-color);
 
     @media (prefers-reduced-motion: no-preference) {
       animation: twirl 2s infinite alternate ease-in-out;
-    } */
+    }
   }
 }
 
