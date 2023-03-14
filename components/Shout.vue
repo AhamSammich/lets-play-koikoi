@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// @ts-ignore
-import coin from "../assets/images/coin.png";
 defineProps<{
   msg: string;
 }>();
@@ -8,7 +6,7 @@ defineProps<{
 
 <template>
   <div id="shout">
-    <img :src="coin" alt="" />
+    <nuxt-img src="/images/webp/coin.webp" alt="Koi-Koi has been called." />
     <h1>{{ msg.toUpperCase() }}</h1>
   </div>
 </template>
