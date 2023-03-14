@@ -102,7 +102,7 @@ onMounted(() => {
         class="glow-line"
       ></rect>
     </svg>
-    <div v-if="isLoading" class="card loading"></div>
+    <div v-if="isLoading" class="card loading mx-auto my-0"></div>
     <nuxt-img
       v-else
       preset="card"
@@ -146,13 +146,12 @@ onMounted(() => {
   }
 
   &.loading {
-    max-width: 50px;
-    /* background: var(--card-bg-color); */
-    opacity: 0.3;
+    max-width: 60px;
+    opacity: 0.5;
     box-shadow: inset 0 0 0 3px var(--card-bg-color);
 
     @media (prefers-reduced-motion: no-preference) {
-      animation: twirl 2s infinite alternate ease-in-out;
+      animation: twirl 2.5s infinite alternate ease-in-out;
     }
   }
 }
