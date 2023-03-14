@@ -28,6 +28,12 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image-edge",
   ],
+  plugins: [
+    {
+      src: '~/plugins/vercel.ts',
+      mode: 'client',
+    }
+  ],
   tailwindcss: {},
   postcss: {
     plugins: {
