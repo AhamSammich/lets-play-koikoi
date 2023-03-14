@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 
-useSeoMeta({
+useServerSeoMeta({
   title: "Let's Play Koi-Koi!",
   ogTitle: "Let's Play Koi-Koi!",
   description: "Play Hanafuda Koi-Koi against an AI opponent!",
   ogDescription: "Play Hanafuda Koi-Koi against an AI opponent!",
+  ogImage: "https://assets.codepen.io/8543383/Screenshot_20230221_204527_Chrome.jpg",
+  twitterCard: "summary_large_image",
 });
 
 const roundNum = STORE.useRoundNum();
