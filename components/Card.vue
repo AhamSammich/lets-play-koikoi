@@ -12,6 +12,7 @@ const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
 const cardBacks: Record<string, string> = useDesignStore().cardBacks;
 const glowRadius = ref("0.3rem");
+const backImage = cardBacks[cardStyle.value] || "";
 
 const { isLoading } = useImage({
   src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${
@@ -57,8 +58,9 @@ async function setGlowRadius() {
   glowRadius.value = getComputedStyle(document.body).getPropertyValue("--card-radius");
 }
 
+
+
 onUpdated(async () => {
-  // await sleep(1800);
   [...document.querySelectorAll(".selected")].forEach((target) =>
     target.classList.remove("selected")
   );
@@ -81,9 +83,7 @@ onMounted(() => {
   <div
     v-if="hide"
     class="card down rotate-180"
-    :style="`background-image: url(${
-      cardBacks[cardStyle] // Applies a card-back image if provided in the designStore.
-    });`"
+    :style="backImage"
   ></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
@@ -148,7 +148,7 @@ onMounted(() => {
   &.loading {
     max-width: 60px;
     opacity: 0.5;
-    box-shadow: inset 0 0 0 3px var(--card-bg-color);
+    /* box-shadow: inset 0 0 0 3px var(--card-bg-color); */
 
     @media (prefers-reduced-motion: no-preference) {
       animation: twirl 2.5s infinite alternate ease-in-out;

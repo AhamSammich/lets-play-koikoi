@@ -36,4 +36,13 @@
     --card-radius: 0.75rem;
     --card-glow-color: red;
   }
+
+  &.hanami-hue {
+    --card-bg-color: linear-gradient(
+      45deg,
+      palegreen,
+      white
+    );
+    --card-border-color: #555;
+  }
 }

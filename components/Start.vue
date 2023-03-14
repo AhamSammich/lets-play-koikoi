@@ -51,11 +51,13 @@ onMounted(() => loadArr());
     >
       <Card v-for="cardName in cards" :key="cardName" :name="cardName" />
     </div>
-    <h1 id="hero-title" :class="{'text-center opacity-0': true, 'ready': ready }"><span>Let's Play!</span>花札 KOI-KOI</h1>
+    <h1 id="hero-title" :class="{'text-center opacity-0': true, ready }"><span>Let's Play!</span>花札 KOI-KOI</h1>
     <button
-      :class="{ 'opacity-0': true, 'ready': ready }"
+      :class="{ 'opacity-0': true, ready }"
       id="start-btn"
       @click="startGame()"
+      autofocus
+      tabindex="1"
     >
       START
     </button>
@@ -99,7 +101,7 @@ section {
     rotate: -30deg;
     translate: 20px 20px;
   }
-
+    
   &:nth-child(2) {
     rotate: -15deg;
     translate: 10px 5px;
