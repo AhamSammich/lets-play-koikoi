@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { useDesignStore } from "../stores/designStore";
 
+useSeoMeta({
+  title: "Hanafuda Gallery | Let's Play Koi-Koi!",
+  ogTitle: "Hanafuda Gallery | Let's Play Koi-Koi!",
+  description: "Play Koi-Koi with amazing designs by talented artists!",
+  ogDescription: "Play Koi-Koi with amazing designs by talented artists!",
+});
+
 const designStore = useDesignStore();
 const cardStyle = RULES.useCardStyle();
 
 function applyTheme(styleName: string) {
   cardStyle.value = styleName;
   let styleSelectElement = document.getElementById("card-style");
-  if (styleSelectElement instanceof HTMLSelectElement) styleSelectElement.value = styleName;
+  if (styleSelectElement instanceof HTMLSelectElement)
+    styleSelectElement.value = styleName;
 }
 </script>
 
@@ -16,17 +24,21 @@ function applyTheme(styleName: string) {
     <article
       v-for="(design, key) in designStore.cardDesigns"
       :key="key"
-      class="flex flex-col h-max text-white px-4 py-8"
+      class="flex flex-col h-max overflow-x-hidden text-white px-4 py-8"
     >
-      <section class="h-max w-full grid md:px-8 mb-4">
+      <section class="h-max w-full grid gap-1 md:px-8 mb-4">
         <div class="grid grid-cols-2">
           <h2>"{{ design.name }}"</h2>
-          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"><p class="text-center mr-2">Play using this design!</p></NuxtLink>
+          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"
+            ><p class="text-center mr-2"><Icon name="material-symbols:play-circle-rounded" class="text-lg mb-1 mx-1" />Play this deck!</p></NuxtLink
+          >
         </div>
-        <p>{{ design.attribution }}</p>
-        <a class="w-max text-yellow-200" :href="design.url" target="_blank"
-          >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
-        /></a>
+        <div class="flex flex-col gap-1 md:max-w-2xl text-sm">
+          <p>{{ design.attribution }}</p>
+          <a class="text-yellow-200" :href="design.url" target="_blank"
+            >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
+          /></a>
+        </div>
       </section>
       <section class="w-full h-max flex justify-center">
         <GalleryCardSheet :style-name="key" :reversed="design.reversed" />
@@ -61,10 +73,9 @@ article:nth-child(2n) {
 
 a {
   transition: translate 0.5s;
-  
+
   &:hover {
     translate: 3% 0;
   }
 }
-
 </style>
