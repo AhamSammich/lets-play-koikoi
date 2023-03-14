@@ -105,6 +105,11 @@ async function handleNext(results: Results) {
 
 onMounted(async () => {
   await loadLocalData();
+  if (/localhost/ig.test(window.location.hostname)) {
+    useSeoMeta({
+      title: "<dev-lp-koikoi> Let's Play Koi-Koi!"
+    })
+  }
 });
 </script>
 

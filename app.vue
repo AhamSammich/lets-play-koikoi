@@ -23,6 +23,18 @@ useSeoMeta({
   --gradient-gold: linear-gradient(15deg, lightgoldenrodyellow, gold, palegoldenrod);
 }
 
+@font-face {
+  font-family: "Mochiy Pop One";
+  src: url("fonts/MochiyPopOne-Regular.woff2") format("woff2"),
+    url("fonts/MochiyPopOne-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Potta One";
+  src: url("fonts/PottaOne-Regular.woff2") format("woff2"),
+    url("fonts/PottaOneOne-Regular.woff") format("woff");
+}
+
 * {
   --tbl-w-max: 1000px;
   box-sizing: border-box;
