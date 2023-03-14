@@ -2,18 +2,11 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Let's Play Koi-Koi!",
-      meta: [
-        {
-          name: "description",
-          content: "Play Hanafuda Koi-Koi against an AI opponent.",
-        },
-      ],
       link: [
         {
           rel: "icon",
-          type: "image/png",
-          href: "coin.png",
+          type: "image/webp",
+          href: "images/webp/sakura.webp",
         },
       ],
     },

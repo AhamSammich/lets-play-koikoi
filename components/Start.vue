@@ -6,8 +6,7 @@ const cardStyle = RULES.useCardStyle();
 const cards = randomCards();
 const ready = ref(false);
 
-const loadArr = () => {
-  let i = 0;
+const loadArr = async () => {
   let arr = [
     useImage({ src: `cards/${cardStyle.value}/webp/${cards[0]}.webp` }),
     useImage({ src: `cards/${cardStyle.value}/webp/${cards[1]}.webp` }),
@@ -15,12 +14,7 @@ const loadArr = () => {
     useImage({ src: `cards/${cardStyle.value}/webp/${cards[3]}.webp` }),
     useImage({ src: `cards/${cardStyle.value}/webp/${cards[4]}.webp` }),
   ];
-  // while (i < 5) {
-  //   i = arr.filter(img => img.isReady).length;
-  //   console.log(i);
-  // }
-  console.log(i = arr.filter(img => img.isReady).length);
-
+  while (!arr.every((img) => img.isReady)) await sleep(100);
   ready.value = true;
 };
 
@@ -51,7 +45,9 @@ onMounted(() => loadArr());
     >
       <Card v-for="cardName in cards" :key="cardName" :name="cardName" />
     </div>
-    <h1 id="hero-title" :class="{'text-center opacity-0': true, ready }"><span>Let's Play!</span>花札 KOI-KOI</h1>
+    <h1 id="hero-title" :class="{ 'text-center opacity-0': true, ready }">
+      <span>Let's Play!</span>花札 KOI-KOI
+    </h1>
     <button
       :class="{ 'opacity-0': true, ready }"
       id="start-btn"
@@ -61,6 +57,11 @@ onMounted(() => loadArr());
     >
       START
     </button>
+    <p
+      class="text-white text-xs font-mono text-center fixed bottom-0 w-screen mb-2 opacity-50"
+    >
+      {{ new Date().getFullYear() }} | Andre L. Hammons
+    </p>
   </section>
 </template>
 
@@ -81,7 +82,7 @@ section {
 
   &.show #hero-title {
     transition: opacity 1s;
-    
+
     &.ready {
       translate: 0 0;
       opacity: 1;
@@ -101,7 +102,7 @@ section {
     rotate: -30deg;
     translate: 20px 20px;
   }
-    
+
   &:nth-child(2) {
     rotate: -15deg;
     translate: 10px 5px;
@@ -155,7 +156,7 @@ button {
   text-align: center;
   z-index: 1;
 
-  &:is(#start-btn.ready) {   
+  &:is(#start-btn.ready) {
     transition: opacity 1s;
     opacity: 1;
   }
