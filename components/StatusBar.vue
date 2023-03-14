@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// @ts-ignore
-import peony from "../assets/images/peony2.png";
-
 const props = defineProps<{
   roundNum: number;
   score: { p1: number; p2: number };
