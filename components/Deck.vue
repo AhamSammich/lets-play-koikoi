@@ -5,8 +5,12 @@ const props = defineProps<{
   drawCard: boolean | null;
 }>();
 const emits = defineEmits(["deal", "draw"]);
+
+// Get applied styles/images
 const cardStyle = RULES.useCardStyle();
 const cardBacks: Record<string, string> = useDesignStore().cardBacks;
+const backImage = cardBacks[cardStyle.value] || "";
+
 let remainingCards: string[];
 let progressBar: HTMLElement;
 
@@ -59,11 +63,10 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
+  <!-- Set image for card back if provided in designStore. -->
   <div
     class="ml-1 card down"
-    :style="`background-image: url(${
-      cardBacks[cardStyle] // Applies a card-back image if provided in the designStore.
-    });`"
+    :style="backImage"
   ></div>
 </template>
 

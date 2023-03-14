@@ -27,9 +27,9 @@ function allowedYaku(): YakuDetails[] {
       <h1 :class="`yaku-name ${isComplete(yaku.name)} text-yellow-100`">
         {{ yaku.name }}
       </h1>
-      <img
+      <nuxt-img
         v-if="isComplete(yaku.name)"
-        src="~/assets/images/coin.png"
+        src="/images/webp/coin.webp"
         alt="coin for a completed yaku"
         loading="lazy"
         class="coin absolute"
@@ -119,7 +119,7 @@ function allowedYaku(): YakuDetails[] {
 
 #legend {
   --card-width: 30px;
-  --card-radius: 0.5rem;
+  --card-radius: 0.25rem;
   transform-origin: bottom right;
   transition: scale 0.3s;
 

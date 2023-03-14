@@ -1,7 +1,7 @@
 # Let's Play Koi-Koi
 This is a Hanafuda game created using TypeScript, Vue.js, and Nuxt.js. Hanafuda is a traditional Japanese card game, also known as "flower cards". The objective of the game is to capture cards with matching symbols or create specific combinations of cards.
 
-![screenshot of title](public/title-screen.png)
+![screenshot of title](public/screenshots/title-screen.png)
 
 🎴[Click here to play!](https://lets-play-koikoi.vercel.app)🎴
 

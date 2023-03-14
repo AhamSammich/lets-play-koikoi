@@ -327,7 +327,7 @@ fieldset {
     position: absolute;
     aspect-ratio: 1 / 1;
     width: var(--input-size);
-    background: url(sakura.png);
+    background: url(images/webp/sakura.webp), url(images/png/sakura.png);
     background-size: contain;
     border-radius: 50%;
     top: 50%;
@@ -342,7 +342,7 @@ fieldset {
     border-radius: 0.2rem;
 
     &::after {
-      background: url(coin.png);
+      background: url(images/webp/coin.webp), url(images/png/coin.png);
       background-size: contain;
     }
   }

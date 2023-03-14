@@ -46,12 +46,11 @@ onBeforeMount(() => {
       >
         <p class="text-sm">KOI-KOI BONUS:</p>
         <div class="relative flex gap-1 w-max">
-          <img
+          <nuxt-img
             v-for="n in koikoi"
-            src="~assets/images/coin.png" 
+            src="/images/webp/coin.webp" 
             alt="coin for koikoi"
             class="coin relative w-6"
-            :data-multiplier="`x${n + 1}` /* Display multiplier above image */"
           />
         </div>
       </div>
@@ -150,16 +149,6 @@ onBeforeMount(() => {
     }
   }
 }
-
-/* .coin::after {
-  content: attr(data-multiplier);
-  display: block;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 0;
-  left: 100%;
-} */
 
 @media (width > 800px) or (orientation: landscape) {
   #scoresheet {
