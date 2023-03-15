@@ -41,26 +41,27 @@ export default defineNuxtConfig({
       gzip: true,
       brotli: false,
     },
-  },
-  routeRules: {
-    // Set custom headers matching paths
-    "/_nuxt/**": {
-      headers: {
-        "Cache-Control": "private, maxage=86400, stale-while-revalidate=86400",
-        "Content-Encoding": "gzip",
-        Vary: "Accept-Encoding",
+    routeRules: {
+      // Set custom headers matching paths
+      "/_nuxt/**": {
+        headers: {
+          "Cache-Control":
+            "private, maxage=86400, stale-while-revalidate=86400",
+          "Content-Encoding": "gzip",
+          Vary: "Accept-Encoding",
+        },
       },
-    },
-    "/_ipx/**": {
-      headers: {
-        "Cache-Control":
-          "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
+      "/_ipx/**": {
+        headers: {
+          "Cache-Control":
+            "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
+        },
       },
-    },
-    "/cards/**": {
-      headers: {
-        "Cache-Control":
-          "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
+      "/cards/**": {
+        headers: {
+          "Cache-Control":
+            "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
+        },
       },
     },
   },
