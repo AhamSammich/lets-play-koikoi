@@ -37,18 +37,18 @@ export default defineNuxtConfig({
   pages: true,
   ssr: true,
   nitro: {
-    compressPublicAssets: {
-      gzip: true,
-      brotli: false,
-    },
+    // compressPublicAssets: {
+    //   gzip: true,
+    //   brotli: false,
+    // },
     routeRules: {
       // Set custom headers matching paths
       "/_nuxt/**": {
         headers: {
           "Cache-Control":
             "private, maxage=86400, stale-while-revalidate=86400",
-          "Content-Encoding": "gzip",
-          Vary: "Accept-Encoding",
+          // "Content-Encoding": "gzip",
+          // Vary: "Accept-Encoding",
         },
       },
       "/_ipx/**": {
