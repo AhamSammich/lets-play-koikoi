@@ -37,18 +37,12 @@ export default defineNuxtConfig({
   pages: true,
   ssr: true,
   nitro: {
-    // compressPublicAssets: {
-    //   gzip: true,
-    //   brotli: false,
-    // },
     routeRules: {
       // Set custom headers matching paths
       "/_nuxt/**": {
         headers: {
           "Cache-Control":
             "private, maxage=86400, stale-while-revalidate=86400",
-          // "Content-Encoding": "gzip",
-          // Vary: "Accept-Encoding",
         },
       },
       "/_ipx/**": {
@@ -81,7 +75,6 @@ export default defineNuxtConfig({
   ],
   css: [
     "@/assets/css/card-styles.css",
-    // "@/assets/css/font-face.css",
   ],
   tailwindcss: {},
   postcss: {

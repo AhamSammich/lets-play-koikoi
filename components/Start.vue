@@ -43,23 +43,17 @@ onMounted(() => loadArr());
   >
     <div
       id="hero-cards"
-      :class="{ 'flex justify-center z-0 -rotate-12': true, 'opacity-0': started }"
+      :class="{ cardStyle, 'flex justify-center z-0 -rotate-12': true, 'opacity-0': started }"
     >
       <template v-if="ready">
-        <Card
-          v-for="cardName in cards"
-          :key="cardName"
-          :name="cardName"
-          loading="eager"
-        />
-        <!-- <nuxt-img
+        <nuxt-img
           v-for="cardName in cards"
           :key="cardName"
           :src="`cards/${cardStyle}/webp/${cardName}.webp`"
           :alt="`Card image for ${cardName}`"
           class="card"
           loading="eager"
-        /> -->
+        />
       </template>
       <template v-else>
         <div class="card loading"></div>
