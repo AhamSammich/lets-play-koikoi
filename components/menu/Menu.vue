@@ -113,10 +113,10 @@ function goToGallery() {
       >
         <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
           ><Icon name="mdi:github"
-        /></a>
+        /><span class="w-0 h-0 opacity-0 absolute">Star this project on GitHub</span></a>
         <a href="https://www.twitter.com/hammons_dev" target="_blank"
           ><Icon name="mdi:twitter"
-        /></a>
+        /><span class="w-0 h-0 opacity-0 absolute">Follow Andre on Twitter</span></a>
       </nav>
     </div>
   </menu>

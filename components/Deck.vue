@@ -9,7 +9,6 @@ const emits = defineEmits(["deal", "draw"]);
 // Get applied styles/images
 const cardStyle = RULES.useCardStyle();
 const cardBacks: Record<string, string> = useDesignStore().cardBacks;
-const backImage = cardBacks[cardStyle.value] || "";
 
 let remainingCards: string[];
 let progressBar: HTMLElement;
@@ -66,7 +65,11 @@ onUpdated(async () => {
   <!-- Set image for card back if provided in designStore. -->
   <div
     class="ml-1 card down"
-    :style="backImage"
+    :style="
+      cardBacks[cardStyle]
+        ? `background-image: url(${cardBacks[cardStyle]});`
+        : ''
+    "
   ></div>
 </template>
 

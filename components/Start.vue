@@ -3,9 +3,20 @@ import { useImage } from "@vueuse/core";
 const started = STORE.useStart();
 const cardStyle = RULES.useCardStyle();
 
+// Get 5 random cards from the deck to display.
+function randomCards(): string[] {
+  let randomArr: string[] = [];
+  for (let i = 0; i < 5; i++) {
+    let randomCard = pickCardFromArr(CARDS);
+    randomArr.includes(randomCard) ? i-- : randomArr.push(randomCard);
+  }
+  return randomArr;
+}
+
 const cards = randomCards();
 const ready = ref(false);
 
+// Set ready -> true when all images loaded.
 const loadArr = async () => {
   let arr = [
     useImage({ src: `cards/${cardStyle.value}/webp/${cards[0]}.webp` }),
@@ -17,15 +28,6 @@ const loadArr = async () => {
   while (!arr.every((img) => img.isReady)) await sleep(100);
   ready.value = true;
 };
-
-function randomCards(): string[] {
-  let randomArr: string[] = [];
-  for (let i = 0; i < 5; i++) {
-    let randomCard = pickCardFromArr(CARDS);
-    randomArr.includes(randomCard) ? i-- : randomArr.push(randomCard);
-  }
-  return randomArr;
-}
 
 function startGame() {
   started.value = true;
@@ -43,7 +45,25 @@ onMounted(() => loadArr());
       id="hero-cards"
       :class="{ 'flex justify-center z-0 -rotate-12': true, 'opacity-0': started }"
     >
-      <Card v-for="cardName in cards" :key="cardName" :name="cardName" />
+      <template v-if="ready">
+        <Card
+          v-for="cardName in cards"
+          :key="cardName"
+          :name="cardName"
+          loading="eager"
+        />
+        <!-- <nuxt-img
+          v-for="cardName in cards"
+          :key="cardName"
+          :src="`cards/${cardStyle}/webp/${cardName}.webp`"
+          :alt="`Card image for ${cardName}`"
+          class="card"
+          loading="eager"
+        /> -->
+      </template>
+      <template v-else>
+        <div class="card loading"></div>
+      </template>
     </div>
     <h1 id="hero-title" :class="{ 'text-center opacity-0': true, ready }">
       <span>Let's Play!</span>花札 KOI-KOI
@@ -53,7 +73,7 @@ onMounted(() => loadArr());
       id="start-btn"
       @click="startGame()"
       autofocus
-      tabindex="1"
+      tabindex="0"
     >
       START
     </button>
@@ -150,7 +170,7 @@ button {
   padding: 0.5em 1em;
   font-weight: bold;
   width: 120px;
-  height: 60px;
+  height: 50px;
   margin: 0 auto;
   color: #eee;
   text-align: center;
@@ -162,9 +182,9 @@ button {
   }
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     transform: translate3d(0, 5%, 0);
-    box-shadow: 0 0.1rem 0.3rem 0 lightgoldenrodyellow;
+    box-shadow: 0 0 0 0.5rem var(--tbl-black), 0 0 0 0.55rem gold;
   }
 }
 

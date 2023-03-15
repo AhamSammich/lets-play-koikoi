@@ -135,14 +135,15 @@ onMounted(async () => {
         class="text-white"
       />
     </div>
-    <dialog v-show="showProgress && started" id="current-progress" class="z-30">
+    <dialog v-if="showProgress && started" id="current-progress" class="z-30">
       <YakuProgress @close-progress="showProgress = false" />
     </dialog>
 
     <nuxt-img
       id="hero"
       src="bg/webp/grey-hills-1024.webp"
-      loading="lazy"
+      alt="Background image of the moon over silver grass."
+      loading="eager"
       :class="{ 'scroll-up': started }"
     />
     <Start />
