@@ -6,20 +6,46 @@ const props = defineProps<{
 }>();
 
 let cards = props.reversed ? CARDS_REV : CARDS;
+const cardStyle = props.styleName ? props.styleName : '';
+
+const scrolling = ref(false);
+
+function finishLoading() {
+  scrolling.value = true;
+}
 </script>
 
 <template>
   <div
-    class="card-sheet grid overflow-x-hidden overflow-y-scroll z-10"
-    :style="`--display-rows: ${rows || 2};`"
+    :data-style="cardStyle"
+    :class="`card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardStyle}`"
+    :style="`--display-rows: ${rows || 1};`"
+    @pointerenter="finishLoading()"
   >
-    <Card
-      v-for="cardName in cards"
+    <!-- Initially load the first 8 cards in the deck. -->
+    <nuxt-img
+      v-for="cardName in cards.slice(0,8)"
       :key="cardName"
       :name="cardName"
-      :forced-style="styleName"
-      class="pointer-events-none"
+      loading="eager"
+      :src="`cards/${styleName}/webp/${cardName}.webp`"
+      :alt="`${cardName} in ${styleName}`"
+      preset="card"
+      class="card pointer-events-none"
     />
+    <!-- Load the rest when user starts scrolling. -->
+    <template v-if="scrolling">
+      <nuxt-img
+        v-for="cardName in cards.slice(8)"
+        :key="cardName"
+        :name="cardName"
+        loading="lazy"
+        :src="`cards/${styleName}/webp/${cardName}.webp`"
+        :alt="`${cardName} in ${styleName}`"
+        preset="card"
+        class="card pointer-events-none"
+      />
+    </template>
   </div>
 </template>
 
@@ -30,7 +56,7 @@ let cards = props.reversed ? CARDS_REV : CARDS;
   --row-size: 4;
   grid-template-columns: repeat(var(--row-size), minmax(calc(var(--card-width) + var(--card-border-w)), 1fr));
   min-height: var(--card-height);
-  max-height: calc(var(--card-height) * var(--display-rows) + 2rem);
+  max-height: calc(var(--card-height) * var(--display-rows));
 
   &::-webkit-scrollbar {
     width: 0.4rem;
