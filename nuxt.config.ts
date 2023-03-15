@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  devServer: {
+    port: 43505,
+  },
   app: {
     head: {
       htmlAttrs: {
@@ -22,18 +25,30 @@ export default defineNuxtConfig({
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Potta+One&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Potta+One&display=swap",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap",
         },
       ],
     },
   },
   pages: true,
   ssr: true,
+  nitro: {
+    compressPublicAssets: {
+      gzip: true,
+      brotli: false,
+    },
+  },
   routeRules: {
     // Set custom headers matching paths
     "/_nuxt/**": {
       headers: {
         "Cache-Control": "private, maxage=86400, stale-while-revalidate=86400",
+        "Content-Encoding": "gzip",
+        Vary: "Accept-Encoding",
       },
     },
     "/_ipx/**": {
@@ -81,8 +96,7 @@ export default defineNuxtConfig({
       card: {
         modifiers: {
           fit: "cover",
-          width: 100,
-          height: 150,
+          sizes: "sm:80px md:120px lg:150px",
         },
       },
       screenshot: {
