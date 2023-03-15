@@ -13,9 +13,6 @@ const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
 const cardBacks: Record<string, string> = useDesignStore().cardBacks;
 const glowRadius = ref("0.3rem");
-const backImage = cardBacks[cardStyle.value]
-  ? `background-image: url(${cardBacks[cardStyle.value]});`
-  : "";
 
 const { isLoading } = useImage({
   src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${
@@ -81,7 +78,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="hide" class="card down rotate-180" :style="backImage"></div>
+  <div v-if="hide" class="card down rotate-180" 
+    :style="
+      cardBacks[cardStyle]
+        ? `background-image: url(${cardBacks[cardStyle]});`
+        : ''
+    "></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
