@@ -3,6 +3,7 @@ import { useImage } from "@vueuse/core";
 import { useDesignStore } from "../stores/designStore";
 const props = defineProps<{
   name: string;
+  loading?: "lazy" | "eager";
   hide?: boolean;
   interactive?: boolean;
   forcedStyle?: string;
@@ -12,7 +13,9 @@ const imgFormat = "webp";
 const cardStyle = RULES.useCardStyle();
 const cardBacks: Record<string, string> = useDesignStore().cardBacks;
 const glowRadius = ref("0.3rem");
-const backImage = cardBacks[cardStyle.value] || "";
+const backImage = cardBacks[cardStyle.value]
+  ? `background-image: url(${cardBacks[cardStyle.value]});`
+  : "";
 
 const { isLoading } = useImage({
   src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${
@@ -58,8 +61,6 @@ async function setGlowRadius() {
   glowRadius.value = getComputedStyle(document.body).getPropertyValue("--card-radius");
 }
 
-
-
 onUpdated(async () => {
   [...document.querySelectorAll(".selected")].forEach((target) =>
     target.classList.remove("selected")
@@ -80,11 +81,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    v-if="hide"
-    class="card down rotate-180"
-    :style="backImage"
-  ></div>
+  <div v-if="hide" class="card down rotate-180" :style="backImage"></div>
 
   <div v-else :class="{ glow: interactive, previewed: isMatched() }">
     <!-- No effects if interactive is false -->
@@ -108,7 +105,7 @@ onMounted(() => {
       preset="card"
       :alt="`Card image for ${getName(props.name).toUpperCase()}`"
       :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
-      loading="lazy"
+      :loading="loading || 'lazy'"
       class="card"
       draggable="false"
       @pointerenter="handleHover"
@@ -118,7 +115,6 @@ onMounted(() => {
 </template>
 
 <style lang="postcss">
-@import "~/assets/css/card-styles.css";
 .card {
   border-radius: var(--card-radius);
   width: var(--card-width);
@@ -146,7 +142,7 @@ onMounted(() => {
   }
 
   &.loading {
-    max-width: 60px;
+    max-width: 50px;
     opacity: 0.5;
     /* box-shadow: inset 0 0 0 3px var(--card-bg-color); */
 
