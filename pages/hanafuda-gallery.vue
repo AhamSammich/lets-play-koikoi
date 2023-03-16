@@ -26,7 +26,7 @@ function applyTheme(styleName: string) {
     <article
       v-for="(design, key) in designStore.cardDesigns"
       :key="key"
-      class="flex flex-col h-max overflow-x-hidden text-white px-4 py-8"
+      class="flex flex-col h-max overflow-x-hidden px-4 py-8"
     >
       <section class="h-max w-full grid gap-1 md:px-8 mb-4">
         <div class="grid grid-cols-2">
@@ -51,30 +51,43 @@ function applyTheme(styleName: string) {
 
 <style scoped lang="postcss">
 #fuda-gallery {
+  --color1: var(--tbl-black);
+  --color2: var(--menu-gray2);
+  --text-color: white;
+  --link-color: rgb(254 240 138);
   font-family: Consolas, monospace, system-ui;
   overflow-y: scroll;
+  color: var(--text-color);
+
+  @media (prefers-color-scheme: light) {
+    --color1: whitesmoke;
+    --color2: white;
+    --text-color: var(--tbl-black);
+    --link-color: red;
+  }
 }
 
 h1,
 h2 {
   font-family: "Potta One", cursive;
+  letter-spacing: 0.05rem;
 }
 
 article:nth-child(2n + 1) {
-  background-color: lightgray;
-  color: var(--tbl-black);
-
-  & a {
-    color: red;
-  }
+  background-color: var(--color1);
 }
 
 article:nth-child(2n) {
-  background-color: var(--menu-gray1);
+  background-color: var(--color2);
 }
 
 a {
   transition: translate 0.5s;
+  color: var(--link-color);
+
+  &:has(p) {
+    font-family: "Potta One", cursive;
+  }
 
   &:hover {
     translate: 3% 0;
