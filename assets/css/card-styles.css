@@ -18,7 +18,11 @@
   }
 
   &.nobori-blue {
-    --card-bg-color: skyblue;
+    --card-bg-color: linear-gradient(
+      225deg,
+      skyblue,
+      lightsteelblue
+    );
     --card-border-color: #333;
     --card-radius: 0.5rem;
   }
@@ -31,15 +35,15 @@
       silver 30%,
       slategray
     );
-    --card-radius: 0.75rem;
+    --card-radius: calc(0.2 * var(--card-width));
     --card-glow-color: red;
   }
 
   &.hanami-hue {
     --card-bg-color: linear-gradient(
       45deg,
-      palegreen,
-      white
+      springgreen,
+      palegreen
     );
     --card-border-color: #555;
   }

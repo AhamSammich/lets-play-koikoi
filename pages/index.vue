@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
+import { useDesignStore } from "~~/stores/designStore";
 
 useServerSeoMeta({
   title: "Let's Play Koi-Koi!",
@@ -9,6 +10,8 @@ useServerSeoMeta({
   ogImage: "https://assets.codepen.io/8543383/Screenshot_20230221_204527_Chrome.jpg",
   twitterCard: "summary_large_image",
 });
+
+const activeDesign = computed(() => useDesignStore().activeDesign);
 
 const roundNum = STORE.useRoundNum();
 const score1: Ref<number> = STORE.useScore1();
@@ -120,24 +123,25 @@ onMounted(async () => {
     />
   </header>
 
-  <main>
-    <div
-      v-if="started"
-      id="progress-btn"
-      :class="`z-40 fixed top-16 right-4 ${
-        showProgress ? 'opacity-100' : 'opacity-50'
-      }`"
-    >
-      <MenuButton
-        ico-name="mdi:cards"
-        @open-menu="showProgress = true"
-        @close-menu="showProgress = false"
-        class="text-white"
-      />
-    </div>
-    <dialog v-if="showProgress && started" id="current-progress" class="z-30">
-      <YakuProgress @close-progress="showProgress = false" />
-    </dialog>
+  <main :class="activeDesign">
+    <template v-if="started">
+      <div
+        id="progress-btn"
+        :class="`z-40 fixed top-16 right-4 ${
+          showProgress ? 'opacity-100' : 'opacity-50'
+        }`"
+      >
+        <MenuButton
+          ico-name="mdi:cards"
+          @open-menu="showProgress = true"
+          @close-menu="showProgress = false"
+          class="text-white"
+        />
+      </div>
+      <dialog v-show="showProgress" id="current-progress" class="z-30">
+        <YakuProgress @close-progress="showProgress = false" />
+      </dialog>
+    </template>
 
     <nuxt-img
       id="hero"

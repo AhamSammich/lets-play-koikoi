@@ -11,28 +11,35 @@ useServerSeoMeta({
 });
 
 const designStore = useDesignStore();
-const cardStyle = RULES.useCardStyle();
 
-function applyTheme(styleName: string) {
-  cardStyle.value = styleName;
-  let styleSelectElement = document.getElementById("card-style");
-  if (styleSelectElement instanceof HTMLSelectElement)
-    styleSelectElement.value = styleName;
+function applyTheme(designName: string) {
+  designStore.changeActive(designName);
+  let designSelectElement = document.getElementById("card-design");
+  if (designSelectElement instanceof HTMLSelectElement)
+    designSelectElement.value = designName;
 }
 </script>
 
 <template>
   <div id="fuda-gallery" class="h-max w-screen overflow-y-scroll">
+    <div class="header min-h-16 flex flex-col justify-center p-2 gap-2">
+      <h1 class="text-2xl">🎴<span>Hanafuda Gallery</span></h1>
+      <div class="flex flex-col self-center gap-2 pl-4 max-w-2xl">
+        <p class="text-lg">🎊 Welcome! 🎊</p>
+        <p>This collection features some awesome hanafuda designs by various artists!🔥 Play Koi-Koi using your favorite design by clicking on <em>Play this deck!</em></p>
+        <p>If there's a design you would like to have added, <a href="https://www.twitter.com/hammons_dev" target="_blank">let me know!💬</a></p>
+      </div>
+    </div>
     <article
       v-for="(design, key) in designStore.cardDesigns"
       :key="key"
-      class="flex flex-col h-max overflow-x-hidden px-4 py-8"
+      class="flex flex-col items-center h-max overflow-x-hidden px-4 py-8"
     >
-      <section class="h-max w-full grid gap-1 md:px-8 mb-4">
+      <section class="h-max w-full max-w-5xl grid gap-1 md:px-8 mb-4">
         <div class="grid grid-cols-2">
-          <h2>"{{ design.name }}"</h2>
+          <h2>✨{{ design.name }}</h2>
           <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"
-            ><p class="text-center mr-2"><Icon name="material-symbols:play-circle-rounded" class="text-lg mb-1 mx-1" />Play this deck!</p></NuxtLink
+            ><p class="text-right mr-2"><Icon name="material-symbols:play-circle-rounded" class="text-lg mb-1 mx-1" />Play this deck!</p></NuxtLink
           >
         </div>
         <div class="flex flex-col gap-1 md:max-w-2xl text-sm">
@@ -71,6 +78,18 @@ h1,
 h2 {
   font-family: "Potta One", cursive;
   letter-spacing: 0.05rem;
+}
+
+.header {
+  background-color: var(--color1);
+
+  @media (prefers-color-scheme: dark) {
+    & h1 span {
+      color: transparent;
+      background: var(--gradient-gold);
+      background-clip: text;
+    }
+  }
 }
 
 article:nth-child(2n + 1) {

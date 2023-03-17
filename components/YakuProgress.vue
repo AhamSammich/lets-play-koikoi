@@ -4,7 +4,6 @@ import { Ref } from "vue";
 const collection1: Ref<string[]> = STORE.useCollection1();
 const collection2: Ref<string[]> = STORE.useCollection2();
 const completedYaku: Ref<Dict> = STORE.useYaku1();
-const cardStyle: Ref<string> = RULES.useCardStyle();
 const viewingsAllowed: Ref<number> = RULES.useViewingsAllowed();
 const restrictedSet = new Set(["hanami-zake", "tsukimi-zake"]);
 function isComplete(yakuName: string) {
@@ -43,7 +42,7 @@ function allowedYaku(): YakuDetails[] {
         </p>
       </template>
       <div v-if="yaku.cards" class="yaku-cards mt-1">
-        <Card
+        <StaticCard
           v-for="card in yaku.cards"
           :key="card"
           :name="card"
@@ -72,15 +71,15 @@ function allowedYaku(): YakuDetails[] {
     </div>
     <div id="legend" class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center">
       <div>
-        <Card name="kiri-no-kasu-1" class="opacity-40 unavailable" />
+        <StaticCard name="kiri-no-kasu-1" class="opacity-40 unavailable" />
         <p>uncollectible</p>
       </div>
       <div>
-        <Card name="kiri-no-kasu-1" class="opacity-40" />
+        <StaticCard name="kiri-no-kasu-1" class="opacity-40" />
         <p>collectible</p>
       </div>
       <div>
-        <Card name="kiri-no-kasu-1" />
+        <StaticCard name="kiri-no-kasu-1" />
         <p>collected</p>
       </div>
     </div>
@@ -179,7 +178,6 @@ function allowedYaku(): YakuDetails[] {
   & > * {
     --card-width: 50px;
     position: relative;
-    animation: none;
 
     &[data-name]::after {
       content: "";
@@ -222,7 +220,7 @@ function allowedYaku(): YakuDetails[] {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 5;
   }
 }
 

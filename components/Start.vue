@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useImage } from "@vueuse/core";
+import { useDesignStore } from "~~/stores/designStore";
+
 const started = STORE.useStart();
-const cardStyle = RULES.useCardStyle();
+const designStore = useDesignStore();
+const activeDesign = computed(() => designStore.activeDesign);
 
 // Get 5 random cards from the deck to display.
-function randomCards(): string[] {
+async function randomCards() {
   let randomArr: string[] = [];
   for (let i = 0; i < 5; i++) {
     let randomCard = pickCardFromArr(CARDS);
@@ -13,46 +16,46 @@ function randomCards(): string[] {
   return randomArr;
 }
 
-const cards = randomCards();
+const cards = await randomCards();
 const ready = ref(false);
 
 // Set ready -> true when all images loaded.
-const loadArr = async () => {
-  let arr = [
-    useImage({ src: `cards/${cardStyle.value}/webp/${cards[0]}.webp` }),
-    useImage({ src: `cards/${cardStyle.value}/webp/${cards[1]}.webp` }),
-    useImage({ src: `cards/${cardStyle.value}/webp/${cards[2]}.webp` }),
-    useImage({ src: `cards/${cardStyle.value}/webp/${cards[3]}.webp` }),
-    useImage({ src: `cards/${cardStyle.value}/webp/${cards[4]}.webp` }),
-  ];
+async function loadArr() {
+  let arr = cards.map((card) =>
+    useImage({ src: `cards/${activeDesign.value}/webp/${card}.webp` })
+  );
   while (!arr.every((img) => img.isReady)) await sleep(100);
   ready.value = true;
-};
+}
 
 function startGame() {
   started.value = true;
 }
 
-onMounted(() => loadArr());
+onMounted(() => {
+  loadArr();
+});
 </script>
 
 <template>
   <section
     id="start-page"
-    :class="`${started ? '' : 'show'} flex flex-col align-center justify-center gap-8`"
+    :class="`${
+      started ? '' : 'show'
+    } ${activeDesign} flex flex-col align-center justify-center gap-8`"
   >
     <div
       id="hero-cards"
-      :class="{ cardStyle, 'flex justify-center z-0 -rotate-12': true, 'opacity-0': started }"
+      :class="{
+        'flex justify-center z-0 -rotate-12': true,
+        'opacity-0': started,
+      }"
     >
       <template v-if="ready">
-        <nuxt-img
+        <StaticCard
           v-for="cardName in cards"
           :key="cardName"
-          :src="`cards/${cardStyle}/webp/${cardName}.webp`"
-          :alt="`Card image for ${cardName}`"
-          class="card"
-          loading="eager"
+          :name="cardName"
         />
       </template>
       <template v-else>

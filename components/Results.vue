@@ -29,10 +29,8 @@ const playerLoses = () => props.scoreboard.p1 < props.scoreboard.p2;
         </div>
         <div class="yaku-list flex flex-col gap-1">
             <div v-for="(yaku, index) in resultsMap.get(key)?.yaku" :key="yaku" class="yaku flex flex-wrap relative">
-            <div v-for="card in yaku" :key="card" class="">
-                <Card :name="card" />
-            </div>
-            <p class="absolute top-1/2 -right-4 bg-black bg-opacity-70 p-2 -translate-y-1/2 uppercase text-xs">{{ index }}</p>
+              <StaticCard v-for="card in yaku" :key="card" :name="card" />
+            <p class="absolute top-1/2 -right-4 bg-black bg-opacity-80 p-2 -translate-y-1/2 uppercase text-xs rounded-lg">{{ index }}</p>
             </div>
         </div>
         </section>
