@@ -42,7 +42,7 @@
   &.hanami-hue {
     --card-bg-color: linear-gradient(
       45deg,
-      springgreen,
+      seagreen,
       palegreen
     );
     --card-border-color: #555;
