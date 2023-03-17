@@ -24,13 +24,14 @@ function updateDesign(target: any) {
 }
 
 async function loadDesign() {
+  // Load design preference from local storage.
   if (!localStorage) return;
   let savedDesign = localStorage.getItem("cardDesign");
   let designSelectElement = document.getElementById("card-design");
-  if (!savedDesign) return;
-  designStore.changeActive(savedDesign);
+  // Use a default design if none saved.
+  designStore.changeActive(savedDesign || designStore.defaultDesign);
   if (designSelectElement instanceof HTMLSelectElement)
-    designSelectElement.value = savedDesign;
+    designSelectElement.value = savedDesign || designStore.defaultDesign;
 }
 
 function updateRuleSet(target: any) {
@@ -227,7 +228,7 @@ onMounted(async () => {
           id="card-design"
           title="Select a design"
           name="cardDesign"
-          class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus:text-black"
+          class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus-within:bg-gray-900"
           @change="(e) => updateDesign(e.target)"
         >
           <option v-for="(design, key) in designs()" :key="key" :value="key">

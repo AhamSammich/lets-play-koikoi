@@ -10,6 +10,7 @@ type cardDesign = {
 }
 export const useDesignStore = defineStore("design", {
   state: () => ({
+    defaultDesign: "flash-black",
     activeDesign: "flash-black",
     cardDesigns: (<Record<string, cardDesign>>{
       "nobori-blue": {

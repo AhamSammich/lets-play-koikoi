@@ -119,30 +119,32 @@ section {
   }
 }
 
-#hero-cards > * {
-  transform-origin: bottom;
-  max-width: 50px;
+#hero-cards {
+  --card-width: 50px;
+  & * {
+    transform-origin: bottom;
+  }
 
-  &:nth-child(1) {
+  & > *:nth-child(1) {
     rotate: -30deg;
     translate: 20px 20px;
   }
 
-  &:nth-child(2) {
+  & > *:nth-child(2) {
     rotate: -15deg;
     translate: 10px 5px;
   }
 
-  &:nth-child(3) {
+  & > *:nth-child(3) {
     rotate: 0deg;
   }
 
-  &:nth-child(4) {
+  & > *:nth-child(4) {
     rotate: 15deg;
     translate: -10px 5px;
   }
 
-  &:nth-child(5) {
+  & > *:nth-child(5) {
     rotate: 30deg;
     translate: -20px 20px;
   }
