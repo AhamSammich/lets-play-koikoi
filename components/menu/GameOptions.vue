@@ -2,7 +2,6 @@
 import { Ref } from "vue";
 import { useDesignStore } from "~~/stores/designStore";
 
-// @ts-ignore
 const designStore = useDesignStore();
 const designs = (): Record<string, Record<string, any>> => designStore.cardDesigns;
 const started = STORE.useStart();
@@ -12,11 +11,27 @@ const settings: Record<string, Ref> = {
   viewingsAllowed: <Ref<number>>RULES.useViewingsAllowed(),
   bonusForAnyKoiKoi: <Ref<boolean>>RULES.useBonusForAnyKoiKoi(),
   doubledOverSeven: <Ref<boolean>>RULES.useDoubledOverSeven(),
-  cardStyle: <Ref<string>>RULES.useCardStyle(),
 };
 
 const INPUTS: Map<string, any[]> = new Map();
-const cardStyle: Ref<string> = settings.cardStyle;
+const activeDesign = computed(() => designStore.activeDesign);
+const designProps = computed(() => designStore.getActiveProps);
+
+function updateDesign(target: any) {
+  if (!(target instanceof HTMLSelectElement)) return;
+  let designName = target.value;
+  designStore.changeActive(designName);
+}
+
+async function loadDesign() {
+  if (!localStorage) return;
+  let savedDesign = localStorage.getItem("cardDesign");
+  let designSelectElement = document.getElementById("card-design");
+  if (!savedDesign) return;
+  designStore.changeActive(savedDesign);
+  if (designSelectElement instanceof HTMLSelectElement)
+    designSelectElement.value = savedDesign;
+}
 
 function updateRuleSet(target: any) {
   if (target === null) return;
@@ -66,11 +81,12 @@ async function loadRuleSet() {
 
 onMounted(async () => {
   await loadRuleSet();
+  await loadDesign();
   watchEffect(() => {
     // Options may only be changed from the title screen
     INPUTS.forEach((inputArr) =>
       inputArr
-        .filter((input) => input.name != "cardStyle")  // Allow style change mid-game
+        .filter((input) => input.name != "cardStyle") // Allow style change mid-game
         .forEach((input) => (input.disabled = started.value))
     );
   });
@@ -80,8 +96,13 @@ onMounted(async () => {
   Object.keys(settings).forEach((key) => {
     watchEffect(() => {
       console.log(`Updated ${key} -> ${settings[key].value}`);
-      localStorage?.setItem(key, settings[key].value);
+      localStorage.setItem(key, settings[key].value);
     });
+  });
+
+  watchEffect(() => {
+    console.log(`Updated cardDesign -> ${activeDesign.value}`);
+    localStorage.setItem("cardDesign", activeDesign.value);
   });
 });
 </script>
@@ -200,22 +221,26 @@ onMounted(async () => {
 
     <!-- choose style/design of cards -->
     <fieldset>
-      <legend>Card Style</legend>
+      <legend>Card Design</legend>
       <div class="flex flex-col gap-2">
         <select
-          id="card-style"
+          id="card-design"
           title="Select a design"
-          name="cardStyle"
+          name="cardDesign"
           class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus:text-black"
-          @change="(e) => updateRuleSet(e.target)"
+          @change="(e) => updateDesign(e.target)"
         >
-          <option v-for="design, key in designs()" :key="key" :value="key">{{ design.name }}</option>
+          <option v-for="(design, key) in designs()" :key="key" :value="key">
+            {{ design.name }}
+          </option>
           <!-- <option value="flash-black">Flash Black</option>
           <option value="nobori-blue">Nobori Blue</option> -->
         </select>
         <div id="attribution" class="text-sm">
-          <p class="mb-1">{{ designs()[cardStyle].attribution }}</p>
-          <a class="text-yellow-200" :href="designs()[cardStyle].url" target="_blank">{{ designs()[cardStyle].urlDescription }}<Icon name="mi:external-link" /></a>
+          <p class="mb-1">{{ designProps.attribution }}</p>
+          <a class="text-yellow-200" :href="designProps.url" target="_blank"
+            >{{ designProps.urlDescription }}<Icon name="mi:external-link"
+          /></a>
         </div>
       </div>
     </fieldset>
@@ -275,7 +300,6 @@ fieldset {
         margin-bottom: 0;
       }
     }
-
   }
 
   & legend {

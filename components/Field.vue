@@ -7,11 +7,7 @@ defineProps<{
 
 <template>
   <div class="field">
-    <template v-for="(card, index) in cards">
-      <div :id="`field-${index}`" :class="`field-card ${getFlower(card)}`">
-        <Card :name="card" :interactive="true"/>
-      </div>
-    </template>
+      <Card v-for="card in cards" :key="card" :name="card" loading="eager"/>
   </div>
 </template>
 

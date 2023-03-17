@@ -12,7 +12,7 @@ const emits = defineEmits(["match-select"]);
   <dialog :open="showModal" aria-modal="true" class="gap-4">
     <template v-if="matchSrc">
       <h1>{{ matchSrc.replace(/-\d?/g, " ").trim() }}</h1>
-      <Card id="match-src" :name="matchSrc" />
+      <StaticCard id="match-src" :name="matchSrc" />
     </template>
     <h2>Pick a card:</h2>
     <!-- Get selected card details and check table for match -->

@@ -17,16 +17,18 @@ function selectCard(cardName: string) {
 
 <template>
   <div class="hand">
-    <template v-for="card in cards">
-      <div class="player-card">
-        <!-- Get selected card details and check table for match -->
-        <Card
-          :name="card"
-          :hide="player === 'p2'"
-          :interactive="player === 'p1'"
-          @card-select="(cardName: string) => selectCard(cardName)"
-        />
-      </div>
+    <template v-if="player === 'p1'">
+      <!-- Get selected card details and check table for match -->
+      <Card
+        v-for="card in cards"
+        :name="card"
+        :interactive="player === 'p1'"
+        @card-select="(cardName: string) => selectCard(cardName)"
+      />
+    </template>
+    <template v-else>
+      <!-- Render facedown cards with no names. -->
+      <StaticCard v-for="card in cards" />
     </template>
   </div>
 </template>
@@ -41,12 +43,9 @@ function selectCard(cardName: string) {
   margin-left: 0.5rem;
   transform-origin: left;
 }
-.player-card > * {
-  max-width: 60px;
-}
 
 @media (width < 800px) {
-  .player-card {
+  .hand > * {
     max-width: 60px;
 
     &:nth-child(5) {

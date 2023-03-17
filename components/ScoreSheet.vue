@@ -59,9 +59,7 @@ onBeforeMount(() => {
       <div v-for="yaku in Object.keys(finalList)" :key="yaku" class="yaku">
         <h2>{{ yaku }}</h2>
         <div class="yaku-cards">
-          <div v-for="card in finalList[yaku]" class="card">
-            <Card :name="card" />
-          </div>
+          <StaticCard v-for="card in finalList[yaku]" :key="card" :name="card" />
         </div>
       </div>
     </div>
@@ -98,28 +96,23 @@ onBeforeMount(() => {
   }
 
   & .yaku-cards {
+    --card-width: 60px;
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
     max-width: 350px;
     gap: 0.2rem;
     pointer-events: none;
-  }
 
-  & .card {
-    max-width: 60px;
-    aspect-ratio: 2 / 3;
-    animation: none;
-
-    &:nth-child(n + 6) {
+    & :nth-child(n + 6) {
       transform: translate3d(0, -20%, 0);
     }
 
-    &:nth-child(n + 11) {
+    & :nth-child(n + 11) {
       transform: translate3d(0, -40%, 0);
     }
 
-    &:nth-child(6) {
+    & :nth-child(6) {
       margin-left: 5%;
     }
   }

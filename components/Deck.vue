@@ -7,9 +7,8 @@ const props = defineProps<{
 const emits = defineEmits(["deal", "draw"]);
 
 // Get applied styles/images
-const cardStyle = RULES.useCardStyle();
-const cardBacks: Record<string, string> = useDesignStore().cardBacks;
-
+const designStore = useDesignStore();
+const activeDesign = computed(() => designStore.activeDesign);
 let remainingCards: string[];
 let progressBar: HTMLElement;
 
@@ -63,14 +62,13 @@ onUpdated(async () => {
 <template>
   <div id="deck-progress"></div>
   <!-- Set image for card back if provided in designStore. -->
-  <div
-    class="ml-1 card down"
-    :style="
-      cardBacks[cardStyle]
-        ? `background-image: url(${cardBacks[cardStyle]});`
-        : ''
-    "
-  ></div>
+  <nuxt-img
+    v-if="designStore.hasBackImage"
+    class="card"
+    :src="`cards/${activeDesign}/webp/card-back.webp`"
+    alt="deck of cards"
+  />
+  <div v-else class="ml-1 card down"></div>
 </template>
 
 <style scoped lang="postcss">

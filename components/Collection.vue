@@ -76,16 +76,16 @@ onUpdated(() => {
 <template>
   <div :id="`${player}-collected`" class="collected">
     <div :id="`${player}-brights`" class="subset">
-      <Card v-for="card in sortedCards['brights']" :key="card" :name="card" />
+      <StaticCard v-for="card in sortedCards['brights']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-animals`" class="subset">
-      <Card v-for="card in sortedCards['animals']" :key="card" :name="card" />
+      <StaticCard v-for="card in sortedCards['animals']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-ribbons`" class="subset">
-      <Card v-for="card in sortedCards['ribbons']" :key="card" :name="card" />
+      <StaticCard v-for="card in sortedCards['ribbons']" :key="card" :name="card" />
     </div>
     <div :id="`${player}-plains`" class="subset">
-      <Card v-for="card in sortedCards['plains']" :key="card" :name="card" />
+      <StaticCard v-for="card in sortedCards['plains']" :key="card" :name="card" />
     </div>
   </div>
 </template>

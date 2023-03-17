@@ -4,30 +4,35 @@ import { useDesignStore } from "../stores/designStore";
 const props = defineProps<{
   name: string;
   loading?: "lazy" | "eager";
-  hide?: boolean;
   interactive?: boolean;
   forcedStyle?: string;
 }>();
+const emits = defineEmits(["card-select"]);
 
 const imgFormat = "webp";
-const cardStyle = RULES.useCardStyle();
-const cardBacks: Record<string, string> = useDesignStore().cardBacks;
-const glowRadius = ref("0.3rem");
+const activeDesign = computed(() => useDesignStore().activeDesign);
+const imgUrl = computed(
+  () =>
+    `cards/${props.forcedStyle || activeDesign.value}/${imgFormat}/${
+      props.name
+    }.${imgFormat}`
+);
+const { isLoading } = useImage({ src: imgUrl.value });
 
-const { isLoading } = useImage({
-  src: `cards/${props.forcedStyle || cardStyle.value}/${imgFormat}/${
-    props.name
-  }.${imgFormat}`,
-});
-const emits = defineEmits(["card-select"]);
+// Dynamically set the glowing border radius
+const glowRadius = computed(() =>
+  getComputedStyle(document.querySelector(`.${activeDesign.value}`)!).getPropertyValue(
+    "--card-radius"
+  )
+);
+
 const previewCard = STORE.usePreview();
-
 const isMatched = () =>
-  props.interactive && getFlower(props.name) === getFlower(previewCard.value);
+  getFlower(props.name) === getFlower(previewCard.value);
 
 // Mouseover to preview card matches
 function handleHover(e: Event) {
-  if (!props.interactive || isTouchScreen()) return; // Prevent triggering effects hovering over cards not in hand
+  if (isTouchScreen()) return; // Prevent triggering effects hovering over cards not in hand
   previewCard.value = props.name;
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
@@ -41,7 +46,6 @@ async function cancelHover() {
 
 // Click (and hold for touchscreen) to play a card
 async function handlePointerDown(e: Event) {
-  if (!props.interactive) return; // Prevent events on cards not in hand
   e.preventDefault();
   let target = <HTMLElement>e.target;
   target.classList.add("selecting");
@@ -53,41 +57,16 @@ async function handlePointerDown(e: Event) {
   }
 }
 
-async function setGlowRadius() {
-  // Set the glowing border radius
-  glowRadius.value = getComputedStyle(document.body).getPropertyValue("--card-radius");
-}
-
 onUpdated(async () => {
   [...document.querySelectorAll(".selected")].forEach((target) =>
     target.classList.remove("selected")
   );
 });
-
-onMounted(() => {
-  // Apply styles for specific designs by toggling body class
-  watchEffect(() => {
-    let newStyle = props.forcedStyle || cardStyle.value;
-    if (!document.body.classList.contains(newStyle)) {
-      console.log(`Applied style: ${newStyle}.`);
-      document.body.className = newStyle;
-    }
-    setGlowRadius();
-  });
-});
 </script>
 
 <template>
-  <div v-if="hide" class="card down rotate-180" 
-    :style="
-      cardBacks[cardStyle]
-        ? `background-image: url(${cardBacks[cardStyle]});`
-        : ''
-    "></div>
-
-  <div v-else :class="{ glow: interactive, previewed: isMatched() }">
-    <!-- No effects if interactive is false -->
-    <svg v-if="interactive" class="glow-container absolute">
+  <div :class="{ glow: true, previewed: isMatched() }">
+    <svg class="glow-container absolute">
       <rect
         :rx="glowRadius"
         pathLength="100"
@@ -106,7 +85,9 @@ onMounted(() => {
       v-else
       preset="card"
       :alt="`Card image for ${getName(props.name).toUpperCase()}`"
-      :src="`cards/${forcedStyle || cardStyle}/${imgFormat}/${props.name}.${imgFormat}`"
+      :src="`cards/${forcedStyle || activeDesign}/${imgFormat}/${
+        props.name
+      }.${imgFormat}`"
       :loading="loading || 'lazy'"
       class="card"
       draggable="false"
@@ -146,7 +127,6 @@ onMounted(() => {
   &.loading {
     max-width: 50px;
     opacity: 0.5;
-    /* box-shadow: inset 0 0 0 3px var(--card-bg-color); */
 
     @media (prefers-reduced-motion: no-preference) {
       animation: twirl 2.5s infinite alternate ease-in-out;
@@ -245,11 +225,9 @@ onMounted(() => {
 
 @keyframes dropIn {
   from {
-    /* opacity: 0.5; */
     transform: translate3d(10%, 0, 0);
   }
   to {
-    /* opacity: 1; */
     transform: none;
   }
 }

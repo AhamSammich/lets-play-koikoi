@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 
 let cards = props.reversed ? CARDS_REV : CARDS;
-const cardStyle = props.styleName ? props.styleName : '';
+const cardStyle = props.styleName ? props.styleName : "";
 
 const scrolling = ref(false);
 
@@ -20,30 +20,26 @@ function finishLoading() {
     :data-style="cardStyle"
     :class="`card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardStyle}`"
     :style="`--display-rows: ${rows || 1};`"
-    @pointerenter="finishLoading()"
+    @scroll="finishLoading()"
   >
     <!-- Initially load the first 8 cards in the deck. -->
-    <nuxt-img
-      v-for="cardName in cards.slice(0,8)"
+    <StaticCard
+      v-for="cardName in cards.slice(0, 9)"
       :key="cardName"
       :name="cardName"
+      :design="cardStyle"
       loading="eager"
-      :src="`cards/${styleName}/webp/${cardName}.webp`"
-      :alt="`${cardName} in ${styleName}`"
-      preset="card"
-      class="card pointer-events-none"
+      class="pointer-events-none"
     />
     <!-- Load the rest when user starts scrolling. -->
     <template v-if="scrolling">
-      <nuxt-img
-        v-for="cardName in cards.slice(8)"
+      <StaticCard
+        v-for="cardName in cards.slice(9)"
         :key="cardName"
         :name="cardName"
         loading="lazy"
-        :src="`cards/${styleName}/webp/${cardName}.webp`"
-        :alt="`${cardName} in ${styleName}`"
-        preset="card"
-        class="card pointer-events-none"
+        :design="cardStyle"
+        class="pointer-events-none"
       />
     </template>
   </div>
@@ -54,7 +50,10 @@ function finishLoading() {
   --card-width: 80px;
   --card-height: calc(var(--card-width) * 1.5);
   --row-size: 4;
-  grid-template-columns: repeat(var(--row-size), minmax(calc(var(--card-width) + var(--card-border-w)), 1fr));
+  grid-template-columns: repeat(
+    var(--row-size),
+    minmax(calc(var(--card-width) + var(--card-border-w)), 1fr)
+  );
   min-height: var(--card-height);
   max-height: calc(var(--card-height) * var(--display-rows));
 
@@ -64,7 +63,7 @@ function finishLoading() {
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 0.5px solid  var(--menu-gray1);
+    border: 0.5px solid var(--menu-gray1);
     border-radius: 0.2rem;
     width: 0.4rem;
   }

@@ -390,9 +390,9 @@ async function runGame() {
         @check-match="(cardName: string) => getMatch(cardName)"
       />
     </div>
-    <template v-if="activeP === 'p2' && TABLE.selectedCard.value && !draw">
+    <template v-show="activeP === 'p2' && TABLE.selectedCard.value && !draw">
       <div id="p2-reveal">
-        <Card :name="TABLE.selectedCard.value" />
+        <StaticCard :name="TABLE.selectedCard.value" />
       </div>
     </template>
     <div id="p2-collection" class="collection">
@@ -412,11 +412,9 @@ async function runGame() {
         @draw="(cardName: string) => revealCard(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
-      <template v-if="TABLE.selectedCard.value && draw">
-        <div id="reveal">
-          <Card :name="TABLE.selectedCard.value" />
-        </div>
-      </template>
+      <div v-show="TABLE.selectedCard.value && draw" id="reveal">
+        <StaticCard :name="TABLE.selectedCard.value" />
+      </div>
     </div>
     <div id="field">
       <Field :cards="TABLE.hand.value" />

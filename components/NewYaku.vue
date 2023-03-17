@@ -31,12 +31,12 @@ onMounted(async () => {
       <div class="yaku" v-for="yaku in Object.keys(yakuList)" :key="yaku">
         <h1>{{ yaku }}</h1>
         <div class="yaku-cards">
-            <Card v-for="card in yakuList[yaku]" :name="card" />
+            <StaticCard v-for="card in yakuList[yaku]" :name="card" />
         </div>
       </div>
     </div>
-    <div v-if="player === 'p1'" class="btn-bar">
-      <button v-if="koikoiAllowed" @click="callKoiKoi()">KOI KOI</button>
+    <div v-show="player === 'p1'" class="btn-bar">
+      <button v-show="koikoiAllowed" @click="callKoiKoi()">KOI KOI</button>
       <button @click="callShoubu()">END ROUND</button>
     </div>
     <MenuButton v-show="player === 'p1'" id="toggle-btn" ico-name="mdi:eye" 
