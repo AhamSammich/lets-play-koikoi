@@ -94,7 +94,7 @@ p {
 }
 
 #turn-pointer {
-  --pointer-color: gold;
+  --pointer-color: rgb(254 240 138 / 1);
   border-radius: 50%;
   height: 50px;
   width: 50px;
@@ -105,7 +105,6 @@ p {
   translate: -50% -50%;
   transform-origin: center top;
   transition: all 0.5s;
-  opacity: 0.8;
   z-index: 20;
 
   @media (orientation: landscape) {
