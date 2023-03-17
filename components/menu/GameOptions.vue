@@ -15,7 +15,7 @@ const settings: Record<string, Ref> = {
 
 const INPUTS: Map<string, any[]> = new Map();
 const activeDesign = computed(() => designStore.activeDesign);
-const designProps = computed(() => designStore.getActiveProps);
+const designProps = computed(() => designStore.cardDesigns[activeDesign.value]);
 
 function updateDesign(target: any) {
   if (!(target instanceof HTMLSelectElement)) return;

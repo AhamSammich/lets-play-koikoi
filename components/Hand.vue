@@ -28,7 +28,7 @@ function selectCard(cardName: string) {
     </template>
     <template v-else>
       <!-- Render facedown cards with no names. -->
-      <StaticCard v-for="card in cards" />
+      <StaticCard v-for="card in cards" class="rotate-180"/>
     </template>
   </div>
 </template>

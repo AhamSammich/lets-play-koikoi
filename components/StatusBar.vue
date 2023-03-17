@@ -19,9 +19,7 @@ function pointToActive() {
   >
     <div id="p1-score" :class="{ 'is-oya': props.oya === 'p1' }">
       <p>PLAYER 1</p>
-      <template v-show="props.oya === 'p1'">
-        <nuxt-img loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 1." />
-      </template>
+      <nuxt-img v-show="props.oya === 'p1'" loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 1." />
       <p>{{ score.p1 }}</p>
     </div>
     <div id="round-num" class="">
@@ -31,9 +29,7 @@ function pointToActive() {
     </div>
     <div id="p2-score" :class="{ 'is-oya': props.oya === 'p2' }">
       <p>PLAYER 2</p>
-      <template v-show="props.oya === 'p2'">
-        <nuxt-img loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 2." />
-      </template>
+      <nuxt-img v-show="props.oya === 'p2'" loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 2." />
       <p>{{ score.p2 }}</p>
     </div>
   </header>
