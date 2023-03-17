@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <div class="field">
-      <Card v-for="card in cards" :key="card" :name="card" loading="eager"/>
+      <Card v-for="card in cards" :key="card" :name="card" />
   </div>
 </template>
 
