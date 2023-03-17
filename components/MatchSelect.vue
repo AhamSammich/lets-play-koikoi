@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   showModal: boolean;
   matchSrc?: string;
   cards: string[];
 }>();
 
-const emits = defineEmits(["match-select"]);
+defineEmits(["match-select"]);
 </script>
 
 <template>

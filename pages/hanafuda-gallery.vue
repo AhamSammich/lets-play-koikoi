@@ -26,8 +26,14 @@ function applyTheme(designName: string) {
       <h1 class="text-2xl">🎴<span>Hanafuda Gallery</span></h1>
       <div class="flex flex-col self-center gap-2 pl-4 max-w-2xl">
         <p class="text-lg">🎊 Welcome! 🎊</p>
-        <p>This collection features some awesome hanafuda designs by various artists!🔥 Play Koi-Koi using your favorite design by clicking on <em>Play this deck!</em></p>
-        <p>If there's a design you would like to have added, <a href="https://www.twitter.com/hammons_dev" target="_blank">let me know!💬</a></p>
+        <p>
+          This collection features some awesome hanafuda designs by various artists!🔥
+          Play Koi-Koi using your favorite design by clicking on <em>Play this deck!</em>
+        </p>
+        <p>
+          If there's a design you would like to have added,
+          <a href="https://www.twitter.com/hammons_dev" target="_blank">let me know!💬</a>
+        </p>
       </div>
     </div>
     <article
@@ -36,15 +42,22 @@ function applyTheme(designName: string) {
       class="flex flex-col items-center h-max overflow-x-hidden px-4 py-8"
     >
       <section class="h-max w-full max-w-5xl grid gap-1 md:px-8 mb-4">
-        <div class="grid grid-cols-2">
+        <div class="flex justify-between">
           <h2>✨{{ design.name }}</h2>
-          <NuxtLink class="text-yellow-200 text-xs" to="/" @click="applyTheme(key)"
-            ><p class="text-right mr-2"><Icon name="material-symbols:play-circle-rounded" class="text-lg mb-1 mx-1" />Play this deck!</p></NuxtLink
+          <NuxtLink
+            class="play text-yellow-200 text-xs w-max mr-4"
+            to="/"
+            @click="applyTheme(key)"
           >
+            <Icon
+              name="material-symbols:play-circle-rounded"
+              class="text-lg mb-1 mx-1"
+            />Play this deck!
+          </NuxtLink>
         </div>
-        <div class="flex flex-col gap-1 md:max-w-2xl text-sm">
+        <div class="flex flex-col gap-1 md:max-w-2xl text-sm px-4">
           <p>{{ design.attribution }}</p>
-          <a class="text-yellow-200" :href="design.url" target="_blank"
+          <a class="text-yellow-200 w-max" :href="design.url" target="_blank"
             >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
           /></a>
         </div>
@@ -104,7 +117,7 @@ a {
   transition: translate 0.5s;
   color: var(--link-color);
 
-  &:has(p) {
+  &.play {
     font-family: "Potta One", cursive;
   }
 
