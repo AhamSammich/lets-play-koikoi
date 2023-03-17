@@ -392,7 +392,7 @@ async function runGame() {
     </div>
     <template v-show="activeP === 'p2' && TABLE.selectedCard.value && !draw">
       <div id="p2-reveal">
-        <StaticCard :name="TABLE.selectedCard.value" />
+        <StaticCard :name="TABLE.selectedCard.value" loading="eager" />
       </div>
     </template>
     <div id="p2-collection" class="collection">
@@ -413,7 +413,7 @@ async function runGame() {
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
       <div v-show="TABLE.selectedCard.value && draw" id="reveal">
-        <StaticCard :name="TABLE.selectedCard.value" />
+        <StaticCard :name="TABLE.selectedCard.value" loading="eager" />
       </div>
     </div>
     <div id="field">

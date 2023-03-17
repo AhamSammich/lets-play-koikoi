@@ -28,6 +28,14 @@ async function loadArr() {
   ready.value = true;
 }
 
+async function fetchCards() {
+  CARDS.forEach(async (cardName) => {
+      if (cards.includes(cardName)) return;
+      console.log(`Fetching ${cardName}...`);
+      fetch(`cards/${activeDesign.value}/webp/${cardName}.webp`);
+    });
+}
+
 function startGame() {
   started.value = true;
 }
