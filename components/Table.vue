@@ -629,7 +629,7 @@ async function runGame() {
   justify-self: flex-start;
   transform-origin: left;
   margin-left: 0.5rem;
-  z-index: 0;
+  z-index: -1;
 }
 
 @media (width < 500px) or (height < 500px) {
