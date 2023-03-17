@@ -1,13 +1,27 @@
 <script setup lang="ts">
 const props = defineProps<{
   rows?: number;
-  reversed?: boolean;
-  styleName?: string;
+  arrangement?: {
+    reversed?: boolean;
+    orderByName?: string[];
+  }
+  cardDesign?: string;
 }>();
 
-let cards = props.reversed ? CARDS_REV : CARDS;
-const cardStyle = props.styleName ? props.styleName : "";
+function arrangeCards() {
+  // Global constants CARDS and CARDS_REV defined in utils/match.ts
+  if (!props.arrangement) return CARDS;
+  let { orderByName, reversed } = props.arrangement;
+  if (orderByName) {
+    return orderByName;
+  } else if (reversed) {
+    return CARDS_REV;
+  } else {
+    return CARDS;
+  }
+}
 
+const cards = arrangeCards();
 const scrolling = ref(false);
 
 function finishLoading() {
@@ -17,8 +31,8 @@ function finishLoading() {
 
 <template>
   <div
-    :data-style="cardStyle"
-    :class="`card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardStyle}`"
+    :data-style="cardDesign"
+    :class="`card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardDesign}`"
     :style="`--display-rows: ${rows || 1};`"
     @scroll="finishLoading()"
   >
@@ -27,7 +41,7 @@ function finishLoading() {
       v-for="cardName in cards.slice(0, 9)"
       :key="cardName"
       :name="cardName"
-      :design="cardStyle"
+      :design="cardDesign"
       loading="eager"
       class="pointer-events-none"
     />
@@ -38,7 +52,7 @@ function finishLoading() {
         :key="cardName"
         :name="cardName"
         loading="lazy"
-        :design="cardStyle"
+        :design="cardDesign"
         class="pointer-events-none"
       />
     </template>

@@ -12,7 +12,7 @@ useServerSeoMeta({
 
 const designStore = useDesignStore();
 
-function applyTheme(designName: string) {
+function applyDesign(designName: string) {
   designStore.changeActive(designName);
   let designSelectElement = document.getElementById("card-design");
   if (designSelectElement instanceof HTMLSelectElement)
@@ -47,7 +47,7 @@ function applyTheme(designName: string) {
           <NuxtLink
             class="play text-yellow-200 text-xs w-max mr-4"
             to="/"
-            @click="applyTheme(key)"
+            @click="applyDesign(key)"
           >
             <Icon
               name="material-symbols:play-circle-rounded"
@@ -63,7 +63,7 @@ function applyTheme(designName: string) {
         </div>
       </section>
       <section class="w-full h-max flex justify-center">
-        <GalleryCardSheet :style-name="key" :reversed="design.reversed" />
+        <GalleryCardSheet :card-design="key" :arrangement="design.arrangement"/>
       </section>
     </article>
   </div>
