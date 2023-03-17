@@ -22,9 +22,9 @@ function applyDesign(designName: string) {
 
 <template>
   <div id="fuda-gallery" class="h-max w-screen overflow-y-scroll">
-    <div class="header min-h-16 flex flex-col justify-center p-2 gap-2">
+    <div class="header min-h-16 flex flex-col justify-center px-4 pt-4 pb-8 gap-2">
       <h1 class="text-2xl">🎴<span>Hanafuda Gallery</span></h1>
-      <div class="flex flex-col self-center gap-2 pl-4 max-w-2xl">
+      <div class="flex flex-col self-center gap-2 max-w-2xl">
         <p class="text-lg">🎊 Welcome! 🎊</p>
         <p>
           This collection features some awesome hanafuda designs by various artists!🔥
@@ -57,7 +57,7 @@ function applyDesign(designName: string) {
         </div>
         <div class="flex flex-col gap-1 md:max-w-2xl text-sm px-4">
           <p>{{ design.attribution }}</p>
-          <a class="text-yellow-200 w-max" :href="design.url" target="_blank"
+          <a class="text-yellow-200 max-w-full" :href="design.url" target="_blank"
             >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
           /></a>
         </div>
