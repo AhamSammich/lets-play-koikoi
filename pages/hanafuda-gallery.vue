@@ -42,7 +42,7 @@ function applyDesign(designName: string) {
       class="flex flex-col items-center h-max overflow-x-hidden px-4 py-8"
     >
       <section class="h-max w-full max-w-5xl grid gap-1 md:px-8 mb-4">
-        <div class="flex justify-between">
+        <div class="flex justify-between w-full">
           <h2>✨{{ design.name }}</h2>
           <NuxtLink
             class="play text-yellow-200 text-xs w-max mr-4"
