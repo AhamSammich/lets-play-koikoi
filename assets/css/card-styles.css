@@ -47,4 +47,14 @@
     );
     --card-border-color: #555;
   }
+
+  &.kc-original {
+    --card-bg-color: linear-gradient(
+      45deg,
+      darkred,
+      red,
+      palevioletred
+    );
+    --card-radius: 0.1rem;
+  }
 }
