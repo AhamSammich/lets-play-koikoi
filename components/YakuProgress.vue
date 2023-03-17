@@ -120,8 +120,7 @@ function allowedYaku(): YakuDetails[] {
 }
 
 #legend {
-  --card-width: 30px;
-  --card-radius: 0.25rem;
+  --card-width: 35px;
   transform-origin: bottom right;
   transition: scale 0.3s;
 

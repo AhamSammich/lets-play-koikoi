@@ -128,7 +128,7 @@ function goToGallery() {
   --menu-gray1: rgb(64, 73, 90);
   --menu-gray2: rgb(36, 43, 61);
   --menu-accent1: firebrick;
-  --menu-accent2: lightgoldenrodyellow;
+  --menu-accent2: rgb(254 240 138 / 1);
   --menu-speed: 0.5s;
 }
 
@@ -236,6 +236,7 @@ a:not(li a):hover {
   cursor: pointer;
   color: var(--menu-accent1);
 }
+
 .icon {
   margin-left: 0.5em;
   margin-bottom: 0.2em;

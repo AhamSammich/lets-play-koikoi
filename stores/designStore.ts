@@ -75,6 +75,22 @@ export const useDesignStore = defineStore("design", {
           ],
         },
       },
+      "hanami-hue": {
+        name: "Hanami",
+        attribution:
+        "Hanami Hanafuda designed by Jason Johnson of IndianWolf Studios LLC and illustrated by Antonietta Fazio-Johnson of Inner Hue Art Studio LLC!",
+        urlDescription: "Get this deck and more from IndianWolf Studios!",
+        url: "https://indianwolfstudios.com/shop/",
+      },
+      "sabling-silver": {
+        name: "SablingArt",
+        attribution: "Pokemon handafuda designed by SablingArt!",
+        urlDescription:
+        "Find more from @SablingArt on Tumblr, Twitter and Etsy!",
+        url: "https://sablingart.tumblr.com",
+        backImage: true,
+        arrangement: { reversed: true },
+      },
       "nobori-blue": {
         name: "Koinobori",
         attribution:
@@ -82,34 +98,18 @@ export const useDesignStore = defineStore("design", {
         urlDescription: "Back their project on Kickstarter!",
         url: "https://www.kickstarter.com/projects/iws/koinobori-playing-cards-hanafuda-poker-plastic",
       },
-      "sabling-silver": {
-        name: "SablingArt",
-        attribution: "Pokemon handafuda designed by SablingArt!",
-        urlDescription:
-          "Find more from @SablingArt on Tumblr, Twitter and Etsy!",
-        url: "https://sablingart.tumblr.com",
-        backImage: true,
-        arrangement: { reversed: true },
-      },
-      "hanami-hue": {
-        name: "Hanami",
+      "flash-black": {
+        name: "Flash Black",
         attribution:
-          "Hanami Hanafuda designed by Jason Johnson of IndianWolf Studios LLC and illustrated by Antonietta Fazio-Johnson of Inner Hue Art Studio LLC!",
-        urlDescription: "Get this deck and more from IndianWolf Studios!",
-        url: "https://indianwolfstudios.com/shop/",
+        "Traditional design from Hanafuda Flash and gamedesign.jp!",
+        urlDescription: "Free to play online!",
+        url: "https://www.gamedesign.jp/sp/hanafuda",
       },
       "ramen-red": {
         name: "Ramen Red",
         attribution: "Classic Hwatu design seen in Hanafuda Koi-Koi Ramen!",
         urlDescription: "Download and play for free!",
         url: "https://pelicapp.itch.io/hanafuda",
-      },
-      "flash-black": {
-        name: "Flash Black",
-        attribution:
-          "Traditional design from Hanafuda Flash and gamedesign.jp!",
-        urlDescription: "Free to play online!",
-        url: "https://www.gamedesign.jp/sp/hanafuda",
       },
     },
   }),
