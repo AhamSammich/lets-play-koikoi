@@ -42,16 +42,16 @@ function allowedYaku(): YakuDetails[] {
         </p>
       </template>
       <div v-if="yaku.cards" class="yaku-cards mt-1">
-        <StaticCard
+        <div
           v-for="card in yaku.cards"
-          :key="card"
-          :name="card"
           :class="{
             'opacity-40 translate-y-1': !collection1.includes(card),
             unavailable: collection2.includes(card),
           }"
           :data-name="getName(card)"
-        />
+        >
+          <StaticCard :key="card" :name="card" />
+        </div>
       </div>
       <p
         v-if="
@@ -69,7 +69,10 @@ function allowedYaku(): YakuDetails[] {
         >
       </p>
     </div>
-    <div id="legend" class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center">
+    <div
+      id="legend"
+      class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center"
+    >
       <div>
         <StaticCard name="kiri-no-kasu-1" class="opacity-40 unavailable" />
         <p>uncollectible</p>
@@ -88,7 +91,7 @@ function allowedYaku(): YakuDetails[] {
 
 <style scoped lang="postcss">
 #progress-screen {
-  --menu-gray: rgba(36, 43, 61, 0.9); 
+  --menu-gray: rgba(36, 43, 61, 0.9);
   background: var(--menu-gray);
 }
 .yaku-progress {
