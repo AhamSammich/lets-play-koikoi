@@ -19,6 +19,9 @@ const imgUrl = computed(() => `cards/${appliedDesign.value}/webp/${props.name}.w
 const backImgUrl = computed(() => `cards/${appliedDesign.value}/webp/card-back.webp`);
 
 const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false;
+function logLoaded() {
+  console.log(props.name);
+}
 </script>
 
 <template>
@@ -27,7 +30,7 @@ const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false
     <nuxt-img
       v-if="!name && hasCardBack"
       preset="card"
-      class="card rotate-180"
+      class="card down rotate-180"
       :loading="loading || 'lazy'"
       :src="backImgUrl"
       alt="face-down card"

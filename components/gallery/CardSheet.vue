@@ -66,7 +66,7 @@ function finishLoading() {
   --row-size: 4;
   grid-template-columns: repeat(
     var(--row-size),
-    minmax(calc(var(--card-width) + var(--card-border-w)), 1fr)
+    minmax(var(--card-width), 1fr)
   );
   min-height: var(--card-height);
   max-height: calc(var(--card-height) * var(--display-rows));
