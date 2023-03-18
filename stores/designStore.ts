@@ -16,6 +16,22 @@ export const useDesignStore = defineStore("design", {
     defaultDesign: "flash-black",
     activeDesign: "flash-black",
     cardDesigns: <Record<string, cardDesign>>{
+      "nishiki-fuda": {
+        name: "Nishiki Fuda",
+        attribution:
+          "Design by Hanako of Estudio Artes in Osaka, Japan!",
+        urlDescription: "Buy this deck and others from their online store!",
+        url: "https://nishikie.stores.jp",
+        // backImage: true,
+      },
+      "parish-cherry": {
+        name: "Parish Cherry",
+        attribution:
+          "Design by Parish Cherry, an illustrator & graphic designer based in Los Angeles, California!",
+        urlDescription: "See more at ParishCherry.com!",
+        url: "https://parishcherry.com",
+        backImage: true,
+      },
       "kc-original": {
         name: "Moon Rabbit Original",
         attribution:

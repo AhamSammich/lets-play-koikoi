@@ -148,6 +148,7 @@ onMounted(async () => {
       src="bg/webp/grey-hills-1024.webp"
       alt="Background image of the moon over silver grass."
       loading="eager"
+      preload
       :class="{ 'scroll-up': started }"
     />
     <Start />

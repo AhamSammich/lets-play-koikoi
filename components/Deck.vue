@@ -64,7 +64,7 @@ onUpdated(async () => {
   <!-- Set image for card back if provided in designStore. -->
   <nuxt-img
     v-if="designStore.hasBackImage"
-    class="card"
+    class="card down"
     :src="`cards/${activeDesign}/webp/card-back.webp`"
     alt="deck of cards"
   />

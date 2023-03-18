@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     "nuxt-vitest",
     "@pinia/nuxt",
     "@nuxt/image-edge",
+    '@nuxt/devtools',
   ],
   plugins: [
     {
