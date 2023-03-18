@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useImage } from "@vueuse/core";
 import { useDesignStore } from "~~/stores/designStore";
 
-const started = STORE.useStart();
 const designStore = useDesignStore();
 const activeDesign = computed(() => designStore.activeDesign);
 
@@ -17,32 +15,19 @@ async function randomCards() {
 }
 
 const cards = await randomCards();
-const ready = ref(false);
+const imagesLoading = ref(cards.length);
+const ready = computed(() => !imagesLoading.value);
 
-// Set ready -> true when all images loaded.
-async function loadArr() {
-  let arr = cards.map((card) =>
-    useImage({ src: `cards/${activeDesign.value}/webp/${card}.webp` })
-  );
-  while (!arr.every((img) => img.isReady)) await sleep(100);
-  ready.value = true;
+// ready == true when all images loaded.
+function countLoaded() {
+  imagesLoading.value--;
 }
 
-async function fetchCards() {
-  CARDS.forEach(async (cardName) => {
-      if (cards.includes(cardName)) return;
-      console.log(`Fetching ${cardName}...`);
-      fetch(`cards/${activeDesign.value}/webp/${cardName}.webp`);
-    });
-}
+const started = STORE.useStart();
 
 function startGame() {
   started.value = true;
 }
-
-onMounted(() => {
-  loadArr();
-});
 </script>
 
 <template>
@@ -52,36 +37,43 @@ onMounted(() => {
       started ? '' : 'show'
     } ${activeDesign} flex flex-col align-center justify-center gap-8`"
   >
+
+    <!-- Show loader -->
+    <div v-if="imagesLoading" class="card loading rotate-12"></div>
+
+    <!-- Hide while loading and after pressing START -->
     <div
       id="hero-cards"
       :class="{
         'flex justify-center z-0 -rotate-12': true,
-        'opacity-0': started,
+        'opacity-0': started || imagesLoading,
       }"
     >
-      <template v-if="ready">
-        <StaticCard
-          v-for="cardName in cards"
-          :key="cardName"
-          :name="cardName"
-        />
-      </template>
-      <template v-else>
-        <div class="card loading"></div>
-      </template>
+      <StaticCard
+        v-for="cardName in cards"
+        :key="cardName"
+        :name="cardName"
+        loading="eager"
+        @img-loaded="countLoaded"
+      />
     </div>
-    <h1 id="hero-title" :class="{ 'text-center opacity-0': true, ready }">
-      <span>Let's Play!</span>花札 KOI-KOI
-    </h1>
-    <button
-      :class="{ 'opacity-0': true, ready }"
-      id="start-btn"
-      @click="startGame()"
-      autofocus
-      tabindex="0"
-    >
-      START
-    </button>
+
+    <template v-if="(imagesLoading < cards.length)">
+      <h1 id="hero-title" :class="{ 'text-center opacity-0': true, ready }">
+        <span>Let's Play!</span>花札 KOI-KOI
+      </h1>
+      <button
+        :class="{ 'opacity-0': true, ready }"
+        id="start-btn"
+        @click="startGame()"
+        autofocus
+        tabindex="0"
+      >
+        START
+      </button>
+    </template>
+
+    <!-- Footer -->
     <p
       class="text-white text-xs font-mono text-center fixed bottom-0 w-screen mb-2 opacity-50"
     >

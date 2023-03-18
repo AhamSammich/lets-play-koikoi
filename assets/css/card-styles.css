@@ -7,94 +7,79 @@
   --card-glow-color: lightgoldenrodyellow;
 }
 
-* {
-  &.ramen-red {
+
+/* Ensure image is not upside-down */
+.down:not(#deck .down) {
+  rotate: 180deg;
+}
+
+.ramen-red {
+}
+
+.flash-black {
+  --card-border-color: slategray;
+  --card-radius: 0.1rem;
+  --card-bg-color: #333;
+}
+
+.nobori-blue {
+  --card-bg-color: linear-gradient(225deg, skyblue, lightsteelblue);
+  --card-border-color: #333;
+  --card-radius: 0.5rem;
+}
+
+.sabling-art {
+  --card-radius: calc(0.2 * var(--card-width));
+  --card-glow-color: red;
+
+  & .down {
+    --card-bg-color: url("/cards/sabling-art/webp/card-back.webp");
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
   }
+}
 
-  &.flash-black {
-    --card-border-color: slategray;
-    --card-radius: 0.1rem;
-    --card-bg-color: #333;
+.hanami-hue {
+  --card-bg-color: linear-gradient(45deg, seagreen, palegreen);
+  --card-border-color: #555;
+}
+
+.kc-original {
+  --card-radius: 0.1rem;
+
+  & .down {
+    --card-border-w: 2px;
+    background-image: url("/cards/kc-original/webp/card-back.webp") !important;
+    background-color: lightgray !important;
+    background-size: 40% !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom 5% right 5% !important;
   }
+}
 
-  &.nobori-blue {
-    --card-bg-color: linear-gradient(225deg, skyblue, lightsteelblue);
-    --card-border-color: #333;
-    --card-radius: 0.5rem;
+.nishiki-fuda {
+  --card-radius: 0.1rem;
+  --card-border-color: #555;
+
+  & .down {
+    --card-bg-color: url("/cards/nishiki-fuda/webp/card-back.webp"),
+      linear-gradient(45deg, gray, #111);
+    background-blend-mode: screen;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
   }
+}
 
-  &.sabling-silver {
-    --card-bg-color: linear-gradient(
-      225deg,
-      red 15%,
-      #333,
-      silver 30%,
-      slategray
-    );
-    --card-radius: calc(0.2 * var(--card-width));
-    --card-glow-color: red;
-  }
+.parish-cherry {
+  --card-radius: 0.1rem;
 
-  &.hanami-hue {
-    --card-bg-color: linear-gradient(45deg, seagreen, palegreen);
-    --card-border-color: #555;
-  }
-
-  &.kc-original {
-    --card-radius: 0.1rem;
-    
-    & .down {
-      --card-border-w: 2px;
-      background-image: url("public/cards/kc-original/webp/card-back.webp") !important;
-      background-color: lightgray  !important;
-      background-size: 40% !important;
-      background-repeat: no-repeat !important;
-      background-position: bottom 5% right 5% !important;
-      
-      /* Ensure image is not upside-down */
-      &:not(#deck .down) {
-        rotate: 180deg;
-      }
-    }
-  }
-
-  &.nishiki-fuda {
-    --card-radius: 0.1rem;
-    --card-border-color: #555;
-
-    & .down {
-      --card-bg-color: url("public/cards/nishiki-fuda/webp/card-back.webp"),
-        linear-gradient(45deg, gray, #111);
-      background-blend-mode: screen;
-      background-size: contain !important;
-      background-repeat: no-repeat !important;
-      background-position: center !important;
-      
-      /* Ensure image is not upside-down */
-      &:not(#deck .down) {
-        rotate: 180deg;
-      }
-    }
-  }
-
-  &.parish-cherry {
-    --card-bg-color: linear-gradient(225deg, palevioletred, firebrick 50%);
-    --card-radius: 0.1rem;
-
-    & .down {
-      position: relative;
-    }
-
-    & .down::before {
-      content: "";
-      display: block;
-      position: absolute;
-      width: var(--card-width);
-      aspect-ratio: 2/3;
-      background: var(--card-bg-color);
-      top: 0;
-      left: 0;
-      translate: -50% -50%;
-    }
+  & .down {
+    --card-bg-color: url("/cards/parish-cherry/webp/card-back.webp"),
+    linear-gradient(225deg, palevioletred, firebrick 50%);
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
   }
 }

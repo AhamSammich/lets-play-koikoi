@@ -125,8 +125,14 @@ onUpdated(async () => {
   }
 
   &.loading {
-    max-width: 50px;
+    transform-origin: center;
+    margin: 0 auto;
+    scale: 0.8;
     opacity: 0.5;
+
+    &.down {
+      rotate: 0deg !important;
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       animation: twirl 2.5s infinite alternate ease-in-out;
