@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { useDesignStore } from "../stores/designStore";
-
 const props = defineProps<{
   drawCard: boolean | null;
 }>();
 const emits = defineEmits(["deal", "draw"]);
 
 // Get applied styles/images
-const designStore = useDesignStore();
-const activeDesign = computed(() => designStore.activeDesign);
 let remainingCards: string[];
 let progressBar: HTMLElement;
 
@@ -61,14 +57,7 @@ onUpdated(async () => {
 
 <template>
   <div id="deck-progress"></div>
-  <!-- Set image for card back if provided in designStore. -->
-  <nuxt-img
-    v-if="designStore.hasBackImage"
-    class="card down"
-    :src="`cards/${activeDesign}/webp/card-back.webp`"
-    alt="deck of cards"
-  />
-  <div v-else class="ml-1 card down"></div>
+  <div class="ml-1 card down"></div>
 </template>
 
 <style scoped lang="postcss">

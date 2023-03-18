@@ -63,7 +63,7 @@ function applyDesign(designName: string) {
         </div>
       </section>
       <section class="w-full h-max flex justify-center">
-        <GalleryCardSheet :card-design="key" :arrangement="design.arrangement"/>
+        <GalleryCardSheet :rows="3" :card-design="key" :arrangement="design.arrangement"/>
       </section>
     </article>
   </div>

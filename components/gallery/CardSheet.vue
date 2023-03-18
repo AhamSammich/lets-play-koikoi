@@ -4,7 +4,7 @@ const props = defineProps<{
   arrangement?: {
     reversed?: boolean;
     orderByName?: string[];
-  }
+  };
   cardDesign?: string;
 }>();
 
@@ -21,6 +21,7 @@ function arrangeCards() {
   }
 }
 
+const initialCardsToLoad = 8;
 const cards = arrangeCards();
 const scrolling = ref(false);
 
@@ -32,13 +33,21 @@ function finishLoading() {
 <template>
   <div
     :data-style="cardDesign"
-    :class="`card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardDesign}`"
+    :class="`relative card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardDesign}`"
     :style="`--display-rows: ${rows || 1};`"
     @scroll="finishLoading()"
+    @pointerenter="finishLoading()"
   >
-    <!-- Initially load the first 8 cards in the deck. -->
+    <p
+      v-if="!scrolling"
+      class="absolute w-max bottom-1 right-1 p-1 rounded-md text-xs bg-black text-yellow-200"
+    >
+      Load more
+      <Icon class="text-base" name="icon-park-solid:blocks-and-arrows" />
+    </p>
+    <!-- Initially load the first 12 cards in the deck. -->
     <StaticCard
-      v-for="cardName in cards.slice(0, 9)"
+      v-for="cardName in cards.slice(0, initialCardsToLoad)"
       :key="cardName"
       :name="cardName"
       :design="cardDesign"
@@ -48,7 +57,7 @@ function finishLoading() {
     <!-- Load the rest when user starts scrolling. -->
     <template v-if="scrolling">
       <StaticCard
-        v-for="cardName in cards.slice(9)"
+        v-for="cardName in cards.slice(initialCardsToLoad)"
         :key="cardName"
         :name="cardName"
         loading="lazy"
@@ -64,10 +73,8 @@ function finishLoading() {
   --card-width: 80px;
   --card-height: calc(var(--card-width) * 1.5);
   --row-size: 4;
-  grid-template-columns: repeat(
-    var(--row-size),
-    minmax(var(--card-width), 1fr)
-  );
+  --all-rows: 12;
+  grid-template-columns: repeat(var(--row-size), minmax(var(--card-width), 1fr));
   min-height: var(--card-height);
   max-height: calc(var(--card-height) * var(--display-rows));
 
@@ -86,6 +93,7 @@ function finishLoading() {
 @media (orientation: landscape) and (width > 768px) {
   .card-sheet {
     --row-size: 8;
+    max-height: calc(var(--card-height) * var(--all-rows));
   }
 }
 </style>

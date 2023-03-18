@@ -145,10 +145,11 @@ onMounted(async () => {
 
     <nuxt-img
       id="hero"
-      src="bg/webp/grey-hills-1024.webp"
+      preload
+      src="bg/webp/grey-hills-1920.webp"
+      sizes="sm:480px md:1280px lg:1400px xl:100vw"
       alt="Background image of the moon over silver grass."
       loading="eager"
-      preload
       :class="{ 'scroll-up': started }"
     />
     <Start />

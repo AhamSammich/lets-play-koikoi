@@ -3,49 +3,44 @@
 // If no name is passed to props, card will be face-down.
 import { useImage } from "@vueuse/core";
 import { useDesignStore } from "~~/stores/designStore";
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   name?: string;
   design?: string;
   loading?: "lazy" | "eager";
-}>();
+  noAnimation?: boolean;
+}>(), {
+  loading: "lazy",
+  noAnimation: true,
+});
+
+defineEmits(["img-loaded"]);
 
 const designStore = useDesignStore();
 
 const activeDesign = computed(() => designStore.activeDesign);
+
 const appliedDesign = computed(() => props.design || activeDesign.value);
-const hasCardBack = computed(() => designStore.hasBackImage);
 
 const imgUrl = computed(() => `cards/${appliedDesign.value}/webp/${props.name}.webp`);
-const backImgUrl = computed(() => `cards/${appliedDesign.value}/webp/card-back.webp`);
 
 const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false;
-function logLoaded() {
-  console.log(props.name);
-}
 </script>
 
 <template>
-  <div class="no-animate">
+  <div :class="{ 'no-animation': noAnimation }">
     <!-- Render card face-down -->
-    <nuxt-img
-      v-if="!name && hasCardBack"
-      preset="card"
-      class="card down rotate-180"
-      :loading="loading || 'lazy'"
-      :src="backImgUrl"
-      alt="face-down card"
-    />
-    <div v-else-if="!name" class="down card"></div>
+    <div v-if="!name" class="down card"></div>
 
     <!-- Render card face-up -->
-    <div v-else-if="isLoading" class="card loading"></div>
+    <div v-else-if="isLoading" class="card down loading"></div>
     <div v-else>
       <nuxt-img
         preset="card"
         class="card"
-        :loading="loading || 'lazy'"
+        :loading="loading"
         :src="`cards/${appliedDesign}/webp/${props.name}.webp`"
         :alt="name"
+        @load="$emit('img-loaded')"
       />
     </div>
   </div>
@@ -54,7 +49,7 @@ function logLoaded() {
 <style scoped>
 /* Uses global css variables */
 /* @import url(~assets/css/card-styles.css); */
-.no-animate * {
+.no-animation * {
   transition-duration: 0ms !important;
   transition-delay: 0ms !important;
   animation-duration: 0ms !important;
