@@ -1,12 +1,17 @@
 <script setup lang="ts">
-defineProps<{
+import { usePlayerStore } from "~~/stores/playerStore";
+
+const props = defineProps<{
   player: string;
-  cards: string[];
 }>();
 
 // Emit card detail to Table
 const emits = defineEmits(["check-match"]);
 const activeP = STORE.useActiveP();
+const playerStore = usePlayerStore();
+
+// const cards = props.player === "p1" ? STORE.useHand1() : STORE.useHand2();
+const cards = computed(() => playerStore[props.player].cardsInHand);
 
 // If match, props.cards will be updated
 function selectCard(cardName: string) {
@@ -22,7 +27,6 @@ function selectCard(cardName: string) {
       <Card
         v-for="card in cards"
         :name="card"
-        :interactive="player === 'p1'"
         @card-select="(cardName: string) => selectCard(cardName)"
       />
     </template>

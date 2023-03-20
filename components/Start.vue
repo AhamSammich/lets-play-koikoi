@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { useDesignStore } from "~~/stores/designStore";
+import { useGameStore } from "~~/stores/gameStore";
 
 const designStore = useDesignStore();
-const activeDesign = computed(() => designStore.activeDesign);
+const activeDesignName = computed(() => designStore.activeDesignName);
+
+const gameStore = useGameStore();
+const gameIsRunning = computed(() => gameStore.gameInProgress);
 
 // Get 5 random cards from the deck to display.
 async function randomCards() {
@@ -23,10 +27,8 @@ function countLoaded() {
   imagesLoading.value--;
 }
 
-const started = STORE.useStart();
-
 function startGame() {
-  started.value = true;
+  gameStore.startGame();
 }
 </script>
 
@@ -34,8 +36,8 @@ function startGame() {
   <section
     id="start-page"
     :class="`${
-      started ? '' : 'show'
-    } ${activeDesign} flex flex-col align-center justify-center gap-8`"
+      gameIsRunning ? '' : 'show'
+    } ${activeDesignName} flex flex-col align-center justify-center gap-8`"
   >
 
     <!-- Show loader -->
@@ -46,7 +48,7 @@ function startGame() {
       id="hero-cards"
       :class="{
         'flex justify-center z-0 -rotate-12': true,
-        'opacity-0': started || imagesLoading,
+        'opacity-0': gameIsRunning || imagesLoading,
       }"
     >
       <StaticCard

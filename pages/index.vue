@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { useDesignStore } from "~~/stores/designStore";
+import { useGameStore } from "~~/stores/gameStore";
 
 useServerSeoMeta({
   title: "Let's Play Koi-Koi!",
@@ -11,12 +12,13 @@ useServerSeoMeta({
   twitterCard: "summary_large_image",
 });
 
-const activeDesign = computed(() => useDesignStore().activeDesign);
+const activeDesignName = toRef(useDesignStore(), "activeDesignName");
+const gameStore = useGameStore();
+const gameIsRunning = computed(() => gameStore.gameIsRunning);
 
 const roundNum = STORE.useRoundNum();
 const score1: Ref<number> = STORE.useScore1();
 const score2: Ref<number> = STORE.useScore2();
-const started = STORE.useStart();
 const oya = STORE.useCurrentOya();
 const showProgress = ref(false);
 
@@ -69,7 +71,7 @@ async function saveLocalData() {
 }
 
 function endGame() {
-  started.value = false;
+  gameStore.endGame();
   Object.keys(saveData).forEach((key) => localStorage.removeItem(key));
 }
 
@@ -117,14 +119,14 @@ onMounted(async () => {
   <header class="flex fixed top-0 justify-start w-max h-max z-20">
     <MenuButton
       ico-name="material-symbols:arrow-back"
-      :class="`${started ? '' : 'hidden'} m-4 opacity-50`"
+      :class="`${gameIsRunning ? '' : 'hidden'} m-4 opacity-50`"
       close-only
       @close-menu="endGame()"
     />
   </header>
 
-  <main :class="activeDesign">
-    <template v-if="started">
+  <main :class="activeDesignName">
+    <template v-if="gameIsRunning">
       <div
         id="progress-btn"
         :class="`z-40 fixed top-16 right-4 ${
@@ -150,10 +152,10 @@ onMounted(async () => {
       sizes="sm:480px md:1280px lg:1400px xl:100vw"
       alt="Background image of the moon over silver grass."
       loading="eager"
-      :class="{ 'scroll-up': started }"
+      :class="{ 'scroll-up': gameIsRunning }"
     />
     <Start />
-    <template v-if="started">
+    <template v-if="gameIsRunning">
       <Table @next-round="(results) => handleNext(results)" @reset="resetGame()" />
       <StatusBar
         :round-num="roundNum"

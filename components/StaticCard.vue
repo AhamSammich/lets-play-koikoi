@@ -15,13 +15,9 @@ const props = withDefaults(defineProps<{
 
 defineEmits(["img-loaded"]);
 
-const designStore = useDesignStore();
+const activeDesignName = computed(() => useDesignStore().activeDesignName);
 
-const activeDesign = computed(() => designStore.activeDesign);
-
-const appliedDesign = computed(() => props.design || activeDesign.value);
-
-const imgUrl = computed(() => `cards/${appliedDesign.value}/webp/${props.name}.webp`);
+const imgUrl = computed(() => `cards/${props.design || activeDesignName.value}/webp/${props.name}.webp`);
 
 const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false;
 </script>
@@ -38,7 +34,7 @@ const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false
         preset="card"
         class="card"
         :loading="loading"
-        :src="`cards/${appliedDesign}/webp/${props.name}.webp`"
+        :src="imgUrl"
         :alt="name"
         @load="$emit('img-loaded')"
       />

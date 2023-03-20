@@ -1,26 +1,30 @@
 <script setup lang="ts">
-const isOpen = ref(false);
+import { storeToRefs } from "pinia";
+import { useGameStore } from "~~/stores/gameStore";
+
+const gameStore = useGameStore();
+const { menuOpen, gameInProgress } = storeToRefs(gameStore);
 const guideOpen = ref(false);
 const showOptions = ref(false);
-const started = STORE.useStart();
 const route = useRoute();
 
 function openMenu() {
-  isOpen.value = true;
+  gameStore.openMenu();
 }
 
 function closeMenu() {
-  isOpen.value = false;
+  gameStore.closeMenu();
   guideOpen.value = false;
   showOptions.value = false;
 }
 
 function goToStart() {
   closeMenu();
+  // gameStore.startGame();
 }
 
 function goToGallery() {
-  started.value = false;
+  gameStore.endGame();
   closeMenu();
 }
 </script>
@@ -28,9 +32,13 @@ function goToGallery() {
 <template>
   <div
     id="menu-btn"
-    :class="`fixed z-50 top-4 right-4 ${isOpen ? 'opacity-100' : 'opacity-50'}`"
+    :class="`fixed z-50 top-4 right-4 ${menuOpen ? 'opacity-100' : 'opacity-50'}`"
   >
-    <MenuButton :forceState="isOpen" @open-menu="openMenu()" @close-menu="closeMenu()" />
+    <MenuButton
+      :forceState="menuOpen"
+      @open-menu="openMenu()"
+      @close-menu="closeMenu()"
+    />
   </div>
   <div
     id="menu-backdrop"
@@ -40,7 +48,7 @@ function goToGallery() {
   <menu
     id="menu-container"
     class="font-mono text-white fixed right-0 top-0 translate-x-full scale-x-0 max-h-screen w-screen"
-    :aria-expanded="isOpen"
+    :aria-expanded="menuOpen"
   >
     <div
       id="menu"
@@ -59,7 +67,7 @@ function goToGallery() {
           </li>
           <li v-if="route.name !== 'hanafuda-gallery'">
             <NuxtLink
-              :class="{ 'opacity-50 pointer-events-none': started }"
+              :class="{ 'opacity-50 pointer-events-none': gameInProgress }"
               to="/hanafuda-gallery"
               @click="goToGallery()"
             >
@@ -112,11 +120,15 @@ function goToGallery() {
         class="w-full flex justify-center items-end pb-4"
       >
         <a href="https://www.github.com/ahamsammich/lets-play-koikoi" target="_blank"
-          ><Icon name="mdi:github"
-        /><span class="w-0 h-0 opacity-0 absolute">Star this project on GitHub</span></a>
+          ><Icon name="mdi:github" /><span class="w-0 h-0 opacity-0 absolute"
+            >Star this project on GitHub</span
+          ></a
+        >
         <a href="https://www.twitter.com/hammons_dev" target="_blank"
-          ><Icon name="mdi:twitter"
-        /><span class="w-0 h-0 opacity-0 absolute">Follow Andre on Twitter</span></a>
+          ><Icon name="mdi:twitter" /><span class="w-0 h-0 opacity-0 absolute"
+            >Follow Andre on Twitter</span
+          ></a
+        >
       </nav>
     </div>
   </menu>
@@ -128,7 +140,7 @@ function goToGallery() {
   --menu-gray1: rgb(64, 73, 90);
   --menu-gray2: rgb(36, 43, 61);
   --menu-accent1: firebrick;
-  --menu-accent2: rgb(254 240 138 / 1);
+  --menu-accent2: lightgoldenrodyellow;
   --menu-speed: 0.5s;
 }
 

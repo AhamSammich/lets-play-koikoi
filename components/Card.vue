@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { useImage } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { useDesignStore } from "../stores/designStore";
 const props = defineProps<{
   name: string;
   loading?: "lazy" | "eager";
-  interactive?: boolean;
   forcedStyle?: string;
 }>();
 const emits = defineEmits(["card-select"]);
 
+const { activeDesignName } = storeToRefs(useDesignStore());
 const imgFormat = "webp";
-const activeDesign = computed(() => useDesignStore().activeDesign);
 const imgUrl = computed(
   () =>
-    `cards/${props.forcedStyle || activeDesign.value}/${imgFormat}/${
+    `cards/${props.forcedStyle || activeDesignName.value}/${imgFormat}/${
       props.name
     }.${imgFormat}`
 );
@@ -21,14 +21,13 @@ const { isLoading } = useImage({ src: imgUrl.value });
 
 // Dynamically set the glowing border radius
 const glowRadius = computed(() =>
-  getComputedStyle(document.querySelector(`.${activeDesign.value}`)!).getPropertyValue(
+  getComputedStyle(document.querySelector(`.${activeDesignName.value}`)!).getPropertyValue(
     "--card-radius"
   )
 );
 
 const previewCard = STORE.usePreview();
-const isMatched = () =>
-  getFlower(props.name) === getFlower(previewCard.value);
+const isMatched = () => getFlower(props.name) === getFlower(previewCard.value);
 
 // Mouseover to preview card matches
 function handleHover(e: Event) {
@@ -85,7 +84,7 @@ onUpdated(async () => {
       v-else
       preset="card"
       :alt="`Card image for ${getName(props.name).toUpperCase()}`"
-      :src="`cards/${forcedStyle || activeDesign}/${imgFormat}/${
+      :src="`cards/${forcedStyle || activeDesignName}/${imgFormat}/${
         props.name
       }.${imgFormat}`"
       :loading="loading || 'lazy'"

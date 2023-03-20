@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { useDesignStore } from "~~/stores/designStore";
+import { useGameStore } from "~~/stores/gameStore";
 
 const designStore = useDesignStore();
-const designs = (): Record<string, Record<string, any>> => designStore.cardDesigns;
-const started = STORE.useStart();
+
+const gameStore = useGameStore();
+const started = toRef(gameStore, "gameInProgress");
 
 const settings: Record<string, Ref> = {
   maxRounds: <Ref<number>>RULES.useMaxRounds(),
@@ -14,13 +16,12 @@ const settings: Record<string, Ref> = {
 };
 
 const INPUTS: Map<string, any[]> = new Map();
-const activeDesign = computed(() => designStore.activeDesign);
-const designProps = computed(() => designStore.getActiveProps);
+const activeDesign = computed(() => designStore.getActiveDesign);
 
 function updateDesign(target: any) {
   if (!(target instanceof HTMLSelectElement)) return;
   let designName = target.value;
-  designStore.changeActive(designName);
+  designStore.setActiveDesign(designName);
 }
 
 async function loadDesign() {
@@ -29,9 +30,9 @@ async function loadDesign() {
   let savedDesign = localStorage.getItem("cardDesign");
   let designSelectElement = document.getElementById("card-design");
   // Use a default design if none saved.
-  designStore.changeActive(savedDesign || designStore.defaultDesign);
+  designStore.setActiveDesign(savedDesign);
   if (designSelectElement instanceof HTMLSelectElement)
-    designSelectElement.value = savedDesign || designStore.defaultDesign;
+    designSelectElement.value = activeDesign.value.name;
 }
 
 function updateRuleSet(target: any) {
@@ -102,8 +103,8 @@ onMounted(async () => {
   });
 
   watchEffect(() => {
-    console.log(`Updated cardDesign -> ${activeDesign.value}`);
-    localStorage.setItem("cardDesign", activeDesign.value);
+    console.log(`Updated cardDesign -> ${activeDesign.value.name}`);
+    localStorage.setItem("cardDesign", activeDesign.value.name);
   });
 });
 </script>
@@ -231,16 +232,14 @@ onMounted(async () => {
           class="px-4 py-1 text-sm bg-transparent outline outline-yellow-200 focus-within:bg-gray-900"
           @change="(e) => updateDesign(e.target)"
         >
-          <option v-for="(design, key) in designs()" :key="key" :value="key">
-            {{ design.name }}
+          <option v-for="(design, key) in designStore.getDesigns" :key="key" :value="key">
+            {{ design.title }}
           </option>
-          <!-- <option value="flash-black">Flash Black</option>
-          <option value="nobori-blue">Nobori Blue</option> -->
         </select>
         <div id="attribution" class="text-sm">
-          <p class="mb-1">{{ designProps.attribution }}</p>
-          <a class="text-yellow-200" :href="designProps.url" target="_blank"
-            >{{ designProps.urlDescription }}<Icon name="mi:external-link"
+          <p class="mb-1">{{ activeDesign.attribution }}</p>
+          <a class="text-yellow-200" :href="activeDesign.url" target="_blank"
+            >{{ activeDesign.urlDescription }}<Icon name="mi:external-link"
           /></a>
         </div>
       </div>
