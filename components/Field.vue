@@ -1,13 +1,14 @@
-<script setup lang="ts">
+<script setup lang="ts">import { useTableStore } from '~~/stores/tableStore';
 
 defineProps<{
   cards: string[];
 }>();
 </script>
 
+
 <template>
   <div class="field">
-      <Card v-for="card in cards" :key="card" :name="card" />
+    <Card v-for="card in cards" :key="card" :name="card" />
   </div>
 </template>
 
@@ -19,17 +20,16 @@ defineProps<{
   align-items: flex-start;
   gap: 0.5rem;
   overflow: visible;
-  pointer-events: none;
 
-  @media (orientation: landscape) {
+  @media (orientation: landscape) and (width > 768px) {
     max-width: calc(var(--card-width) * 9);
 
     & :nth-child(9) {
       margin-left: 5%;
     }
 
-    & :nth-child(n+9) {
-      margin-top:  -40px;
+    & :nth-child(n + 9) {
+      margin-top: -40px;
     }
 
     &:has(:nth-child(9)) .card {
@@ -37,7 +37,7 @@ defineProps<{
     }
   }
 
-  @media (orientation: portrait) {
+  @media (orientation: portrait) or (width <= 768px) {
     max-width: calc(var(--card-width) * 5);
     flex-direction: row;
 
@@ -45,7 +45,7 @@ defineProps<{
       margin-left: 10%;
     }
 
-    & :nth-child(n+5) {
+    & :nth-child(n + 5) {
       margin-top: -10%;
     }
   }

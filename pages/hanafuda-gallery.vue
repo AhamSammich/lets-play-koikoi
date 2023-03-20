@@ -13,7 +13,7 @@ useServerSeoMeta({
 const designStore = useDesignStore();
 
 function applyDesign(designName: string) {
-  designStore.changeActive(designName);
+  designStore.setActiveDesign(designName);
   let designSelectElement = document.getElementById("card-design");
   if (designSelectElement instanceof HTMLSelectElement)
     designSelectElement.value = designName;
@@ -37,13 +37,13 @@ function applyDesign(designName: string) {
       </div>
     </div>
     <article
-      v-for="(design, key) in designStore.cardDesigns"
+      v-for="(design, key) in designStore.getDesigns"
       :key="key"
       class="flex flex-col items-center h-max overflow-x-hidden px-4 py-8"
     >
       <section class="h-max w-full max-w-5xl grid gap-1 md:px-8 mb-4">
         <div class="flex justify-between w-full">
-          <h2>✨{{ design.name }}</h2>
+          <h2>✨{{ design.title }}</h2>
           <NuxtLink
             class="play text-yellow-200 text-xs w-max mr-4"
             to="/"

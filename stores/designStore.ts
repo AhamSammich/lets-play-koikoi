@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 type cardDesign = {
   name: string;
+  title: string;
   attribution?: string;
   urlDescription?: string;
   url?: string;
@@ -14,31 +15,32 @@ type cardDesign = {
 
 const CARD_DESIGNS: Record<string, cardDesign> = {
   "nishiki-fuda": {
-    name: "Nishiki Fuda",
-    attribution:
-      "Design by Hanako of Estudio Artes in Osaka, Japan!",
+    name: "nishiki-fuda",
+    title: "Nishiki Fuda",
+    attribution: "Design by Hanako of Estudio Artes in Osaka, Japan!",
     urlDescription: "Buy this deck and others from their online store!",
     url: "https://nishikie.stores.jp",
-    // backImage: true,
   },
   "sabling-art": {
-    name: "Sabling Art",
+    name: "sabling-art",
+    title: "Sabling Art",
     attribution: "Pokemon handafuda designed by SablingArt!",
-    urlDescription:
-    "Find more from @SablingArt on Tumblr, Twitter and Etsy!",
+    urlDescription: "Find more from @SablingArt on Tumblr, Twitter and Etsy!",
     url: "https://sablingart.tumblr.com",
     backImage: true,
     arrangement: { reversed: true },
   },
   "hanami-hue": {
-    name: "Hanami",
+    name: "hanami-hue",
+    title: "Hanami",
     attribution:
-    "Hanami Hanafuda designed by Jason Johnson of IndianWolf Studios LLC and illustrated by Antonietta Fazio-Johnson of Inner Hue Art Studio LLC!",
+      "Hanami Hanafuda designed by Jason Johnson of IndianWolf Studios LLC and illustrated by Antonietta Fazio-Johnson of Inner Hue Art Studio LLC!",
     urlDescription: "Get this deck and more from IndianWolf Studios!",
     url: "https://indianwolfstudios.com/shop/",
   },
   "kc-original": {
-    name: "Moon Rabbit Original",
+    name: "kc-original",
+    title: "Moon Rabbit Original",
     attribution:
       "Moon Rabbit Handafuda cards designed and illustrated by Kelsey Cretcher!",
     urlDescription: "Find more from Kelsey on DeviantArt!",
@@ -97,14 +99,16 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
     },
   },
   "nobori-blue": {
-    name: "Koinobori",
+    name: "nobori-blue",
+    title: "Koinobori",
     attribution:
       "Koinobori Handafuda brought to you by IndianWolf Studios LLC!",
     urlDescription: "Back their project on Kickstarter!",
     url: "https://www.kickstarter.com/projects/iws/koinobori-playing-cards-hanafuda-poker-plastic",
   },
   "parish-cherry": {
-    name: "Parish Cherry",
+    name: "parish-cherry",
+    title: "Parish Cherry",
     attribution:
       "Design by Parish Cherry, an illustrator & graphic designer based in Los Angeles, California!",
     urlDescription: "See more at ParishCherry.com!",
@@ -112,33 +116,47 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
     backImage: true,
   },
   "flash-black": {
-    name: "Flash Black",
-    attribution:
-    "Traditional design from Hanafuda Flash and gamedesign.jp!",
+    name: "flash-black",
+    title: "Flash Black",
+    attribution: "Traditional design from Hanafuda Flash and gamedesign.jp!",
     urlDescription: "Free to play online!",
     url: "https://www.gamedesign.jp/sp/hanafuda",
   },
   "ramen-red": {
-    name: "Ramen Red",
+    name: "ramen-red",
+    title: "Ramen Red",
     attribution: "Classic Hwatu design seen in Hanafuda Koi-Koi Ramen!",
     urlDescription: "Download and play for free!",
     url: "https://pelicapp.itch.io/hanafuda",
   },
-}
+};
 
 export const useDesignStore = defineStore("design", {
   state: () => ({
-    defaultDesign: "flash-black",
-    activeDesign: "flash-black",
+    defaultDesignName: "flash-black",
+    activeDesignName: "flash-black",
   }),
   actions: {
-    changeActive(designName: string) {
-      if (CARD_DESIGNS[designName]) this.activeDesign = designName;
+    setActiveDesign(designName?: string | null) {
+      if (!designName) {
+        this.activeDesignName = this.defaultDesignName;
+      } else if (this.getDesignNames.includes(designName)) {
+        this.activeDesignName = designName;
+      } else {
+        console.warn(
+          `${designName} not found in available designs.\nDefault design (${this.defaultDesignName}) was used instead.`
+        );
+      }
     },
   },
   getters: {
-    cardDesigns: () => CARD_DESIGNS,
-    hasBackImage: (state) => CARD_DESIGNS[state.activeDesign].backImage,
-    getActiveProps: (state) => CARD_DESIGNS[state.activeDesign],
+    hasBackImage: (state) => CARD_DESIGNS[state.activeDesignName].backImage,
+    getDesigns: () => CARD_DESIGNS,
+    getDesignNames: () => Object.keys(CARD_DESIGNS),
+    getDefaultDesign: (state) => CARD_DESIGNS[state.defaultDesignName],
+    getActiveDesign: (state) => CARD_DESIGNS[state.activeDesignName],
+    getDesignByName: (state) => {
+      (designName: string) => CARD_DESIGNS[designName];
+    },
   },
 });
