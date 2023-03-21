@@ -195,7 +195,8 @@ export function getYakuScore(yakuList: Record<string, string[]>): number {
   for (let yaku in yakuList) {
     let points = POINTS[yaku];
     switch (yaku) {
-      case "tan-zaku" || "tane-zaku":
+      case "tan-zaku":
+      case "tane-zaku":
         points += yakuList[yaku].length - 5;
         break;
       case "kasu":
