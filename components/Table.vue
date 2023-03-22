@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { Ref } from "vue";
 import { useGameStore } from "~~/stores/gameStore";
 import { usePlayerStore } from "~~/stores/playerStore";
@@ -31,6 +32,9 @@ const bonusForAnyKoiKoi = RULES.useBonusForAnyKoiKoi();
 const playerStore = usePlayerStore();
 const p2Collection = computed(() => playerStore.p2.collectedCards);
 const p1Collection = computed(() => playerStore.p1.collectedCards);
+
+const tableStore = useTableStore();
+const { cardSelected } = storeToRefs(tableStore);
 
 const P1: Player = {
   hand: STORE.useHand1(),
@@ -144,7 +148,7 @@ async function newGame(score?: number) {
   let roundResults = { winner: winner.value, yaku: winningYaku.value };
   emits("next-round", roundResults);
   await resetRefs();
-  TABLE.selectedCard.value = "";
+  tableStore.clearSelectedCard();
   WAIT.value = false;
   draw.value = null; // Triggers deck reshuffle
   await sleep();
@@ -172,14 +176,10 @@ function dealFirstHands(cards: string[]): void {
 // =======================  TRIGGERS  =========================== //
 // ============================================================== //
 
-async function setSelectedCard(cardName: string): Promise<void> {
-  TABLE.selectedCard.value = cardName;
-  await sleep(200);
-}
-
 async function revealCard(cardName: string) {
-  await setSelectedCard(cardName);
-  console.log(`Revealed ${TABLE.selectedCard.value} from the deck.`);
+  tableStore.setSelectedCard(cardName);
+  await sleep(400); // Allow animation to play
+  console.log(`Revealed ${cardSelected.value} from the deck.`);
 }
 
 async function removeFromHand(
@@ -218,12 +218,11 @@ async function collectCards(
 // =======================  MATCHING  =========================== //
 // ============================================================== //
 
-function aiFindMatch(): string {
+function aiSelectedCard(): string {
   let aiCard = "";
-  let matchedCards: string[] = [];
   for (let card of [...playerStore.p2.cardsInHand]) {
     aiCard = card;
-    matchedCards = matchCardInArr(card, TABLE.hand.value);
+    let matchedCards = matchCardInArr(card, TABLE.hand.value);
     if (matchedCards.length) {
       console.log(`%cPlayer 2 matched ${aiCard} with ${matchedCards}`, "color: yellow;");
       break;
@@ -308,34 +307,30 @@ async function runGame() {
   let waiting = () => WAIT.value;
   let reset = false;
 
-  let selectedCard: string;
+  let cardPlayed: string;
   let matches: string[];
-  let aiPlay = false;
+  let aiPlaying = () => activeP.value === "p2";
+
   while (gameIsRunning.value) {
     if (reset) break;
 
-    while (gameIsRunning.value) {
-      aiPlay = activeP.value === "p2";
-      if (aiPlay && draw.value) break;
-      if (aiPlay && !draw.value) {
-        await setSelectedCard(aiFindMatch());
-        break;
-      } else if (TABLE.selectedCard.value && !aiPlay) {
-        break;
+    while (!cardSelected.value) {
+      if (aiPlaying() && !draw.value) {
+        let aiCard = aiSelectedCard();
+        tableStore.setSelectedCard(aiCard);
       }
       await sleep();
     }
-
     await sleep(400);
 
-    selectedCard = TABLE.selectedCard.value;
-    matches = await getMatch(selectedCard);
-    if (aiPlay && matches.length === 2) matches = matches.slice(0, 1);
+    cardPlayed = cardSelected.value;
+    matches = await getMatch(cardPlayed);
+    if (aiPlaying() && matches.length === 2) matches = matches.slice(0, 1);
 
     if (matches.length) {
       if (matches.length == 1 || matches.length == 3) {
         // Collect matches and selected
-        [selectedCard, ...matches].forEach((card) => TABLE.cardsToCollect.add(card));
+        [cardPlayed, ...matches].forEach((card) => TABLE.cardsToCollect.add(card));
         console.log(`${activeP.value} matched ${[...TABLE.cardsToCollect]}.`);
         await sleep(400);
         TABLE.hand.value = await removeFromHand(new Set(matches), TABLE.hand.value);
@@ -349,11 +344,11 @@ async function runGame() {
     } else {
       await sleep(400);
       // NO MATCHES; place on table
-      console.log(`${activeP.value} placed ${selectedCard} on the table.`);
-      TABLE.hand.value = TABLE.hand.value.concat([selectedCard]);
+      console.log(`${activeP.value} placed ${cardPlayed} on the table.`);
+      TABLE.hand.value = TABLE.hand.value.concat([cardPlayed]);
     }
     // activeHand.value = await removeFromHand(selectedCard, activeHand.value);
-    playerStore.removeCardFromHand(activeP.value, selectedCard);
+    playerStore.removeCardFromHand(activeP.value, cardPlayed);
 
     await sleep(400);
 
@@ -364,7 +359,8 @@ async function runGame() {
       }
     }
 
-    await setSelectedCard("");
+    // await setSelectedCard("");
+    tableStore.clearSelectedCard();
     draw.value = !draw.value;
 
     if (!draw.value) {
@@ -413,9 +409,9 @@ async function runGame() {
     <div id="p2-hand">
       <Hand player="p2" @check-match="(cardName: string) => getMatch(cardName)" />
     </div>
-    <template v-show="activeP === 'p2' && TABLE.selectedCard.value && !draw">
+    <template v-show="activeP === 'p2' && cardSelected && !draw">
       <div id="p2-reveal">
-        <StaticCard :name="TABLE.selectedCard.value" loading="eager" />
+        <StaticCard :name="cardSelected" loading="eager" />
       </div>
     </template>
     <div id="p2-collection" class="collection">
@@ -435,8 +431,8 @@ async function runGame() {
         @draw="(cardName: string) => revealCard(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
-      <div v-show="TABLE.selectedCard.value && draw" id="reveal">
-        <StaticCard :name="TABLE.selectedCard.value" loading="eager" />
+      <div v-show="cardSelected && draw" id="reveal">
+        <StaticCard :name="cardSelected" loading="eager" />
       </div>
     </div>
     <div id="field">
@@ -467,12 +463,7 @@ async function runGame() {
         />
         <!-- Hide hints if it's not Player 1's turn. -->
         <template
-          v-if="
-            useGameStore().showHints &&
-            activeP === 'p1' &&
-            !draw &&
-            !TABLE.selectedCard.value
-          "
+          v-if="useGameStore().showHints && activeP === 'p1' && !draw && !cardSelected"
         >
           <!-- Show different control hints for mobile/touchscreen or desktop. -->
           <p v-if="STORE.usePreview().value">
@@ -490,7 +481,7 @@ async function runGame() {
       <Hand
         class="self-start"
         player="p1"
-        @check-match="(cardName: string) => setSelectedCard(cardName)"
+        @check-match="(cardName: string) => tableStore.setSelectedCard(cardName)"
       />
     </div>
     <div id="p1-collection" class="collection">
@@ -506,7 +497,7 @@ async function runGame() {
     <!-- MODAL -->
     <div id="match" v-if="TABLE.matchesFound.value.length">
       <MatchSelect
-        :match-src="TABLE.selectedCard.value"
+        :match-src="cardSelected"
         :cards="TABLE.matchesFound.value"
         :show-modal="TABLE.matchesFound.value.length > 0"
         @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
