@@ -58,7 +58,7 @@ export const useTableStore = defineStore("tabletop", {
     },
   },
   getters: {
-    selectingCard: (state) => state.selectedCard === "",
+    cardSelected: (state) => state.selectedCard,
     getFieldMatches: (state) => [...state.fieldCards].filter(card => getFlower(card) === getFlower(state.selectedCard || state.previewCard)),
 },
 });

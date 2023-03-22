@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useImage } from "@vueuse/core";
 import { storeToRefs } from "pinia";
+import { useTableStore } from "~~/stores/tableStore";
 import { useDesignStore } from "../stores/designStore";
 const props = defineProps<{
   name: string;
@@ -10,6 +11,9 @@ const props = defineProps<{
 const emits = defineEmits(["card-select"]);
 
 const { activeDesignName } = storeToRefs(useDesignStore());
+const tableStore = useTableStore();
+const isSelected = computed(() => props.name === tableStore.cardIsSelected);
+
 const imgFormat = "webp";
 const imgUrl = computed(
   () =>
@@ -26,13 +30,10 @@ const glowRadius = computed(() =>
   )
 );
 
-const previewCard = STORE.usePreview();
-const isMatched = () => getFlower(props.name) === getFlower(previewCard.value);
-
 // Mouseover to preview card matches
 function handleHover(e: Event) {
   if (isTouchScreen()) return; // Prevent triggering effects hovering over cards not in hand
-  previewCard.value = props.name;
+  tableStore.setPreviewCard(props.name);
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
 
@@ -40,31 +41,21 @@ function handleHover(e: Event) {
 // Maintains preview on touchscreens without hover
 async function cancelHover() {
   if (isTouchScreen()) return;
-  previewCard.value = "";
+  tableStore.clearPreview();
 }
 
 // Click (and hold for touchscreen) to play a card
 async function handlePointerDown(e: Event) {
-  e.preventDefault();
-  let target = <HTMLElement>e.target;
-  target.classList.add("selecting");
-  if (previewCard.value === props.name) {
-    previewCard.value = "";
+  // e.preventDefault();
+  if (tableStore.matchesPreviewCard(props.name)) {
     emits("card-select", props.name);
-  } else {
-    previewCard.value = props.name;
+    tableStore.clearPreview();
   }
 }
-
-onUpdated(async () => {
-  [...document.querySelectorAll(".selected")].forEach((target) =>
-    target.classList.remove("selected")
-  );
-});
 </script>
 
 <template>
-  <div :class="{ glow: true, previewed: isMatched() }">
+  <div :class="{ glow: true, previewed: tableStore.matchesPreviewCard(name) }">
     <svg class="glow-container absolute">
       <rect
         :rx="glowRadius"
@@ -83,12 +74,12 @@ onUpdated(async () => {
     <nuxt-img
       v-else
       preset="card"
-      :alt="`Card image for ${getName(props.name).toUpperCase()}`"
+      :alt="`Card image for ${getName(name).toUpperCase()}`"
       :src="`cards/${forcedStyle || activeDesignName}/${imgFormat}/${
-        props.name
+        name
       }.${imgFormat}`"
       :loading="loading || 'lazy'"
-      class="card"
+      :class="{card: true, selected: isSelected }"
       draggable="false"
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
@@ -120,7 +111,6 @@ onUpdated(async () => {
   &.selected {
     transform-origin: bottom;
     translate: 0 -10%;
-    opacity: 0;
   }
 
   &.loading {
@@ -167,10 +157,6 @@ onUpdated(async () => {
   --glow-blur-size: 5px;
   --duration: 1s;
   position: relative;
-
-  &:has(.selected) {
-    opacity: 0;
-  }
 }
 
 .glow-container {
