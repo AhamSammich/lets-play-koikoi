@@ -2,11 +2,10 @@
 import { storeToRefs } from "pinia";
 import { useTableStore } from "~~/stores/tableStore";
 
+const imagesLoading = ref(8);
 const tableStore = useTableStore();
 const { cardsOnField, cardSelected, matchSelected } = storeToRefs(tableStore);
-const selectingCard = computed(
-  () => (cardSelected.value && !matchSelected.value)
-);
+const selectingCard = computed(() => cardSelected.value && !matchSelected.value);
 
 const isSelectable = (card: string) => {
   return tableStore.checkSelectedMatches(card);
@@ -15,10 +14,15 @@ const isSelectable = (card: string) => {
 function handleSelection(card: string) {
   tableStore.setSelectedMatch(card);
 }
+
+function countLoaded(card: string) {
+  imagesLoading.value--;
+}
 </script>
 
 <template>
-  <div :class="{ 'field pointer-events-none': true }">
+  <div v-if="imagesLoading > 0" class="mx-auto card down loading rotate-12"></div>
+  <div :class="{ 'field pointer-events-none': true, 'opacity-0': imagesLoading > 0 }">
     <Card
       v-for="card in cardsOnField"
       :key="card"
@@ -28,6 +32,7 @@ function handleSelection(card: string) {
           selectingCard && isSelectable(card),
         'opacity-70': selectingCard && !isSelectable(card),
       }"
+      @img-loaded="countLoaded"
       @card-select="handleSelection(card)"
     />
   </div>
