@@ -30,7 +30,7 @@ function countLoaded(card: string) {
       :class="{
         'cursor-pointer pointer-events-auto opacity-100 -translate-y-4 z-10':
           selectingCard && isSelectable(card),
-        'opacity-70': selectingCard && !isSelectable(card),
+        'opacity-70': selectingCard && !isSelectable(card), selected: card === match selected,
       }"
       @img-loaded="countLoaded"
       @card-select="handleSelection(card)"
