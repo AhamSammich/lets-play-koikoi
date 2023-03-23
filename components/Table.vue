@@ -61,6 +61,7 @@ const winningYaku: Ref<Dict | null> = ref({});
 const winner: Ref<string | null> = ref("");
 
 const roundNum = STORE.useRoundNum();
+const isFirstRound = () => roundNum.value === 1;
 const scoreboard: Record<string, Ref<number>> = {
   p1: <Ref<number>>STORE.useScore1(),
   p2: <Ref<number>>STORE.useScore2(),
@@ -150,7 +151,7 @@ function dealFirstHands(cards: string[]): void {
     checkForInstantYaku
   );
   draw.value = false;
-  if (roundNum.value === 1) {
+  if (isFirstRound()) {
     runGame();
   }
 }
@@ -163,7 +164,6 @@ async function revealCardFromDeck(cardName: string) {
   await pauseForUpdate();
   tableStore.setSelectedCard(cardName);
   tableStore.setPreviewCard(cardName);
-  // await pauseForUpdate(); // Allow animation to play
   console.log(`%cRevealed ${cardSelected.value} from the deck.`, "color: palegreen;");
 }
 
@@ -268,8 +268,13 @@ async function whileSelectingCard() {
   return cardSelected.value;
 }
 
+function promptSelection() {
+  return activeP.value === "p1" && cardSelected.value && tableStore.multipleMatchesExist;
+}
+
 async function whileSelectingMatch() {
   console.log("Awaiting match selection...");
+  console.dir(tableStore.matchingCards);
   let selecting = () => cardSelected.value && !matchSelected.value;
   while (selecting()) {
     await sleep();
@@ -289,12 +294,15 @@ async function getSelectedMatch(possibleMatches: string[]) {
   return matchesSelected;
 }
 
+const pauseForUpdate = async () => await sleep(300);
+
 // ============================================================== //
 // =======================  MAIN LOOP  ========================== //
 // ============================================================== //
 
-const pauseForUpdate = async () => await sleep(300);
 async function runGame() {
+  tableStore.clearSelectedCards();
+  await pauseForUpdate();
   await getActiveP(await getCurrentOya());
   const cardsToCollect: Set<string> = new Set();
 
@@ -397,7 +405,15 @@ async function runGame() {
         <StaticCard :name="cardSelected" loading="eager" />
       </div>
     </div>
-    <div id="field">
+    <div id="field" class="relative">
+      <div
+        v-show="gameStore.showHints || isFirstRound()"
+        class="help absolute bottom-full max-md:mb-4 h-max w-full font-mono text-white text-sm xl:text-lg"
+      >
+        <p v-if="promptSelection()">
+          {{ isTouchScreen() ? "Tap" : "Click" }} to select a match...
+        </p>
+      </div>
       <Field />
     </div>
 
@@ -410,8 +426,7 @@ async function runGame() {
       }"
     >
       <div
-        id="help"
-        class="xl:absolute xl:top-full xl:text-lg h-max w-full font-mono text-white text-xs ml-4 mb-2 self-start"
+        class="help xl:absolute xl:top-full xl:text-lg h-max w-full font-mono text-white text-xs ml-4 mb-2 self-start"
       >
         <!-- Click light-bulb icon to toggle hints. -->
         <Icon
@@ -421,11 +436,20 @@ async function runGame() {
             'text-xl text-yellow-200': gameStore.showHints,
             'text-lg': !gameStore.showHints,
           }"
-          @click="gameStore.toggleHelp()"
+          @click="
+            () => {
+              if (!isFirstRound()) gameStore.toggleHelp();
+            }
+          "
         />
         <!-- Hide hints if it's not Player 1's turn. -->
-        <template
-          v-if="gameStore.showHints && activeP === 'p1' && !draw && !cardSelected"
+        <div
+          v-show="
+            (gameStore.showHints || isFirstRound()) &&
+            activeP === 'p1' &&
+            !draw &&
+            !cardSelected
+          "
         >
           <!-- Show different control hints for mobile/touchscreen or desktop. -->
           <p v-if="tableStore.cardPreviewed">
@@ -438,7 +462,7 @@ async function runGame() {
             <span v-else> Hover over cards </span>
             to preview possible matches.
           </p>
-        </template>
+        </div>
       </div>
       <Hand
         class="self-start"
@@ -542,7 +566,7 @@ async function runGame() {
   animation: pickUp 1.5s ease-out;
 }
 
-#help {
+.help {
   & p {
     animation: fadeIn 2s ease-in, dropIn 1s;
   }
@@ -551,6 +575,7 @@ async function runGame() {
 #p1-hand {
   grid-area: p1;
   position: relative;
+  z-index: 1;
 
   &.inactive {
     pointer-events: none;
@@ -601,15 +626,16 @@ async function runGame() {
 .collection {
   position: absolute;
   margin: 0.5rem;
-  scale: 0.6;
+  /* scale: 0.6; */
   transition: all 0.3s;
   opacity: 0.5;
+  z-index: 0;
 
-  &:hover {
+  /* &:hover {
     opacity: 1;
     scale: 0.9;
     z-index: 30;
-  }
+  } */
 
   & * {
     pointer-events: none;
@@ -618,7 +644,13 @@ async function runGame() {
   &#p1-collection {
     right: 0;
     bottom: 0;
-    transform-origin: bottom right;
+    transform-origin: center;
+    transform: scaleX(-1);
+
+    & > * {
+      transform-origin: center;
+      transform: scaleX(-1);
+    }
   }
 
   &#p2-collection {

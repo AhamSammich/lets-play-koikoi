@@ -30,7 +30,8 @@ function countLoaded(card: string) {
       :class="{
         'cursor-pointer pointer-events-auto opacity-100 -translate-y-4 z-10':
           selectingCard && isSelectable(card),
-        'opacity-70': selectingCard && !isSelectable(card), selected: card === matchSelected,
+        'opacity-70': selectingCard && !isSelectable(card),
+        selected: card === matchSelected,
       }"
       @img-loaded="countLoaded"
       @card-select="handleSelection(card)"
@@ -47,6 +48,10 @@ function countLoaded(card: string) {
   gap: 0.5rem;
   overflow: visible;
   transition: opacity 0.5s;
+
+  & * {
+    transition: opacity 0.75s;
+  }
 
   @media (orientation: landscape) and (width > 768px) {
     max-width: calc(var(--card-width) * 9);

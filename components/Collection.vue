@@ -45,15 +45,16 @@ function filterYaku(yakuArr: string[]) {
 
 function allowViewings(yakuArr: string[]): string[] {
   switch (viewingsAllowed.value) {
-    case 0:  // 0 => never allowed
+    case 0: // 0 => never allowed
       return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
 
-    case 1:  // 1 => limited allowance
+    case 1: // 1 => limited allowance
       // Yaku not allowed if players has no non-viewing yaku
-      if (yakuMap.size === 0 && yakuArr.every(yaku => restrictedYaku.has(yaku)))
+      if (yakuMap.size === 0 && yakuArr.every((yaku) => restrictedYaku.has(yaku)))
         return yakuArr.filter((yakuName) => !restrictedYaku.has(yakuName));
 
-    default:  // 2 => allow always
+    default:
+      // 2 => allow always
       return yakuArr;
   }
 }
@@ -92,13 +93,13 @@ onUpdated(() => {
 
 <style scoped lang="postcss">
 .collected {
-  --card-w: 35px;
+  --card-w: 25px;
   --card-h: calc(var(--card-w) * 1.5);
   --row-w: calc(6 * var(--card-w));
   display: grid;
-  grid-template-columns: repeat(2, var(--row-w));
+  grid-template-columns: repeat(2, max-content);
   grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));
-  gap: 0.1rem;
+  gap: 0.3rem 1rem;
 
   @media (orientation: portrait) {
     display: flex;
@@ -110,14 +111,15 @@ onUpdated(() => {
 .subset {
   display: flex;
   flex-wrap: wrap;
+  width: max-content;
   max-width: var(--row-w);
   min-height: 50px;
   overflow: hidden;
-
+  /* 
   & * {
     transition: none;
     animation: none;
-  }
+  } */
 
   & > * {
     width: var(--card-w);
