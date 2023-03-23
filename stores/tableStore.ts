@@ -71,7 +71,7 @@ export const useTableStore = defineStore("tabletop", {
   },
   getters: {
     cardSelected: (state) => state.selectedCard,
-    cardPreviewed: (state) => state.selectedCard,
+    cardPreviewed: (state) => state.previewCard,
     matchSelected: (state) => state.selectedMatch,
     cardsOnField: (state) => [...state.fieldCards],
     getFieldMatches: (state) =>
