@@ -241,13 +241,11 @@ function emitSelection() {
     opacity: 1;
   }
   50% {
-    opacity: 0.75;
+    opacity: 0.9;
   }
   to {
     opacity: 0;
     transform: scale(1.2) translate3d(25%, 0, 0);
-    box-shadow: none;
-    outline: none;
   }
 }
 </style>

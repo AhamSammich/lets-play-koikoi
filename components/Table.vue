@@ -292,7 +292,7 @@ async function getSelectedMatch(possibleMatches: string[]) {
 // =======================  MAIN LOOP  ========================== //
 // ============================================================== //
 
-const pauseForUpdate = async () => await sleep(400);
+const pauseForUpdate = async () => await sleep(300);
 async function runGame() {
   await getActiveP(await getCurrentOya());
   const cardsToCollect: Set<string> = new Set();
@@ -392,11 +392,7 @@ async function runGame() {
         @draw="(cardName: string) => revealCardFromDeck(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
-      <div
-        v-show="cardSelected && draw"
-        id="reveal"
-        :class="{ displayed: cardSelected && !matchSelected }"
-      >
+      <div v-show="cardSelected && draw" id="reveal">
         <StaticCard :name="cardSelected" loading="eager" />
       </div>
     </div>
@@ -431,10 +427,10 @@ async function runGame() {
           v-if="gameStore.showHints && activeP === 'p1' && !draw && !cardSelected"
         >
           <!-- Show different control hints for mobile/touchscreen or desktop. -->
-          <p v-if="STORE.usePreview().value">
+          <p v-if="tableStore.cardPreviewed">
             <span v-if="isTouchScreen()"> Tap the card again </span>
             <span v-else> Click the card </span>
-            to play {{ getName(STORE.usePreview().value).toUpperCase() }}.
+            to play {{ getName(tableStore.cardPreviewed).toUpperCase() }}.
           </p>
           <p v-else>
             <span v-if="isTouchScreen()"> Tap a card </span>
@@ -540,12 +536,9 @@ async function runGame() {
   width: max-content;
   pointer-events: none;
   opacity: 0;
-  animation: pickUp 1.5s ease-out;
   z-index: 1;
-
-  &.displayed {
-    animation: fadeIn 0.5s 0.5s, pickUp 1s 0.5s;
-  }
+  transform-origin: center;
+  animation: pickUp 1.5s ease-out;
 }
 
 #help {
@@ -585,7 +578,7 @@ async function runGame() {
   top: 25%;
   right: 25%;
   opacity: 0;
-  animation: pickUp 1s 0.5s;
+  animation: pickUp 1.5s 0.5s;
   z-index: 1;
 }
 
