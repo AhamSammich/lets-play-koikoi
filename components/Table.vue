@@ -260,6 +260,7 @@ async function continueGame(bool: boolean, p: string) {
 async function whileSelectingCard() {
   while (!cardSelected.value) {
     if (activeP.value === "p2" && !draw.value) {
+      await pauseForUpdate();
       setAiSelection();
     }
     await sleep();
@@ -367,7 +368,7 @@ async function runGame() {
 //////////////////////////////////////////////////////////////////////////////////////
 
 <template>
-  <div id="tabletop">
+  <div id="tabletop" class="relative">
     <!-- TOP ROW -->
     <div id="p2-hand">
       <Hand player="p2" @check-match="(cardName: string) => getMatch(cardName)" />
