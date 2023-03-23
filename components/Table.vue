@@ -30,14 +30,13 @@ const gameIsRunning = computed(() => gameStore.gameInProgress);
 const bonusForAnyKoiKoi = RULES.useBonusForAnyKoiKoi();
 
 const playerStore = usePlayerStore();
-const p2Collection = computed(() => playerStore.p2.collectedCards);
-const p1Collection = computed(() => playerStore.p1.collectedCards);
+// const p2Collection = computed(() => playerStore.p2.collectedCards);
+// const p1Collection = computed(() => playerStore.p1.collectedCards);
 
 const tableStore = useTableStore();
-const { cardSelected } = storeToRefs(tableStore);
+const { cardSelected, matchSelected } = storeToRefs(tableStore);
 
 const P1: Player = {
-  hand: STORE.useHand1(),
   collection: STORE.useCollection1(),
   yaku: STORE.useYaku1(),
   score: STORE.useScore1(),
@@ -45,7 +44,6 @@ const P1: Player = {
 };
 
 const P2: Player = {
-  hand: STORE.useHand2(),
   collection: STORE.useCollection2(),
   yaku: STORE.useYaku2(),
   score: STORE.useScore2(),
@@ -57,18 +55,12 @@ const PLAYER: Record<string, () => Player> = {
   p2: () => P2,
 };
 
-const TABLE = {
-  hand: STORE.useField(),
-  selectedCard: ref(""),
-  matchesFound: ref(<string[]>[]),
-  cardsToCollect: <Set<string>>new Set(),
-};
-
 const draw: Ref<boolean | null> = ref(false);
 const newYaku: Ref<MultiDict> = ref({});
 const winningYaku: Ref<Dict | null> = ref({});
 const winner: Ref<string | null> = ref("");
 
+const roundNum = STORE.useRoundNum();
 const scoreboard: Record<string, Ref<number>> = {
   p1: <Ref<number>>STORE.useScore1(),
   p2: <Ref<number>>STORE.useScore2(),
@@ -79,8 +71,6 @@ const currentOya = STORE.useCurrentOya();
 const otherP = () => (activeP.value === "p1" ? "p2" : "p1");
 const otherPlayer = () => PLAYER[otherP()]();
 const activePlayer = () => PLAYER[activeP.value]();
-// const activeHand = () => activePlayer().hand;
-const activeHand = computed(() => playerStore[activeP.value].cardsInHand);
 
 // ============================================================== //
 // =======================  UTILITIES =========================== //
@@ -95,7 +85,6 @@ const WAIT = computed({
   },
 });
 const SHOUT = ref("");
-let START = false;
 const callKoiKoi = () => {
   shoutMsg("KOI KOI");
   activePlayer().koikoi++;
@@ -132,7 +121,6 @@ async function resetRefs() {
   console.log("Resetting...");
   playerStore.clearCollections();
   Object.values(PLAYER).forEach((p) => {
-    p().hand.value = [];
     p().collection.value = [];
     p().yaku.value = {};
     p().koikoi = 0;
@@ -148,27 +136,22 @@ async function newGame(score?: number) {
   let roundResults = { winner: winner.value, yaku: winningYaku.value };
   emits("next-round", roundResults);
   await resetRefs();
-  tableStore.clearSelectedCard();
+  tableStore.clearSelectedCards();
   WAIT.value = false;
   draw.value = null; // Triggers deck reshuffle
   await sleep();
 }
 
 function dealFirstHands(cards: string[]): void {
-  // P1.hand.value = cards.slice(0, 8);
   playerStore.updateCardsInHand("p1", cards.slice(0, 8));
-  // P2.hand.value = cards.slice(8, 16);
   playerStore.updateCardsInHand("p2", cards.slice(8, 16));
-  TABLE.hand.value = cards.slice(16);
-  [
-    [...playerStore.p1.cardsInHand],
-    [...playerStore.p2.cardsInHand],
-    TABLE.hand.value,
-  ].forEach(checkForInstantYaku);
+  tableStore.updateFieldCards(cards.slice(16));
+  [playerStore.p1.cardsInHand, playerStore.p2.cardsInHand, tableStore.fieldCards].forEach(
+    checkForInstantYaku
+  );
   draw.value = false;
-  if (!START) {
+  if (roundNum.value === 1) {
     runGame();
-    START = true;
   }
 }
 
@@ -176,28 +159,12 @@ function dealFirstHands(cards: string[]): void {
 // =======================  TRIGGERS  =========================== //
 // ============================================================== //
 
-async function revealCard(cardName: string) {
+async function revealCardFromDeck(cardName: string) {
+  await pauseForUpdate();
   tableStore.setSelectedCard(cardName);
-  await sleep(400); // Allow animation to play
-  console.log(`Revealed ${cardSelected.value} from the deck.`);
-}
-
-async function removeFromHand(
-  cardsToRemove: string | Set<string>,
-  fromArr: string[]
-): Promise<string[]> {
-  // Take set of card names as argument
-  // Return new array of card names
-  try {
-    return fromArr.filter((card) =>
-      typeof cardsToRemove === "string"
-        ? card !== cardsToRemove
-        : cardsToRemove.has(card) === false
-    );
-  } catch (err) {
-    console.error(err);
-    return fromArr;
-  }
+  tableStore.setPreviewCard(cardName);
+  // await pauseForUpdate(); // Allow animation to play
+  console.log(`%cRevealed ${cardSelected.value} from the deck.`, "color: palegreen;");
 }
 
 async function collectCards(
@@ -222,45 +189,37 @@ function aiSelectedCard(): string {
   let aiCard = "";
   for (let card of [...playerStore.p2.cardsInHand]) {
     aiCard = card;
-    let matchedCards = matchCardInArr(card, TABLE.hand.value);
-    if (matchedCards.length) {
-      console.log(`%cPlayer 2 matched ${aiCard} with ${matchedCards}`, "color: yellow;");
-      break;
-    }
+    let matchedCards = matchCardInArr(card, tableStore.cardsOnField);
+    if (matchedCards.length) break;
   }
   return aiCard;
 }
 
-async function getMatch(cardName: string): Promise<string[]> {
-  let matches = matchCardInArr(cardName, TABLE.hand.value);
-  return matches;
+function setAiSelection() {
+  let aiCard = aiSelectedCard();
+  tableStore.setSelectedCard(aiCard);
+  tableStore.setPreviewCard(aiCard);
 }
 
-async function handleMatch(cards: string[]) {
-  // Clear matches and hide modal
-  cards.forEach(async (card) => {
-    TABLE.cardsToCollect.add(card);
-    TABLE.hand.value = await removeFromHand(new Set(cards), TABLE.hand.value);
-    playerStore.removeCardFromHand(activeP.value, card);
-  });
-  TABLE.matchesFound.value = [];
-  WAIT.value = false;
+async function getMatch(cardName: string): Promise<string[]> {
+  let matches = matchCardInArr(cardName, tableStore.cardsOnField);
+  return matches;
 }
 
 // ============================================================== //
 // =====================  VICTORY CHECK ========================= //
 // ============================================================== //
 
-async function checkForInstantYaku(checkHand: string[]): Promise<void> {
+async function checkForInstantYaku(cardSet: Set<string>): Promise<void> {
   if (WAIT.value) return;
-  let yaku = checkForWinOrVoid(checkHand);
+  let yaku = checkForWinOrVoid([...cardSet]);
   if (yaku === null) return;
-  if (yaku && checkHand === TABLE.hand.value) {
+  if (yaku && cardSet === tableStore.fieldCards) {
     newGame();
     return;
   }
   if (yaku) {
-    if (winningYaku.value) winningYaku.value[yaku] = checkHand;
+    if (winningYaku.value) winningYaku.value[yaku] = [...cardSet];
     winner.value = activeP.value;
     return;
   }
@@ -282,7 +241,6 @@ async function showYaku(yakuNames: string[], p: string) {
 async function continueGame(bool: boolean, p: string) {
   if (p === "p2") {
     let chance = Math.floor(Math.random() * 100);
-    // let factor = P2.hand.value.length * 10;
     let factor = playerStore.p2.cardsInHand.size * 10;
     bool = chance < factor;
   }
@@ -295,87 +253,93 @@ async function continueGame(bool: boolean, p: string) {
     return;
   }
   callKoiKoi();
+  await pauseForUpdate();
   WAIT.value = false;
+}
+
+async function whileSelectingCard() {
+  while (!cardSelected.value) {
+    if (activeP.value === "p2" && !draw.value) {
+      setAiSelection();
+    }
+    await sleep();
+  }
+  return cardSelected.value;
+}
+
+async function whileSelectingMatch() {
+  console.log("Awaiting match selection...");
+  let selecting = () => cardSelected.value && !matchSelected.value;
+  while (selecting()) {
+    await sleep();
+  }
+  return matchSelected.value;
+}
+
+async function getSelectedMatch(possibleMatches: string[]) {
+  let matchesSelected: string[] = [];
+  if (possibleMatches.length == 1 || possibleMatches.length == 3) {
+    matchesSelected.push(...possibleMatches);
+  } else if (activeP.value === "p2") {
+    matchesSelected.push(possibleMatches[0]);
+  } else {
+    matchesSelected.push(await whileSelectingMatch());
+  }
+  return matchesSelected;
 }
 
 // ============================================================== //
 // =======================  MAIN LOOP  ========================== //
 // ============================================================== //
 
+const pauseForUpdate = async () => await sleep(400);
 async function runGame() {
   await getActiveP(await getCurrentOya());
-  let waiting = () => WAIT.value;
-  let reset = false;
-
-  let cardPlayed: string;
-  let matches: string[];
-  let aiPlaying = () => activeP.value === "p2";
+  const cardsToCollect: Set<string> = new Set();
 
   while (gameIsRunning.value) {
-    if (reset) break;
+    let cardPlayed = await whileSelectingCard();
+    await pauseForUpdate();
 
-    while (!cardSelected.value) {
-      if (aiPlaying() && !draw.value) {
-        let aiCard = aiSelectedCard();
-        tableStore.setSelectedCard(aiCard);
-      }
-      await sleep();
-    }
-    await sleep(400);
-
-    cardPlayed = cardSelected.value;
-    matches = await getMatch(cardPlayed);
-    if (aiPlaying() && matches.length === 2) matches = matches.slice(0, 1);
-
+    let matches = await getMatch(cardPlayed);
     if (matches.length) {
-      if (matches.length == 1 || matches.length == 3) {
-        // Collect matches and selected
-        [cardPlayed, ...matches].forEach((card) => TABLE.cardsToCollect.add(card));
-        console.log(`${activeP.value} matched ${[...TABLE.cardsToCollect]}.`);
-        await sleep(400);
-        TABLE.hand.value = await removeFromHand(new Set(matches), TABLE.hand.value);
-        matches = [];
-      } else {
-        WAIT.value = true;
-        TABLE.matchesFound.value = matches;
-        while (waiting()) await sleep(500);
-        matches = [];
-      }
+      let matchedCards = await getSelectedMatch(matches);
+      await pauseForUpdate();
+      console.log(
+        `%c${activeP.value.toUpperCase()} matched ${cardPlayed} with ${matchedCards}`,
+        "color: yellow;"
+      );
+
+      [cardPlayed, ...matchedCards].forEach((card) => {
+        cardsToCollect.add(card);
+        tableStore.removeFieldCard(card);
+      });
     } else {
-      await sleep(400);
-      // NO MATCHES; place on table
+      await pauseForUpdate();
       console.log(`${activeP.value} placed ${cardPlayed} on the table.`);
-      TABLE.hand.value = TABLE.hand.value.concat([cardPlayed]);
+      tableStore.addFieldCard(cardPlayed);
     }
-    // activeHand.value = await removeFromHand(selectedCard, activeHand.value);
+
     playerStore.removeCardFromHand(activeP.value, cardPlayed);
+    await pauseForUpdate();
 
-    await sleep(400);
+    tableStore.clearSelectedCards();
+    await pauseForUpdate();
 
-    if (TABLE.matchesFound.value.length) {
-      console.log(...TABLE.matchesFound.value);
-      while (TABLE.matchesFound.value.length) {
-        await sleep(500);
-      }
-    }
-
-    // await setSelectedCard("");
-    tableStore.clearSelectedCard();
     draw.value = !draw.value;
-
     if (!draw.value) {
       console.log("Collecting...");
       // Collection will emit 'new-yaku' or 'no-yaku'
       activePlayer().collection.value = await collectCards(
-        TABLE.cardsToCollect,
+        cardsToCollect,
         activePlayer().collection.value
       );
-      TABLE.cardsToCollect.clear();
+      cardsToCollect.clear();
       WAIT.value = true;
 
       // Wait for victory determination
       let newOya;
-      while (waiting()) {
+      while (WAIT.value) {
         if (winner.value && !newOya) {
           newOya = winner.value;
         }
@@ -383,11 +347,11 @@ async function runGame() {
       }
 
       // Call a draw if player has no more cards
-      if (activeHand.value.size === 0) {
+      if (playerStore.activeHandIsEmpty(activeP.value)) {
         WAIT.value = true;
         winningYaku.value = null;
         winner.value = null;
-        while (waiting()) await sleep(500);
+        while (WAIT.value) await sleep(500);
         await getActiveP(await getCurrentOya());
       } else {
         await getActiveP(newOya);
@@ -395,7 +359,6 @@ async function runGame() {
       console.log(`IT'S PLAYER ${activeP.value === "p1" ? 1 : 2}'S TURN`);
     }
   }
-  console.log("Game Over\nThank you for playing!");
 }
 </script>
 
@@ -409,11 +372,9 @@ async function runGame() {
     <div id="p2-hand">
       <Hand player="p2" @check-match="(cardName: string) => getMatch(cardName)" />
     </div>
-    <template v-show="activeP === 'p2' && cardSelected && !draw">
-      <div id="p2-reveal">
-        <StaticCard :name="cardSelected" loading="eager" />
-      </div>
-    </template>
+    <div v-show="activeP === 'p2' && cardSelected && !draw" id="p2-reveal">
+      <StaticCard :name="cardSelected" loading="eager" />
+    </div>
     <div id="p2-collection" class="collection">
       <Collection
         player="p2"
@@ -428,15 +389,19 @@ async function runGame() {
     <div id="deck">
       <Deck
         :draw-card="draw"
-        @draw="(cardName: string) => revealCard(cardName)"
+        @draw="(cardName: string) => revealCardFromDeck(cardName)"
         @deal="(cards: string[]) => dealFirstHands(cards)"
       />
-      <div v-show="cardSelected && draw" id="reveal">
+      <div
+        v-show="cardSelected && draw"
+        id="reveal"
+        :class="{ displayed: cardSelected && !matchSelected }"
+      >
         <StaticCard :name="cardSelected" loading="eager" />
       </div>
     </div>
     <div id="field">
-      <Field :cards="TABLE.hand.value" />
+      <Field />
     </div>
 
     <!-- BOTTOM ROW -->
@@ -456,14 +421,14 @@ async function runGame() {
           name="material-symbols:tips-and-updates"
           :class="{
             'float-left mr-2 cursor-help transition-all': true,
-            'text-xl text-yellow-200': useGameStore().showHints,
-            'text-lg': !useGameStore().showHints,
+            'text-xl text-yellow-200': gameStore.showHints,
+            'text-lg': !gameStore.showHints,
           }"
-          @click="useGameStore().toggleHelp()"
+          @click="gameStore.toggleHelp()"
         />
         <!-- Hide hints if it's not Player 1's turn. -->
         <template
-          v-if="useGameStore().showHints && activeP === 'p1' && !draw && !cardSelected"
+          v-if="gameStore.showHints && activeP === 'p1' && !draw && !cardSelected"
         >
           <!-- Show different control hints for mobile/touchscreen or desktop. -->
           <p v-if="STORE.usePreview().value">
@@ -494,45 +459,31 @@ async function runGame() {
       />
     </div>
 
-    <!-- MODAL -->
-    <div id="match" v-if="TABLE.matchesFound.value.length">
-      <MatchSelect
-        :match-src="cardSelected"
-        :cards="TABLE.matchesFound.value"
-        :show-modal="TABLE.matchesFound.value.length > 0"
-        @match-select="async (cardArr: string[]) => await handleMatch(cardArr)"
-      />
-    </div>
-
     <div v-if="Object.keys(newYaku).length" id="yaku-modal">
       <NewYaku
         :show-modal="!!Object.keys(newYaku).length"
         :player="<string>newYaku.player"
         :yakuList="<Dict>newYaku.newList"
-        :koikoi-allowed="!!(activeHand.size || draw)"
+        :koikoi-allowed="!!(!playerStore.activeHandIsEmpty(activeP) || draw)"
         @koi-koi="async (bool, player) => await continueGame(bool, player)"
       />
     </div>
 
-    <template v-if="winner !== '' && (winningYaku || winningYaku === null)">
-      <div id="end-screen">
-        <ScoreSheet
-          :player="winner"
-          :yakuList="winningYaku"
-          :koikoi="
-            bonusForAnyKoiKoi
-              ? otherPlayer().koikoi + activePlayer().koikoi
-              : otherPlayer().koikoi
-          "
-          :show-modal="winner !== ''"
-          @reset="(score: number) => newGame(score)"
-        />
-      </div>
-    </template>
+    <div v-if="winner !== '' && (winningYaku || winningYaku === null)" id="end-screen">
+      <ScoreSheet
+        :player="winner"
+        :yakuList="winningYaku"
+        :koikoi="
+          bonusForAnyKoiKoi
+            ? otherPlayer().koikoi + activePlayer().koikoi
+            : otherPlayer().koikoi
+        "
+        :show-modal="winner !== ''"
+        @reset="(score: number) => newGame(score)"
+      />
+    </div>
 
-    <template v-if="SHOUT">
-      <Shout :msg="SHOUT" />
-    </template>
+    <Shout v-if="SHOUT" :msg="SHOUT" />
   </div>
 </template>
 
@@ -589,8 +540,12 @@ async function runGame() {
   width: max-content;
   pointer-events: none;
   opacity: 0;
-  animation: pickUp 1s 0.5s;
+  animation: pickUp 1.5s ease-out;
   z-index: 1;
+
+  &.displayed {
+    animation: fadeIn 0.5s 0.5s, pickUp 1s 0.5s;
+  }
 }
 
 #help {
@@ -640,7 +595,6 @@ async function runGame() {
   justify-self: flex-start;
   transform-origin: left;
   margin-left: 0.5rem;
-  z-index: -1;
 }
 
 @media (width < 500px) or (height < 500px) {

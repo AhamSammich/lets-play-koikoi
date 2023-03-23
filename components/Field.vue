@@ -1,14 +1,35 @@
-<script setup lang="ts">import { useTableStore } from '~~/stores/tableStore';
+<script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useTableStore } from "~~/stores/tableStore";
 
-defineProps<{
-  cards: string[];
-}>();
+const tableStore = useTableStore();
+const { cardsOnField, cardSelected, matchSelected } = storeToRefs(tableStore);
+const selectingCard = computed(
+  () => (cardSelected.value && !matchSelected.value)
+);
+
+const isSelectable = (card: string) => {
+  return tableStore.checkSelectedMatches(card);
+};
+
+function handleSelection(card: string) {
+  tableStore.setSelectedMatch(card);
+}
 </script>
 
-
 <template>
-  <div class="field">
-    <Card v-for="card in cards" :key="card" :name="card" />
+  <div :class="{ 'field pointer-events-none': true }">
+    <Card
+      v-for="card in cardsOnField"
+      :key="card"
+      :name="card"
+      :class="{
+        'cursor-pointer pointer-events-auto opacity-100 -translate-y-4 z-10':
+          selectingCard && isSelectable(card),
+        'opacity-70': selectingCard && !isSelectable(card),
+      }"
+      @card-select="handleSelection(card)"
+    />
   </div>
 </template>
 
@@ -20,6 +41,7 @@ defineProps<{
   align-items: flex-start;
   gap: 0.5rem;
   overflow: visible;
+  transition: opacity 0.5s;
 
   @media (orientation: landscape) and (width > 768px) {
     max-width: calc(var(--card-width) * 9);

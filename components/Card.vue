@@ -12,50 +12,59 @@ const emits = defineEmits(["card-select"]);
 
 const { activeDesignName } = storeToRefs(useDesignStore());
 const tableStore = useTableStore();
-const isSelected = computed(() => props.name === tableStore.cardIsSelected);
-
-const imgFormat = "webp";
+const isSelected = computed(() => props.name === tableStore.cardSelected);
+const isPreviewed = computed(
+  () => STORE.useActiveP().value === "p1" && tableStore.checkPreviewMatches(props.name)
+);
 const imgUrl = computed(
-  () =>
-    `cards/${props.forcedStyle || activeDesignName.value}/${imgFormat}/${
-      props.name
-    }.${imgFormat}`
+  () => `cards/${props.forcedStyle || activeDesignName.value}/webp/${props.name}.webp`
 );
 const { isLoading } = useImage({ src: imgUrl.value });
 
 // Dynamically set the glowing border radius
 const glowRadius = computed(() =>
-  getComputedStyle(document.querySelector(`.${activeDesignName.value}`)!).getPropertyValue(
-    "--card-radius"
-  )
+  getComputedStyle(
+    document.querySelector(`.${activeDesignName.value}`)!
+  ).getPropertyValue("--card-radius")
 );
 
 // Mouseover to preview card matches
 function handleHover(e: Event) {
-  if (isTouchScreen()) return; // Prevent triggering effects hovering over cards not in hand
+  if (isTouchScreen()) return;
   tableStore.setPreviewCard(props.name);
   e.target?.addEventListener("pointerleave", cancelHover, { once: true });
 }
 
-// Remove effects from matched cards
-// Maintains preview on touchscreens without hover
-async function cancelHover() {
-  if (isTouchScreen()) return;
+function cancelHover() {
+  if (isTouchScreen() || tableStore.cardSelected) return;
   tableStore.clearPreview();
 }
 
-// Click (and hold for touchscreen) to play a card
-async function handlePointerDown(e: Event) {
-  // e.preventDefault();
-  if (tableStore.matchesPreviewCard(props.name)) {
+function handleTouch() {
+  if (isPreviewed.value) {
+    emitSelection();
+  } else {
+    tableStore.setPreviewCard(props.name);
+  }
+}
+
+function handlePointerDown(e: Event) {
+  if (isTouchScreen()) {
+    handleTouch();
+  } else {
+    emitSelection();
+  }
+}
+
+function emitSelection() {
+  if (isPreviewed.value) {
     emits("card-select", props.name);
-    tableStore.clearPreview();
   }
 }
 </script>
 
 <template>
-  <div :class="{ glow: true, previewed: tableStore.matchesPreviewCard(name) }">
+  <div :class="{ glow: true, previewed: isPreviewed, selected: isSelected }">
     <svg class="glow-container absolute">
       <rect
         :rx="glowRadius"
@@ -74,12 +83,10 @@ async function handlePointerDown(e: Event) {
     <nuxt-img
       v-else
       preset="card"
-      :alt="`Card image for ${getName(name).toUpperCase()}`"
-      :src="`cards/${forcedStyle || activeDesignName}/${imgFormat}/${
-        name
-      }.${imgFormat}`"
+      :alt="name"
+      :src="imgUrl"
       :loading="loading || 'lazy'"
-      :class="{card: true, selected: isSelected }"
+      class="card"
       draggable="false"
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
@@ -157,6 +164,12 @@ async function handlePointerDown(e: Event) {
   --glow-blur-size: 5px;
   --duration: 1s;
   position: relative;
+  transition: all 0.3s 0.1s;
+}
+
+.selected {
+  --glow-line-length: 50px;
+  --card-glow-color: gold;
 }
 
 .glow-container {
