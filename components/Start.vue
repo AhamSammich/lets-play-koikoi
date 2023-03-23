@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useImage } from "@vueuse/core";
 import { useDesignStore } from "~~/stores/designStore";
 import { useGameStore } from "~~/stores/gameStore";
 
@@ -21,6 +22,7 @@ async function randomCards() {
 const cards = await randomCards();
 const imagesLoading = ref(cards.length);
 const ready = computed(() => !imagesLoading.value);
+const loadingComplete = ref(false);
 
 // ready == true when all images loaded.
 function countLoaded() {
@@ -30,6 +32,21 @@ function countLoaded() {
 function startGame() {
   gameStore.startGame();
 }
+
+watchEffect(async () => {
+  if (ready.value) {
+    let remainingImages = CARDS.filter((card) => !cards.includes(card)).map((card) => {
+      return useImage({ src: `cards/${activeDesignName.value}/webp/${card}.webp` });
+    });
+
+    while (true) {
+      console.log("Loading images...");
+      if (remainingImages.every((img) => img.isReady)) break;
+    }
+
+    loadingComplete.value = true;
+  }
+});
 </script>
 
 <template>
@@ -39,7 +56,6 @@ function startGame() {
       gameIsRunning ? '' : 'show'
     } ${activeDesignName} flex flex-col align-center justify-center gap-8`"
   >
-
     <!-- Show loader -->
     <div v-if="imagesLoading" class="card loading rotate-12"></div>
 
@@ -60,20 +76,22 @@ function startGame() {
       />
     </div>
 
-    <template v-if="(imagesLoading < cards.length)">
-      <h1 id="hero-title" :class="{ 'text-center opacity-0': true, ready }">
-        <span>Let's Play!</span>花札 KOI-KOI
-      </h1>
-      <button
-        :class="{ 'opacity-0': true, ready }"
-        id="start-btn"
-        @click="startGame()"
-        autofocus
-        tabindex="0"
-      >
-        START
-      </button>
-    </template>
+    <h1
+      v-show="imagesLoading < cards.length"
+      id="hero-title"
+      :class="{ 'text-center opacity-0': true, ready }"
+    >
+      <span>Let's Play!</span>花札 KOI-KOI
+    </h1>
+    <button
+      :class="{ 'opacity-0': true, ready: loadingComplete }"
+      id="start-btn"
+      @click="startGame()"
+      autofocus
+      tabindex="0"
+    >
+      START
+    </button>
 
     <!-- Footer -->
     <p
