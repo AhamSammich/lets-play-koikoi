@@ -33,19 +33,30 @@ function startGame() {
   gameStore.startGame();
 }
 
-watchEffect(async () => {
-  if (ready.value) {
-    let remainingImages = CARDS.filter((card) => !cards.includes(card)).map((card) => {
-      return useImage({ src: `cards/${activeDesignName.value}/webp/${card}.webp` });
-    });
+async function preloadCard(card: string) {
+  return useImage({ src: `cards/${activeDesignName.value}/webp/${card}.webp` });
+}
 
-    while (true) {
-      console.log("Loading images...");
-      if (remainingImages.every((img) => img.isReady)) break;
-    }
+async function preloadRemainingCards() {
+  let remainingImages = await Promise.all(
+    CARDS.filter((card) => !cards.includes(card)).map((card) => {
+      return preloadCard(card);
+    })
+  );
 
-    loadingComplete.value = true;
+  while (true) {
+    console.log("Loading images...");
+    if (remainingImages.every((img) => img.isReady)) break;
+    await sleep(100);
   }
+  console.log("Loading complete!");
+  loadingComplete.value = true;
+}
+
+onMounted(() => {
+  watchEffect(async () => {
+    if (ready.value) preloadRemainingCards();
+  });
 });
 </script>
 
