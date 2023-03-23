@@ -8,7 +8,7 @@ const props = defineProps<{
   loading?: "lazy" | "eager";
   forcedStyle?: string;
 }>();
-const emits = defineEmits(["card-select"]);
+const emits = defineEmits(["card-select", "img-loaded"]);
 
 const { activeDesignName } = storeToRefs(useDesignStore());
 const tableStore = useTableStore();
@@ -61,6 +61,10 @@ function emitSelection() {
     emits("card-select", props.name);
   }
 }
+
+function emitLoaded() {
+  emits("img-loaded", props.name);
+}
 </script>
 
 <template>
@@ -88,6 +92,7 @@ function emitSelection() {
       :loading="loading || 'lazy'"
       class="card"
       draggable="false"
+      @load="emitLoaded"
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
     />
