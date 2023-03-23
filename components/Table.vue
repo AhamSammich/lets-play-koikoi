@@ -617,7 +617,7 @@ async function runGame() {
   &#p1-collection {
     right: 0;
     bottom: 0;
-    transform-origin: bottom center;
+    transform-origin: center;
     transform: scaleX(-1);
 
     & .card {
