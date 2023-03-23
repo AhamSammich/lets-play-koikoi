@@ -50,8 +50,10 @@ function handleTouch() {
 
 function handlePointerDown(e: Event) {
   if (isTouchScreen()) {
+    console.log("touched");
     handleTouch();
   } else {
+    console.log("clicked");
     emitSelection();
   }
 }

@@ -26,8 +26,9 @@ export const useTableStore = defineStore("tabletop", {
     },
 
     setSelectedCard(card: string) {
+      this.matchingCards.clear();
+      this.setPreviewCard(card);
       this.selectedCard = card;
-      this.addMatchingCards(card);
     },
     setSelectedMatch(card: string) {
       if (this.checkSelectedMatches(card)) {
@@ -43,6 +44,7 @@ export const useTableStore = defineStore("tabletop", {
     },
 
     setPreviewCard(card: string) {
+      // console.log(`%cPreviewing matches for ${card}.`, "color: gray;")
       this.previewCard = card;
       this.addMatchingCards(card);
     },
@@ -79,5 +81,6 @@ export const useTableStore = defineStore("tabletop", {
         (card) =>
           getFlower(card) === getFlower(state.selectedCard || state.previewCard)
       ),
+    multipleMatchesExist: (state) => state.matchingCards.size === 2,
   },
 });
