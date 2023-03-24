@@ -587,7 +587,6 @@ async function runGame() {
 }
 
 #p2-hand {
-  --card-width: 50px;
   grid-area: p2;
   pointer-events: none;
   position: relative;
@@ -595,6 +594,7 @@ async function runGame() {
   rotate: 180deg;
 
   & > * {
+    --card-width: 50px;
     position: absolute;
   }
 }
@@ -619,23 +619,21 @@ async function runGame() {
 @media (width < 500px) or (height < 500px) {
   #deck,
   #field {
-    scale: 0.8;
+    --card-width: 60px;
   }
 }
 
 .collection {
   position: absolute;
   margin: 0.5rem;
-  /* scale: 0.6; */
   transition: all 0.3s;
-  opacity: 0.5;
+  opacity: 0.6;
   z-index: 0;
 
-  /* &:hover {
+  &:hover {
     opacity: 1;
-    scale: 0.9;
-    z-index: 30;
-  } */
+    z-index: 5;
+  }
 
   & * {
     pointer-events: none;
