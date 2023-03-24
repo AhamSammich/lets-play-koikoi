@@ -93,18 +93,20 @@ onUpdated(() => {
 
 <style scoped lang="postcss">
 .collected {
-  --card-w: 25px;
+  --card-w: 20px;
   --card-h: calc(var(--card-w) * 1.5);
   --row-w: calc(6 * var(--card-w));
+  --columns: 2;
+  --rows: 2;
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  grid-template-rows: repeat(2, calc(1.3 * var(--card-h)));
-  gap: 0.3rem 1rem;
+  grid-template-columns: repeat(var(--columns), max-content);
+  grid-template-rows: repeat(var(--rows), calc(1.3 * var(--card-h)));
+  gap: 0.3rem;
 
   @media (orientation: portrait) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    --columns: 1;
+    --rows: 4;
+    gap: 0.1rem;
   }
 }
 
