@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useImage } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { useDesignStore } from "~~/stores/designStore";
 import { useGameStore } from "~~/stores/gameStore";
 
@@ -7,7 +8,7 @@ const designStore = useDesignStore();
 const activeDesignName = computed(() => designStore.activeDesignName);
 
 const gameStore = useGameStore();
-const gameIsRunning = computed(() => gameStore.gameInProgress);
+const { gameIsRunning } = storeToRefs(gameStore);
 
 // Get 5 random cards from the deck to display.
 async function randomCards() {
@@ -22,40 +23,52 @@ async function randomCards() {
 const cards = await randomCards();
 const imagesLoading = ref(cards.length);
 const ready = computed(() => !imagesLoading.value);
-const loadingComplete = ref(false);
 
 // ready == true when all images loaded.
 function countLoaded() {
   imagesLoading.value--;
 }
 
-function startGame() {
+async function startGame() {
+  await preloadCards(activeDesignName.value);
   gameStore.startGame();
 }
 
-async function preloadCard(card: string) {
-  return useImage({ src: `cards/${activeDesignName.value}/webp/${card}.webp` });
+async function preloadCardImage(card: string, design: string) {
+  try {
+    return useImage({ src: `cards/${design}/webp/${card}.webp` });
+  } catch (err) {
+    console.warn(`Failed to load image from cards/${design}/webp/${card}.webp`, err);
+  }
 }
 
-async function preloadRemainingCards() {
-  let remainingImages = await Promise.all(
-    CARDS.filter((card) => !cards.includes(card)).map((card) => {
-      return preloadCard(card);
-    })
-  );
+async function preloadCards(design: string): Promise<boolean> {
+  try {
+    let images = await Promise.all(
+      CARDS.map((card) => {
+        return preloadCardImage(card, design);
+      })
+    );
 
-  while (true) {
-    console.log("Loading images...");
-    if (remainingImages.every((img) => img.isReady)) break;
-    await sleep(100);
+    while (true) {
+      console.log(`Loading images from %c/cards/${design}...`, "color: skyblue;");
+      if (images.every((img) => img?.isReady)) break;
+      await sleep(100);
+    }
+    console.log("Loading complete!");
+    return true;
+  } catch (err) {
+    console.error(
+      `An error occurred while loading images from %c/cards/${design}...`,
+      "color: skyblue;"
+    );
+    return false;
   }
-  console.log("Loading complete!");
-  loadingComplete.value = true;
 }
 
 onMounted(() => {
   watchEffect(async () => {
-    if (ready.value) preloadRemainingCards();
+    if (gameIsRunning.value) preloadCards(activeDesignName.value);
   });
 });
 </script>
@@ -70,7 +83,7 @@ onMounted(() => {
     <!-- Show loader -->
     <div
       v-if="imagesLoading"
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card loading rotate-12 origin-center"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card loading -rotate-12 origin-center"
     ></div>
 
     <!-- Hide while loading and after pressing START -->
@@ -82,6 +95,7 @@ onMounted(() => {
       }"
     >
       <StaticCard
+        class="w-10 md:w-16"
         v-for="cardName in cards"
         :key="cardName"
         :name="cardName"
@@ -93,12 +107,17 @@ onMounted(() => {
     <h1
       v-show="imagesLoading < cards.length"
       id="hero-title"
-      :class="{ 'text-center opacity-0': true, ready }"
+      :class="{ 'text-center text-3xl lg:text-5xl opacity-0': true, ready }"
     >
-      <span>Let's Play!</span>花札 KOI-KOI
+      <span class="text-base md:text-2xl text-right text-white block italic"
+        >Let's Play!</span
+      >花札 KOI-KOI
     </h1>
     <button
-      :class="{ 'opacity-0': true, ready: loadingComplete }"
+      :class="{
+        'w-max mx-auto text-sm md:text-xl text-white text-center font-bold opacity-0': true,
+        ready,
+      }"
       id="start-btn"
       @click="startGame()"
       autofocus
@@ -146,7 +165,7 @@ section {
 }
 
 #hero-cards {
-  --card-width: 50px;
+  /* --card-width: 50px; */
   & * {
     transform-origin: bottom;
   }
@@ -180,20 +199,11 @@ section {
   background: var(--gradient-gold);
   background-clip: text;
   color: transparent;
-  font-family: "Potta One", cursive;
+  font-family: "Potta One", sans-serif;
   font-weight: 700;
-  font-size: 48px;
   max-width: 500px;
   margin: 0 auto;
   z-index: 1;
-
-  & span {
-    text-align: right;
-    display: block;
-    font-size: 20px;
-    color: white;
-    font-style: italic;
-  }
 }
 
 button {
@@ -201,12 +211,6 @@ button {
   border-radius: 0.2rem;
   background: firebrick;
   padding: 0.5em 1em;
-  font-weight: bold;
-  width: 120px;
-  height: 50px;
-  margin: 0 auto;
-  color: #eee;
-  text-align: center;
   z-index: 1;
 
   &:is(#start-btn.ready) {

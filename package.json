@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "prune": "powershell git branch $(git branch).Trim()",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
