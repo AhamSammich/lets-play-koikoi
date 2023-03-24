@@ -11,8 +11,8 @@ const props = defineProps<{
 const emits = defineEmits(["check-match"]);
 const activeP = STORE.useActiveP();
 const playerStore = usePlayerStore();
+const imagesLoading = ref(8);
 
-// const cards = props.player === "p1" ? STORE.useHand1() : STORE.useHand2();
 const cards = computed(() => playerStore[props.player].cardsInHand);
 const tableStore = useTableStore();
 const { cardSelected, matchSelected } = storeToRefs(tableStore);
@@ -23,15 +23,28 @@ function selectCard(cardName: string) {
   if (cardName == null || activeP.value !== "p1") return;
   emits("check-match", cardName);
 }
+
+function countLoaded(card: string) {
+  imagesLoading.value--;
+}
 </script>
 
 <template>
-  <div :class="{ hand: true, 'pointer-events-none opacity-70': selectingMatch }">
+  <div
+    :class="{
+      hand: true,
+      'pointer-events-none opacity-70': selectingMatch,
+    }"
+  >
     <template v-if="player === 'p1'">
+      <div v-if="imagesLoading > 0" class="w-full flex justify-center">
+        <div class="card down loading rotate-12"></div>
+      </div>
       <!-- Get selected card details and check table for match -->
       <Card
         v-for="card in cards"
         :name="card"
+        @img-loaded="countLoaded"
         @card-select="(cardName: string) => selectCard(cardName)"
       />
     </template>
@@ -44,6 +57,7 @@ function selectCard(cardName: string) {
 
 <style scoped lang="postcss">
 .hand {
+  --card-width: 60px;
   height: inherit;
   display: flex;
   justify-content: flex-start;
@@ -54,9 +68,10 @@ function selectCard(cardName: string) {
   transition: opacity 0.5s;
 }
 
-@media (width < 800px) {
+@media (width < 768px) {
   .hand > * {
     max-width: 60px;
+    z-index: 0;
 
     &:nth-child(5) {
       margin-left: 10%;
@@ -64,6 +79,7 @@ function selectCard(cardName: string) {
 
     &:nth-child(n + 5) {
       margin-top: -10%;
+      z-index: 1;
     }
   }
 

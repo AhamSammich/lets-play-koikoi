@@ -21,7 +21,9 @@ function countLoaded(card: string) {
 </script>
 
 <template>
-  <div v-if="imagesLoading > 0" class="mx-auto card down loading rotate-12"></div>
+  <div v-if="imagesLoading > 0" class="w-full flex justify-center">
+    <div class="card down loading rotate-12"></div>
+  </div>
   <div :class="{ 'field pointer-events-none': true, 'opacity-0': imagesLoading > 0 }">
     <Card
       v-for="card in cardsOnField"

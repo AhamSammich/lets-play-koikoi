@@ -68,7 +68,10 @@ onMounted(() => {
     } ${activeDesignName} flex flex-col align-center justify-center gap-8`"
   >
     <!-- Show loader -->
-    <div v-if="imagesLoading" class="card loading rotate-12"></div>
+    <div
+      v-if="imagesLoading"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card loading rotate-12 origin-center"
+    ></div>
 
     <!-- Hide while loading and after pressing START -->
     <div

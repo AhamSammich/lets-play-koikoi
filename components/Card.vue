@@ -48,7 +48,7 @@ function handleTouch() {
   }
 }
 
-function handlePointerDown(e: Event) {
+function handlePointerDown() {
   if (isTouchScreen()) {
     console.log("touched");
     handleTouch();
