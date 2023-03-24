@@ -51,6 +51,7 @@ function countLoaded(card: string) {
 
   & * {
     transition: opacity 0.75s;
+    z-index: 0;
   }
 
   @media (orientation: landscape) and (width > 768px) {
@@ -62,6 +63,7 @@ function countLoaded(card: string) {
 
     & :nth-child(n + 9) {
       margin-top: -40px;
+      z-index: 1;
     }
 
     &:has(:nth-child(9)) .card {
@@ -79,6 +81,7 @@ function countLoaded(card: string) {
 
     & :nth-child(n + 5) {
       margin-top: -10%;
+      z-index: 1;
     }
   }
 }
