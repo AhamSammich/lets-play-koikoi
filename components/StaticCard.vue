@@ -3,21 +3,26 @@
 // If no name is passed to props, card will be face-down.
 import { useImage } from "@vueuse/core";
 import { useDesignStore } from "~~/stores/designStore";
-const props = withDefaults(defineProps<{
-  name?: string;
-  design?: string;
-  loading?: "lazy" | "eager";
-  noAnimation?: boolean;
-}>(), {
-  loading: "lazy",
-  noAnimation: true,
-});
+const props = withDefaults(
+  defineProps<{
+    name?: string;
+    design?: string;
+    loading?: "lazy" | "eager";
+    noAnimation?: boolean;
+  }>(),
+  {
+    loading: "lazy",
+    noAnimation: true,
+  }
+);
 
 defineEmits(["img-loaded"]);
 
 const activeDesignName = computed(() => useDesignStore().activeDesignName);
 
-const imgUrl = computed(() => `cards/${props.design || activeDesignName.value}/webp/${props.name}.webp`);
+const imgUrl = computed(
+  () => `cards/${props.design || activeDesignName.value}/webp/${props.name}.webp`
+);
 
 const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false;
 </script>
@@ -30,6 +35,7 @@ const isLoading = props.name ? useImage({ src: imgUrl.value }).isLoading : false
     <!-- Render card face-up -->
     <div v-else-if="isLoading" class="card down loading"></div>
     <div v-else>
+      <!-- <div> -->
       <nuxt-img
         preset="card"
         class="card"
