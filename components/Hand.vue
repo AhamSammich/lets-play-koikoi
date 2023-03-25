@@ -47,7 +47,11 @@ function countLoaded() {
       <Card
         v-for="card in cards"
         :name="card"
-        :class="{ selected: isSelectedCard(card), previewed: isPreviewedCard(card) }"
+        :class="{
+          'opacity-0': imagesLoading > 0,
+          selected: isSelectedCard(card),
+          previewed: isPreviewedCard(card),
+        }"
         @img-loaded="countLoaded"
         @card-select="(cardName: string) => selectCard(cardName)"
       />
@@ -71,8 +75,12 @@ function countLoaded() {
   transform-origin: left;
   transition: opacity 0.5s;
 
-  & :is(.selected, .previewed) {
+  & .previewed {
     z-index: 2;
+  }
+
+  & .selected {
+    z-index: 3;
   }
 }
 

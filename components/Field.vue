@@ -58,9 +58,11 @@ function countLoaded(card: string) {
     transition: opacity 0.75s;
     z-index: 0;
   }
-
-  & :is(.selected, .previewed) {
+  & .previewed {
     z-index: 2;
+  }
+  & .selected {
+    z-index: 3;
   }
 
   @media (orientation: landscape) and (width > 768px) {
