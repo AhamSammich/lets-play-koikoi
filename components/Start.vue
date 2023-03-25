@@ -107,9 +107,9 @@ onMounted(() => {
     <h1
       v-show="imagesLoading < cards.length"
       id="hero-title"
-      :class="{ 'text-center text-3xl lg:text-5xl opacity-0': true, ready }"
+      :class="{ 'text-center text-3xl sm:text-5xl opacity-0': true, ready }"
     >
-      <span class="text-base md:text-2xl text-right text-white block italic"
+      <span class="text-xl md:text-3xl text-right text-white block italic"
         >Let's Play!</span
       >花札 KOI-KOI
     </h1>

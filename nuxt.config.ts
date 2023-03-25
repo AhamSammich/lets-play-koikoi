@@ -24,12 +24,16 @@ export default defineNuxtConfig({
           crossorigin: "",
         },
         {
-          rel: "stylesheet",
+          rel: "preload",
+          as: "style",
           href: "https://fonts.googleapis.com/css2?family=Potta+One&display=swap",
+          onload: "this.rel = 'stylesheet'"
         },
         {
-          rel: "stylesheet",
+          rel: "preload",
+          as: "style",
           href: "https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap",
+          onload: "this.rel = 'stylesheet'"
         },
       ],
     },
@@ -63,7 +67,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-icon",
     "@vueuse/nuxt",
-    "nuxt-vitest",
     "@pinia/nuxt",
     "@nuxt/image-edge",
     '@nuxt/devtools',

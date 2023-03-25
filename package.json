@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "prune": "powershell git branch $(git branch).Trim()",
+    "prune-local": "powershell git branch -D $(git branch).Trim()",
+    "pull-prune": "git pull --prune && npm run prune-local",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -18,7 +19,6 @@
     "autoprefixer": "^10.4.13",
     "nuxt": "^3.0.0",
     "nuxt-icon": "^0.3.2",
-    "nuxt-vitest": "^0.6.6",
     "postcss-preset-env": "^7.8.3"
   },
   "dependencies": {
