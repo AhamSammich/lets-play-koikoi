@@ -628,7 +628,7 @@ async function runGame() {
   margin: 0.5rem;
   transition: all 0.3s;
   opacity: 0.6;
-  z-index: 0;
+  z-index: 2;
 
   &:hover {
     opacity: 1;

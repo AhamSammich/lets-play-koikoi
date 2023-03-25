@@ -15,16 +15,19 @@ const imagesLoading = ref(8);
 
 const cards = computed(() => playerStore[props.player].cardsInHand);
 const tableStore = useTableStore();
-const { cardSelected, matchSelected } = storeToRefs(tableStore);
+const { cardSelected, cardPreviewed, matchSelected } = storeToRefs(tableStore);
 const selectingMatch = computed(() => cardSelected.value && !matchSelected.value);
+const isP1Turn = computed(() => activeP.value === "p1");
+const isSelectedCard = (card: string) => isP1Turn.value && card === cardSelected.value;
+const isPreviewedCard = (card: string) => isP1Turn.value && card === cardPreviewed.value;
 
 // If match, props.cards will be updated
 function selectCard(cardName: string) {
-  if (cardName == null || activeP.value !== "p1") return;
+  if (cardName == null || !isP1Turn.value) return;
   emits("check-match", cardName);
 }
 
-function countLoaded(card: string) {
+function countLoaded() {
   imagesLoading.value--;
 }
 </script>
@@ -44,6 +47,7 @@ function countLoaded(card: string) {
       <Card
         v-for="card in cards"
         :name="card"
+        :class="{ selected: isSelectedCard(card), previewed: isPreviewedCard(card) }"
         @img-loaded="countLoaded"
         @card-select="(cardName: string) => selectCard(cardName)"
       />
@@ -66,6 +70,10 @@ function countLoaded(card: string) {
   margin-left: 0.5rem;
   transform-origin: left;
   transition: opacity 0.5s;
+
+  & :is(.selected, .previewed) {
+    z-index: 2;
+  }
 }
 
 @media (width < 768px) {
