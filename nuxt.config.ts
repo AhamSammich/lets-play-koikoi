@@ -1,8 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devServer: {
-    port: 43505,
-  },
   app: {
     head: {
       htmlAttrs: {
@@ -38,8 +35,36 @@ export default defineNuxtConfig({
       ],
     },
   },
-  pages: true,
-  ssr: true,
+  css: [
+    "@/assets/css/card-styles.css",
+  ],
+  devServer: {
+    port: 43505,
+  },
+  image: {
+    presets: {
+      card: {
+        modifiers: {
+          fit: "cover",
+          sizes: "sm:80px md:120px lg:150px",
+        },
+      },
+      screenshot: {
+        modifiers: {
+          width: 285,
+          height: 640,
+        },
+      },
+    },
+  },
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "nuxt-icon",
+    "@vueuse/nuxt",
+    "@pinia/nuxt",
+    "@nuxt/image-edge",
+    '@nuxt/devtools',
+  ],
   nitro: {
     routeRules: {
       // Set custom headers matching paths
@@ -63,46 +88,15 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: [
-    "@nuxtjs/tailwindcss",
-    "nuxt-icon",
-    "@vueuse/nuxt",
-    "@pinia/nuxt",
-    "@nuxt/image-edge",
-    '@nuxt/devtools',
-  ],
+  pages: true,
   plugins: [
     {
       src: "~/plugins/vercel.ts",
       mode: "client",
     },
   ],
-  css: [
-    "@/assets/css/card-styles.css",
-  ],
-  tailwindcss: {},
-  postcss: {
-    plugins: {
-      autoprefixer: {},
-      "postcss-preset-env": {
-        stage: 1,
-      },
-    },
-  },
-  image: {
-    presets: {
-      card: {
-        modifiers: {
-          fit: "cover",
-          sizes: "sm:80px md:120px lg:150px",
-        },
-      },
-      screenshot: {
-        modifiers: {
-          width: 285,
-          height: 640,
-        },
-      },
-    },
-  },
+  ssr: true,
+  tailwindcss: {
+    viewer: false,
+  }
 });
