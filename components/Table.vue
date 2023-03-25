@@ -513,7 +513,7 @@ onMounted(() => {
       />
     </div>
 
-    <Shout v-if="SHOUT" :msg="SHOUT" />
+    <Shout v-if="SHOUT" :msg="SHOUT" class="z-30" />
   </div>
 </template>
 
