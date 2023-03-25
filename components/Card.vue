@@ -12,7 +12,6 @@ const emits = defineEmits(["card-select", "img-loaded"]);
 
 const { activeDesignName } = storeToRefs(useDesignStore());
 const tableStore = useTableStore();
-const isSelected = computed(() => props.name === tableStore.cardSelected);
 const isPreviewed = computed(
   () => STORE.useActiveP().value === "p1" && tableStore.checkPreviewMatches(props.name)
 );
@@ -70,7 +69,7 @@ function emitLoaded() {
 </script>
 
 <template>
-  <div :class="{ glow: true, previewed: isPreviewed, selected: isSelected }">
+  <div :class="{ glow: true }">
     <svg class="glow-container absolute">
       <rect
         :rx="glowRadius"

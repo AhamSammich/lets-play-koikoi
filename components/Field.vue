@@ -6,6 +6,8 @@ const imagesLoading = ref(8);
 const tableStore = useTableStore();
 const { cardsOnField, cardSelected, matchSelected } = storeToRefs(tableStore);
 const selectingCard = computed(() => cardSelected.value && !matchSelected.value);
+const isSelectedMatch = (card: string) => card === matchSelected.value;
+const isPossibleMatch = (card: string) => tableStore.checkPreviewMatches(card);
 
 const isSelectable = (card: string) => {
   return tableStore.checkSelectedMatches(card);
@@ -33,7 +35,8 @@ function countLoaded(card: string) {
         'cursor-pointer pointer-events-auto opacity-100 -translate-y-4 z-10':
           selectingCard && isSelectable(card),
         'opacity-70': selectingCard && !isSelectable(card),
-        selected: card === matchSelected,
+        selected: isSelectedMatch(card),
+        previewed: isPossibleMatch(card),
       }"
       @img-loaded="countLoaded"
       @card-select="handleSelection(card)"
@@ -54,6 +57,10 @@ function countLoaded(card: string) {
   & * {
     transition: opacity 0.75s;
     z-index: 0;
+  }
+
+  & :is(.selected, .previewed) {
+    z-index: 2;
   }
 
   @media (orientation: landscape) and (width > 768px) {
