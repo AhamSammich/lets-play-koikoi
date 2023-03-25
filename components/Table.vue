@@ -258,7 +258,7 @@ async function continueGame(bool: boolean, p: string) {
 }
 
 async function whileSelectingCard() {
-  while (!cardSelected.value) {
+  while (gameIsRunning.value && !cardSelected.value) {
     if (activeP.value === "p2" && !draw.value) {
       await pauseForUpdate();
       setAiSelection();
@@ -275,7 +275,7 @@ function promptSelection() {
 async function whileSelectingMatch() {
   console.log("Awaiting match selection...");
   console.dir(tableStore.matchingCards);
-  let selecting = () => cardSelected.value && !matchSelected.value;
+  let selecting = () => gameIsRunning.value && cardSelected.value && !matchSelected.value;
   while (selecting()) {
     await sleep();
   }
@@ -369,6 +369,15 @@ async function runGame() {
     }
   }
 }
+
+onMounted(() => {
+  watchEffect(() => {
+    console.log(`SELECTED: ${getName(cardSelected.value.toUpperCase())}`);
+  });
+  watchEffect(() => {
+    console.log(`MATCHED: ${getName(matchSelected.value.toUpperCase())}`);
+  });
+});
 </script>
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -561,7 +570,7 @@ async function runGame() {
   width: max-content;
   pointer-events: none;
   opacity: 0;
-  z-index: 1;
+  z-index: 5;
   transform-origin: center;
   animation: pickUp 1.5s ease-out;
 }
@@ -605,7 +614,7 @@ async function runGame() {
   right: 25%;
   opacity: 0;
   animation: pickUp 1.5s 0.5s;
-  z-index: 1;
+  z-index: 5;
 }
 
 #field {
