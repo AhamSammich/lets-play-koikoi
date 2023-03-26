@@ -77,6 +77,7 @@ const activePlayer = () => PLAYER[activeP.value]();
 // =======================  UTILITIES =========================== //
 // ============================================================== //
 
+let loopIsRunning = false;
 const WAIT = computed({
   get() {
     return gameStore.waitingForInput;
@@ -151,8 +152,9 @@ function dealFirstHands(cards: string[]): void {
     checkForInstantYaku
   );
   draw.value = false;
-  if (isFirstRound()) {
+  if (!loopIsRunning) {
     runGame();
+    loopIsRunning = true;
   }
 }
 
@@ -274,7 +276,6 @@ function promptSelection() {
 
 async function whileSelectingMatch() {
   console.log("Awaiting match selection...");
-  console.dir(tableStore.matchingCards);
   let selecting = () => gameIsRunning.value && cardSelected.value && !matchSelected.value;
   while (selecting()) {
     await sleep();
@@ -308,11 +309,13 @@ async function runGame() {
 
   while (gameIsRunning.value) {
     let cardPlayed = await whileSelectingCard();
+    if (!cardPlayed) break;
     await pauseForUpdate();
 
     let matches = await getMatch(cardPlayed);
     if (matches.length) {
       let matchedCards = await getSelectedMatch(matches);
+      if (!matchedCards.length) break;
       await pauseForUpdate();
       console.log(
         `%c${activeP.value.toUpperCase()} matched ${cardPlayed} with ${matchedCards}`,
@@ -372,10 +375,10 @@ async function runGame() {
 
 onMounted(() => {
   watchEffect(() => {
-    console.log(`SELECTED: ${getName(cardSelected.value.toUpperCase())}`);
+    if (cardSelected.value) console.log(`SELECTED: ${getName(cardSelected.value.toUpperCase())}`);
   });
   watchEffect(() => {
-    console.log(`MATCHED: ${getName(matchSelected.value.toUpperCase())}`);
+    if (matchSelected.value) console.log(`MATCHED: ${getName(matchSelected.value.toUpperCase())}`);
   });
 });
 </script>
@@ -605,6 +608,8 @@ onMounted(() => {
   & > * {
     --card-width: 50px;
     position: absolute;
+    transform-origin: center;
+    rotate: 180deg;
   }
 }
 
