@@ -22,6 +22,8 @@ function arrangeCards() {
 }
 
 const initialCardsToLoad = 8;
+const initialLoading = ref(initialCardsToLoad);
+const moreLoading = ref(48 - initialCardsToLoad);
 const cards = arrangeCards();
 const scrolling = ref(false);
 
@@ -36,14 +38,15 @@ function finishLoading() {
     :class="`relative card-sheet grid overflow-x-hidden overflow-y-scroll z-10 ${cardDesign}`"
     :style="`--display-rows: ${rows || 1};`"
     @scroll="finishLoading()"
-    @pointerenter="finishLoading()"
+    
   >
+    <div v-if="initialLoading" class="absolute-center card down loading -rotate-12 z-20"></div>
     <p
-      v-if="!scrolling"
-      class="absolute w-max bottom-1 right-1 p-1 rounded-md text-xs bg-black text-yellow-200"
+      v-else-if="!scrolling && !initialLoading"
+      class="more-card absolute w-max bottom-0 right-0 px-2 py-4 text-xl text-center bg-black bg-opacity-80 text-yellow-200"
     >
-      Load more
-      <Icon class="text-base" name="icon-park-solid:blocks-and-arrows" />
+      MORE
+      <Icon class="text-5xl cursor-pointer" name="material-symbols:more-horiz" @pointerdown="finishLoading()" />
     </p>
     <!-- Initially load the first 12 cards in the deck. -->
     <StaticCard
@@ -53,9 +56,11 @@ function finishLoading() {
       :design="cardDesign"
       loading="eager"
       class="pointer-events-none"
+      @img-loaded="initialLoading--"
     />
     <!-- Load the rest when user starts scrolling. -->
     <template v-if="scrolling">
+      <div v-if="moreLoading" class="absolute-center card down loading -rotate-12"></div>
       <StaticCard
         v-for="cardName in cards.slice(initialCardsToLoad)"
         :key="cardName"
@@ -63,6 +68,7 @@ function finishLoading() {
         loading="lazy"
         :design="cardDesign"
         class="pointer-events-none"
+        @img-loaded="moreLoading--"
       />
     </template>
   </div>
@@ -88,6 +94,19 @@ function finishLoading() {
     border-radius: 0.2rem;
     width: 0.4rem;
   }
+}
+
+.more-card {
+  width: var(--card-width);
+  aspect-ratio: 2/3;
+  border-radius: 0.1rem;
+}
+
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
 }
 
 @media (orientation: landscape) and (width > 768px) {
