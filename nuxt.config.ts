@@ -65,29 +65,6 @@ export default defineNuxtConfig({
     "@nuxt/image-edge",
     '@nuxt/devtools',
   ],
-  nitro: {
-    routeRules: {
-      // Set custom headers matching paths
-      "/_nuxt/**": {
-        headers: {
-          "Cache-Control":
-            "private, maxage=86400, stale-while-revalidate=86400",
-        },
-      },
-      "/_ipx/**": {
-        headers: {
-          "Cache-Control":
-            "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
-        },
-      },
-      "/cards/**": {
-        headers: {
-          "Cache-Control":
-            "private, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
-        },
-      },
-    },
-  },
   pages: true,
   plugins: [
     {
@@ -95,6 +72,21 @@ export default defineNuxtConfig({
       mode: "client",
     },
   ],
+  routeRules: {
+    // Set custom headers matching paths
+    "/_nuxt/**": {
+      headers: {
+        "Cache-Control":
+          "public, maxage=86400, stale-while-revalidate=86400",
+      },
+    },
+    "/(_ipx|cards|images|_vercel)/**": {
+      headers: {
+        "Cache-Control":
+          "public, maxage=604800, stale-while-revalidate=86400, stale-if-error=86400",
+      },
+    },
+  },
   ssr: true,
   tailwindcss: {
     viewer: false,
