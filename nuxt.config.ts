@@ -24,20 +24,24 @@ export default defineNuxtConfig({
           rel: "preload",
           as: "style",
           href: "https://fonts.googleapis.com/css2?family=Potta+One&display=swap",
-          onload: "this.rel = 'stylesheet'"
+          onload: "this.rel = 'stylesheet'",
         },
         {
           rel: "preload",
           as: "style",
           href: "https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap",
-          onload: "this.rel = 'stylesheet'"
+          onload: "this.rel = 'stylesheet'",
+        },
+      ],
+      meta: [
+        {
+          name: "theme-color",
+          content: "#40495a",
         },
       ],
     },
   },
-  css: [
-    "@/assets/css/card-styles.css",
-  ],
+  css: ["@/assets/css/card-styles.css"],
   devServer: {
     port: 43505,
   },
@@ -63,7 +67,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@pinia/nuxt",
     "@nuxt/image-edge",
-    '@nuxt/devtools',
+    "@nuxt/devtools",
   ],
   pages: true,
   plugins: [
@@ -76,8 +80,7 @@ export default defineNuxtConfig({
     // Set custom headers matching paths
     "/_nuxt/**": {
       headers: {
-        "Cache-Control":
-          "public, maxage=86400, stale-while-revalidate=86400",
+        "Cache-Control": "public, maxage=86400, stale-while-revalidate=86400",
       },
     },
     "/(_ipx|cards|images|_vercel)/**": {
@@ -90,5 +93,5 @@ export default defineNuxtConfig({
   ssr: true,
   tailwindcss: {
     viewer: false,
-  }
+  },
 });

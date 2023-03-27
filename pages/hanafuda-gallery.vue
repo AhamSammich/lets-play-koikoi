@@ -32,7 +32,7 @@ function applyDesign(designName: string) {
         </p>
         <p>
           If there's a design you would like to have added,
-          <a href="https://www.twitter.com/hammons_dev" target="_blank">let me know!💬</a>
+          <a href="https://www.twitter.com/hammons_dev" target="_blank" class="underline">let me know!💬</a>
         </p>
       </div>
     </div>

@@ -7,12 +7,6 @@
   --card-glow-color: lightgoldenrodyellow;
 }
 
-
-/* Ensure image is not upside-down */
-.down:not(#deck .down) {
-  rotate: 180deg;
-}
-
 .ramen-red {
 }
 

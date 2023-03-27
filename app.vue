@@ -28,8 +28,7 @@
 body {
   background-color: var(--tbl-black);
   overflow-x: hidden;
-  /* overflow-y: hidden; */
-  width: 100vw;
+  width: 100%;
   font-family: "Mochiy Pop One", sans-serif;
   user-select: none;
 }

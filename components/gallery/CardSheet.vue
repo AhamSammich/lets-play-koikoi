@@ -40,7 +40,7 @@ function finishLoading() {
     @scroll="finishLoading()"
     
   >
-    <div v-if="initialLoading" class="absolute-center card down loading -rotate-12 z-20"></div>
+    <div v-if="initialLoading" class="absolute-center card down animate-pulse z-20"></div>
     <p
       v-else-if="!scrolling && !initialLoading"
       class="more-card absolute w-max bottom-0 right-0 px-2 py-4 text-xl text-center bg-black bg-opacity-80 text-yellow-200"
@@ -55,19 +55,20 @@ function finishLoading() {
       :name="cardName"
       :design="cardDesign"
       loading="eager"
-      class="pointer-events-none"
+      :class="{'pointer-events-none': true, 'opacity-0': initialLoading}"
       @img-loaded="initialLoading--"
     />
     <!-- Load the rest when user starts scrolling. -->
     <template v-if="scrolling">
-      <div v-if="moreLoading" class="absolute-center card down loading -rotate-12"></div>
+      <div v-if="moreLoading" class="absolute-center card down animate-pulse"></div>
       <StaticCard
         v-for="cardName in cards.slice(initialCardsToLoad)"
         :key="cardName"
         :name="cardName"
         loading="lazy"
+        :no-animation="false"
         :design="cardDesign"
-        class="pointer-events-none"
+        :class="{'pointer-events-none': true, 'opacity-0': moreLoading}"
         @img-loaded="moreLoading--"
       />
     </template>

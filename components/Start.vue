@@ -83,7 +83,7 @@ onMounted(() => {
     <!-- Show loader -->
     <div
       v-if="imagesLoading"
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card loading -rotate-12 origin-center"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card loading twirl -rotate-12 origin-center"
     ></div>
 
     <!-- Hide while loading and after pressing START -->
