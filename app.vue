@@ -6,7 +6,7 @@
 <style lang="postcss">
 :root {
   --tbl-black: rgb(14, 20, 34);
-  --gradient-gold: linear-gradient(15deg, lightgoldenrodyellow, gold, palegoldenrod);
+  --gradient-gold: linear-gradient(15deg, gold, palegoldenrod, lightgoldenrodyellow);
 }
 
 * {

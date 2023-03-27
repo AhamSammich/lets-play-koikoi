@@ -78,7 +78,7 @@ onMounted(() => {
     id="start-page"
     :class="`${
       gameIsRunning ? '' : 'show'
-    } ${activeDesignName} flex flex-col align-center justify-center gap-8`"
+    } ${activeDesignName} flex flex-col align-center justify-center gap-12`"
   >
     <!-- Show loader -->
     <div
@@ -90,12 +90,12 @@ onMounted(() => {
     <div
       id="hero-cards"
       :class="{
-        'flex justify-center z-0 -rotate-12': true,
+        'flex justify-center z-0 -rotate-12 md:m-8': true,
         'opacity-0': gameIsRunning || imagesLoading,
       }"
     >
       <StaticCard
-        class="w-10 md:w-16"
+        class="w-12 md:w-14"
         v-for="cardName in cards"
         :key="cardName"
         :name="cardName"
@@ -107,7 +107,7 @@ onMounted(() => {
     <h1
       v-show="imagesLoading < cards.length"
       id="hero-title"
-      :class="{ 'text-center text-3xl sm:text-5xl opacity-0': true, ready }"
+      :class="{ 'text-center text-4xl sm:text-5xl opacity-0': true, ready }"
     >
       <span class="text-xl md:text-3xl text-right text-white block italic"
         >Let's Play!</span
@@ -115,7 +115,7 @@ onMounted(() => {
     </h1>
     <button
       :class="{
-        'w-max mx-auto text-sm md:text-xl text-white text-center font-bold opacity-0': true,
+        'w-max mx-auto text-lg md:text-2xl text-white text-center font-bold opacity-0': true,
         ready,
       }"
       id="start-btn"
@@ -165,7 +165,6 @@ section {
 }
 
 #hero-cards {
-  /* --card-width: 50px; */
   & * {
     transform-origin: bottom;
   }

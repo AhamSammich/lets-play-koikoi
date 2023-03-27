@@ -20,6 +20,14 @@
   --card-bg-color: linear-gradient(225deg, skyblue, lightsteelblue);
   --card-border-color: #333;
   --card-radius: 0.5rem;
+
+  & .down {
+    background-image: url("/cards/nobori-blue/webp/card-back.webp") !important;
+    background-color: lightskyblue !important;
+    background-size: 60% !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom 5% right 5% !important;
+  }
 }
 
 .sabling-art {
@@ -37,6 +45,15 @@
 .hanami-hue {
   --card-bg-color: linear-gradient(45deg, seagreen, palegreen);
   --card-border-color: #555;
+  --card-radius: 0.5rem;
+
+  & .down {
+    background-image: url("/cards/nobori-blue/webp/card-back.webp") !important;
+    background-color: lightgoldenrodyellow !important;
+    background-size: 60% !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom 5% right 5% !important;
+  }
 }
 
 .kc-original {
@@ -71,7 +88,7 @@
 
   & .down {
     --card-bg-color: url("/cards/parish-cherry/webp/card-back.webp"),
-    linear-gradient(225deg, palevioletred, firebrick 50%);
+      linear-gradient(225deg, palevioletred, firebrick 50%);
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
