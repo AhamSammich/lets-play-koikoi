@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useImage } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useTableStore } from "~~/stores/tableStore";
 import { useDesignStore } from "../stores/designStore";
@@ -18,7 +17,6 @@ const isPreviewed = computed(
 const imgUrl = computed(
   () => `cards/${props.forcedStyle || activeDesignName.value}/webp/${props.name}.webp`
 );
-const { isLoading } = useImage({ src: imgUrl.value });
 
 // Dynamically set the glowing border radius
 const glowRadius = computed(() =>
@@ -69,7 +67,7 @@ function emitLoaded() {
 </script>
 
 <template>
-  <div :class="{ glow: true }">
+  <div class="glow">
     <svg class="glow-container absolute">
       <rect
         :rx="glowRadius"
@@ -84,9 +82,8 @@ function emitLoaded() {
         class="glow-line"
       ></rect>
     </svg>
-    <div v-if="isLoading" class="card loading mx-auto my-0"></div>
     <nuxt-img
-      v-else
+      placeholder
       preset="card"
       :alt="name"
       :src="imgUrl"
@@ -128,15 +125,14 @@ function emitLoaded() {
 
   &.loading {
     transform-origin: center;
+    background-color: #EEE;
     margin: 0 auto;
     scale: 0.8;
     opacity: 0.5;
+  }
 
-    &.down {
-      rotate: 0deg !important;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
+    &.twirl {
       animation: twirl 2.5s infinite alternate ease-in-out;
     }
   }
@@ -144,11 +140,14 @@ function emitLoaded() {
 
 @keyframes twirl {
   from {
+    opacity: 0.9;
     scale: -1 1;
-    background: white;
+  }
+  50% {
+    opacity: 0.1;
   }
   to {
-    background: rgb(64, 73, 90);
+    opacity: 0.9;
     scale: 1 1;
   }
 }

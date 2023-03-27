@@ -109,7 +109,7 @@ onMounted(async () => {
   await loadLocalData();
   if (/localhost/ig.test(window.location.hostname)) {
     useSeoMeta({
-      title: "<dev-lp-koikoi> Let's Play Koi-Koi!"
+      title: `<${window.location.port}> Let's Play Koi-Koi!`
     })
   }
 });
@@ -149,7 +149,7 @@ onMounted(async () => {
       id="hero"
       preload
       src="bg/webp/grey-hills-1920.webp"
-      sizes="sm:480px md:1280px lg:1400px xl:100vw"
+      sizes="sm:480px md:100vw"
       alt="Background image of the moon over silver grass."
       loading="eager"
       :class="{ 'scroll-up': gameIsRunning }"
