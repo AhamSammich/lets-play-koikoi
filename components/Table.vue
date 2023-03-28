@@ -388,7 +388,7 @@ onMounted(() => {
 //////////////////////////////////////////////////////////////////////////////////////
 
 <template>
-  <div id="tabletop" class="relative origin-left max-sm:scale-75 xl:scale-110 xl:origin-center">
+  <div id="tabletop" class="relative origin-center max-md:scale-90 xl:scale-110">
     <!-- TOP ROW -->
     <div id="p2-hand">
       <Hand player="p2" @check-match="(cardName: string) => getMatch(cardName)" />
