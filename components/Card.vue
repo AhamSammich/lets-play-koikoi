@@ -11,9 +11,7 @@ const emits = defineEmits(["card-select", "img-loaded"]);
 
 const { activeDesignName } = storeToRefs(useDesignStore());
 const tableStore = useTableStore();
-const isPreviewed = computed(
-  () => STORE.useActiveP().value === "p1" && tableStore.checkPreviewMatches(props.name)
-);
+const isCardPreviewed = computed(() => tableStore.cardPreviewed === props.name);
 const imgUrl = computed(
   () => `cards/${props.forcedStyle || activeDesignName.value}/webp/${props.name}.webp`
 );
@@ -38,7 +36,7 @@ function cancelHover() {
 }
 
 function handleTouch() {
-  if (isPreviewed.value) {
+  if (isCardPreviewed.value) {
     emitSelection();
   } else {
     tableStore.setPreviewCard(props.name);
@@ -56,7 +54,7 @@ function handlePointerDown() {
 }
 
 function emitSelection() {
-  if (isPreviewed.value) {
+  if (isCardPreviewed.value) {
     emits("card-select", props.name);
   }
 }
@@ -158,7 +156,7 @@ function emitLoaded() {
   scale: 1.1;
 }
 
-.previewed:hover {
+.previewed {
   /* Used for calc */
   --container-offset: 50px;
   --glow-line-color: var(--card-glow-color);
