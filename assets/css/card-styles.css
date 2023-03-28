@@ -1,5 +1,6 @@
 :root {
   --card-width: 70px;
+  --card-aspect: 2/3;
   --card-border-color: #111;
   --card-border-w: 0.5px;
   --card-radius: 0.3rem;
@@ -90,6 +91,24 @@
     --card-bg-color: url("/cards/parish-cherry/webp/card-back.webp"),
       linear-gradient(225deg, palevioletred, firebrick 50%);
     background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+}
+
+.modern {
+  --card-aspect: 9/16;
+  --card-border-color: hsla(0 0% 100% / 0.3);
+  --card-glow-color: powderblue;
+
+  & .card {
+    background-color: var(--tbl-black);
+    object-fit: cover;
+  }
+
+  & .down {
+    --card-bg-color: url("/cards/modern/webp/card-back.webp");
+    background-size: cover !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
   }

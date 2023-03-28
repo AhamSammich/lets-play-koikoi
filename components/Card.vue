@@ -101,7 +101,7 @@ function emitLoaded() {
 .card {
   border-radius: var(--card-radius);
   width: var(--card-width);
-  aspect-ratio: 2 / 3;
+  aspect-ratio: var(--card-aspect);
   transition: all 0.3s 0.1s;
   border: var(--card-border-w) solid var(--card-border-color);
 
@@ -158,8 +158,7 @@ function emitLoaded() {
   scale: 1.1;
 }
 
-.previewed,
-.card:hover {
+.previewed:hover {
   /* Used for calc */
   --container-offset: 50px;
   --glow-line-color: var(--card-glow-color);

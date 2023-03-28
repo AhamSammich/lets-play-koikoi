@@ -215,7 +215,7 @@ function allowedYaku(): YakuDetails[] {
     content: "";
     display: block;
     width: var(--card-width);
-    aspect-ratio: 2/3;
+    aspect-ratio: var(--card-aspect);
     background: rgb(0 0 0 / 0.65);
     box-shadow: 0 0 0.1rem 0 red;
     border-radius: var(--card-radius);

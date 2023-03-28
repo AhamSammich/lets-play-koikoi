@@ -40,10 +40,10 @@ function finishLoading() {
     @scroll="finishLoading()"
     
   >
-    <div v-if="initialLoading" class="absolute-center card down animate-pulse z-20"></div>
+    <div v-if="initialLoading" class="absolute-center card down z-20"></div>
     <p
       v-else-if="!scrolling && !initialLoading"
-      :class="`${cardDesign} more-card absolute w-max bottom-0 right-0 px-2 py-6 text-xl text-center bg-black bg-opacity-80 text-yellow-200`"
+      :class="`${cardDesign} more-card flex flex-col items-center justify-center absolute w-max bottom-0 right-0 font-mono font-bold text-xl text-center bg-black bg-opacity-80 text-yellow-200`"
     >
       MORE
       <Icon class="text-3xl cursor-pointer" name="gg:more-vertical-r" @pointerdown="finishLoading()" />
@@ -60,7 +60,7 @@ function finishLoading() {
     />
     <!-- Load the rest when user starts scrolling. -->
     <template v-if="scrolling">
-      <div v-if="moreLoading" class="absolute-center card down animate-pulse"></div>
+      <div v-if="moreLoading" class="absolute-center card down"></div>
       <StaticCard
         v-for="cardName in cards.slice(initialCardsToLoad)"
         :key="cardName"
@@ -99,8 +99,9 @@ function finishLoading() {
 
 .more-card {
   width: var(--card-width);
-  aspect-ratio: 2/3;
+  aspect-ratio: var(--card-aspect);
   border-radius: var(--card-radius);
+  letter-spacing: 0.1rem;
 }
 
 .absolute-center {
