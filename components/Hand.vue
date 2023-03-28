@@ -41,7 +41,7 @@ function countLoaded() {
   >
     <template v-if="player === 'p1'">
       <div v-if="imagesLoading > 0" class="w-full flex justify-center">
-        <div class="card down loading rotate-12"></div>
+        <div class="card down loading twirl -rotate-12"></div>
       </div>
       <!-- Get selected card details and check table for match -->
       <Card
