@@ -65,8 +65,9 @@ function countLoaded(card: string) {
     z-index: 3;
   }
 
-  @media (orientation: landscape) and (width > 768px) {
+  @media (orientation: landscape) {
     max-width: calc(var(--card-width) * 9);
+    gap: 0;
 
     & :nth-child(9) {
       margin-left: 5%;
@@ -78,11 +79,11 @@ function countLoaded(card: string) {
     }
 
     &:has(:nth-child(9)) .card {
-      width: 60px;
+      --card-width: 50px;
     }
   }
 
-  @media (orientation: portrait) or (width <= 768px) {
+  @media (orientation: portrait) and (width < 768px) {
     max-width: calc(var(--card-width) * 5);
     flex-direction: row;
 

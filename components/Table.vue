@@ -388,7 +388,7 @@ onMounted(() => {
 //////////////////////////////////////////////////////////////////////////////////////
 
 <template>
-  <div id="tabletop" class="relative">
+  <div id="tabletop" class="relative origin-center max-md:scale-90 xl:scale-110">
     <!-- TOP ROW -->
     <div id="p2-hand">
       <Hand player="p2" @check-match="(cardName: string) => getMatch(cardName)" />
@@ -547,10 +547,10 @@ onMounted(() => {
   }
 
   @media (orientation: landscape) {
-    grid-template-rows: 60px minmax(100px, 1fr) 150px;
+    grid-template-rows: 70px 1fr 1fr;
 
     & #p1-hand {
-      padding-bottom: 80px;
+      /* padding-bottom: 80px; */
       padding-left: var(--left-shift);
     }
 
@@ -602,7 +602,6 @@ onMounted(() => {
   grid-area: p2;
   pointer-events: none;
   position: relative;
-  margin-right: var(--card-width);
   rotate: 180deg;
 
   & > * {

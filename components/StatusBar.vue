@@ -13,11 +13,9 @@ function pointToActive() {
 </script>
 
 <template>
-  <header
-    id="status"
-    class="flex items-center justify-around p-4 fixed top-0 opacity-70 text-white z-10"
-  >
-    <div id="p1-score" :class="{ 'is-oya': props.oya === 'p1' }">
+  <header id="status" class="flex items-center justify-around p-4 fixed top-0 text-white z-10">
+    <div id="p1-score" :class="{
+      'is-oya': props.oya === 'p1', 'active-player': activeP === 'p1' }">
       <p>PLAYER 1</p>
       <nuxt-img v-show="props.oya === 'p1'" loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 1." />
       <p>{{ score.p1 }}</p>
@@ -27,7 +25,7 @@ function pointToActive() {
       <p>{{ roundNum }}</p>
       <div id="turn-pointer" :class="pointToActive()"></div>
     </div>
-    <div id="p2-score" :class="{ 'is-oya': props.oya === 'p2' }">
+    <div id="p2-score" :class="{ 'is-oya': props.oya === 'p2', 'active-player': activeP === 'p2' }">
       <p>PLAYER 2</p>
       <nuxt-img v-show="props.oya === 'p2'" loading="lazy" src="/images/webp/peony.webp" alt="The oya is Player 2." />
       <p>{{ score.p2 }}</p>
@@ -40,6 +38,15 @@ function pointToActive() {
   transform-origin: top;
   transition: all 0.5s;
   scale: 0.8;
+
+  & > div {
+    opacity: 0.8;
+  }
+
+  & .active-player {
+    opacity: 1;
+    scale: 1.1;
+  }
 
   @media (orientation: portrait) {
     width: 100vw;
@@ -62,12 +69,13 @@ function pointToActive() {
       scale: none;
       opacity: 1;
     }
-    
-    & > * {
+
+    &>* {
       rotate: 180deg;
     }
   }
 }
+
 p {
   font-weight: bold;
   font-size: smaller;

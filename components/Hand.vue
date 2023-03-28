@@ -84,7 +84,7 @@ function countLoaded() {
   }
 }
 
-@media (width < 768px) {
+@media (orientation: portrait) and (width < 768px) {
   .hand > * {
     max-width: 60px;
     z-index: 0;
