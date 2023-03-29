@@ -32,7 +32,7 @@ async function loadDesign() {
   // Use a default design if none saved.
   designStore.setActiveDesign(savedDesign);
   if (designSelectElement instanceof HTMLSelectElement)
-    designSelectElement.value = activeDesign.value.name;
+    designSelectElement.value = activeDesign.value.title;
 }
 
 function updateRuleSet(target: any) {
@@ -110,12 +110,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form @submit.prevent>
+  <section>
     <!-- choose number of rounds: 3 / 6 / 12 -->
     <fieldset>
       <legend>
         Game Length
-        <p class="inline">({{ settings.maxRounds }} rounds)</p>
+        <span>({{ settings.maxRounds }} rounds)</span>
       </legend>
       <div>
         <label for="length-season">Season</label>
@@ -225,6 +225,7 @@ onMounted(async () => {
     <fieldset>
       <legend>Card Design</legend>
       <div class="flex flex-col gap-2">
+        <label class="text-sm" for="card-design">Select a design:</label>
         <select
           id="card-design"
           title="Select a design"
@@ -244,11 +245,11 @@ onMounted(async () => {
         </div>
       </div>
     </fieldset>
-  </form>
+  </section>
 </template>
 
 <style scoped lang="postcss">
-form {
+section {
   display: grid;
   gap: 1rem;
 }
