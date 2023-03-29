@@ -170,7 +170,7 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
     name: "parish-cherry",
     title: "Parish Cherry",
     attribution:
-      "Design by Parish Cherry, an illustrator & graphic designer based in Los Angeles, California!",
+      "Design by Parish Cherry, an illustrator & graphic designer based in Honolulu, HI!",
     urlDescription: "See more at ParishCherry.com!",
     url: "https://parishcherry.com",
     backImage: true,
