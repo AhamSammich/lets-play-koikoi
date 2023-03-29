@@ -30,7 +30,7 @@ The currently available designs in the game are attributed to the following arti
 
 |Design|Artist|
 |---|---|
-|[Modern Hanafuda](http://www.modernhanafuda.net)|Sarah Thomas|
+|[Modern Hanafuda](www.modernhanafuda.net)|Sarah Thomas|
 |Moon Rabbit Hanafuda|[Kelsey Cretcher](https://www.deviantart.com/kcretcher)|
 |[Nishiki Fuda](https://nishikie.stores.jp/)|Estudio Artes|
 |Pokemon Cards|[SablingArt](https://sablingart.tumblr.com/)|
