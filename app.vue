@@ -29,7 +29,7 @@ body {
   background-color: var(--tbl-black);
   overflow-x: hidden;
   width: 100%;
-  font-family: "Mochiy Pop One", sans-serif;
+  font-family: Rubik, Verdana, sans-serif;
   user-select: none;
 }
 

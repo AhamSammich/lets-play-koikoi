@@ -47,7 +47,7 @@ function goToGallery() {
   ></div>
   <menu
     id="menu-container"
-    class="font-mono text-white fixed right-0 top-0 translate-x-full scale-x-0 max-h-screen w-screen"
+    class="font-thin text-white fixed right-0 top-0 translate-x-full scale-x-0 max-h-screen w-screen"
     :aria-expanded="menuOpen"
   >
     <div
@@ -109,7 +109,7 @@ function goToGallery() {
             @close-menu="showOptions = false"
           />
         </div>
-        <h1 class="py-1 text-xs underline underline-offset-1">Game Options</h1>
+        <h3 class="py-1 underline underline-offset-1">Game Options</h3>
         <MenuGameOptions />
       </section>
 
@@ -164,8 +164,8 @@ li:has(.under-construction) {
   border-radius: 0.3rem;
 }
 
-h1 {
-  font-family: "Potta One", cursive;
+h1, h3 {
+  font-family: "Potta One", Rubik, sans-serif;
   margin-bottom: 0.5em;
   letter-spacing: 0.05em;
   color: var(--menu-accent2);

@@ -84,6 +84,11 @@ function finishLoading() {
   grid-template-columns: repeat(var(--row-size), minmax(var(--card-width), 1fr));
   min-height: var(--card-height);
   max-height: calc(var(--card-height) * var(--display-rows));
+  gap: 0.5px;
+
+  @media (max-width: 480px) {
+  --card-width: 75px;
+  }
 
   &::-webkit-scrollbar {
     width: 0.4rem;
@@ -101,7 +106,12 @@ function finishLoading() {
   width: var(--card-width);
   aspect-ratio: var(--card-aspect);
   border-radius: var(--card-radius);
-  letter-spacing: 0.1rem;
+  color: var(--link-color);
+  font-weight: bold;
+
+  @media (prefers-color-scheme: light) {
+    background-color: hsl(0 0% 96% / 0.9);
+  }
 }
 
 .absolute-center {
@@ -115,6 +125,10 @@ function finishLoading() {
   .card-sheet {
     --row-size: 8;
     max-height: calc(var(--card-height) * var(--all-rows));
+
+    @media (width > 1024px) {
+      --row-size: 12;
+    }
   }
 }
 </style>
