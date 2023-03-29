@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDesignStore } from "~~/stores/designStore";
+
 const props = defineProps<{
   showModal: boolean;
   player: string;
@@ -8,6 +10,8 @@ const props = defineProps<{
 
 const emits = defineEmits(["koi-koi"]);
 const tableVisible = ref(false);
+const designStore = useDesignStore();
+const activeDesignName = computed(() => designStore.activeDesignName);
 
 function callKoiKoi() {
   emits("koi-koi", true, props.player);
@@ -25,13 +29,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <dialog :open="showModal" aria-modal="true">
+  <dialog :open="showModal" aria-modal="true" :class="activeDesignName">
     <!-- Toggle button to reveal the table behind the modal -->
     <div id="new-yaku" :class="{ invisible: tableVisible }">
       <div class="yaku" v-for="yaku in Object.keys(yakuList)" :key="yaku">
         <h1>{{ yaku }}</h1>
         <div class="yaku-cards">
-            <StaticCard v-for="card in yakuList[yaku]" :name="card" />
+          <StaticCard v-for="card in yakuList[yaku]" :name="card" />
         </div>
       </div>
     </div>
@@ -39,10 +43,13 @@ onMounted(async () => {
       <button v-show="koikoiAllowed" @click="callKoiKoi()">KOI KOI</button>
       <button @click="callShoubu()">END ROUND</button>
     </div>
-    <MenuButton v-show="player === 'p1'" id="toggle-btn" ico-name="mdi:eye" 
-    class="top-4 opacity-50 z-50"
-    @open-menu="tableVisible = true"
-    @close-menu="tableVisible = false"
+    <MenuButton
+      v-show="player === 'p1'"
+      id="toggle-btn"
+      ico-name="mdi:eye"
+      class="absolute bottom-8 z-50 animate-pulse"
+      @open-menu="tableVisible = true"
+      @close-menu="tableVisible = false"
     />
   </dialog>
 </template>
@@ -50,7 +57,8 @@ onMounted(async () => {
 <style scoped lang="postcss">
 #new-yaku {
   transition: opacity 0.3s;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -59,12 +67,7 @@ onMounted(async () => {
   justify-content: flex-start;
   align-items: flex-start;
   align-self: flex-start;
-  mask-image: linear-gradient(
-    180deg,
-    transparent,
-    #111 25px 95%,
-    transparent
-  );
+  mask-image: linear-gradient(180deg, transparent, #111 25px 95%, transparent);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
@@ -93,23 +96,23 @@ onMounted(async () => {
   }
 
   & :has(.card) {
-
-    &:nth-child(n+6) {
+    &:nth-child(n + 6) {
       transform: translate3d(0, -20%, 0);
     }
 
-    &:nth-child(n+11) {
+    &:nth-child(n + 11) {
       transform: translate3d(0, -40%, 0);
     }
-    
+
     &:nth-child(6) {
       margin-left: 5%;
     }
-
   }
 }
 
-dialog, .btn-bar, button {
+dialog,
+.btn-bar,
+button {
   transition: all 0.3s;
 }
 
@@ -130,23 +133,23 @@ dialog:has(#new-yaku.invisible) {
   }
 
   @media (orientation: landscape) {
-
     & .btn-bar {
       flex-direction: column;
       max-width: max-content;
       gap: 1rem;
       position: absolute;
-      right: 1rem;
+      right: 4rem;
+      bottom: 50%;
     }
 
     & #toggle-btn {
-      translate: 0 1.75rem;
+      box-shadow: 0 0 1rem 0.1rem lightgoldenrodyellow;
     }
   }
 }
 
 @media (width > 800px) or (orientation: landscape) {
-  #new-yaku { 
+  #new-yaku {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;

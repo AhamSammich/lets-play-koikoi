@@ -40,7 +40,7 @@ function pointToActive() {
   scale: 0.8;
 
   & > div {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 
   & .active-player {

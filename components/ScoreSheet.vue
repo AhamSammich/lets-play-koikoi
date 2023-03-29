@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDesignStore } from '~~/stores/designStore';
+
 const props = defineProps<{
   showModal: boolean;
   player: string | null;
@@ -10,6 +12,8 @@ const emits = defineEmits(["reset", "next"]);
 const doubledOverSeven = RULES.useDoubledOverSeven();
 const roundNum = STORE.useRoundNum();
 const maxRounds = RULES.useMaxRounds();
+const designStore = useDesignStore();
+const activeDesignName = computed(() => designStore.activeDesignName);
 
 let score = 0;
 let finalList: Dict;
@@ -34,8 +38,8 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <dialog :open="showModal" aria-modal="true">
-    <div id="points" class="relative">
+  <dialog :open="showModal" aria-modal="true" :class="activeDesignName">
+    <div id="points" class="mt-12 md:mt-4 relative">
       <h1>{{ player || "draw" }}</h1>
       <h2 :class="{ bonus: koikoi && score > 0 }">
         {{ score + `${score === 1 ? " point" : " points"}` }}
@@ -147,7 +151,7 @@ onBeforeMount(() => {
   #scoresheet {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   #points h2 {

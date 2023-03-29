@@ -423,7 +423,7 @@ onMounted(() => {
         class="help absolute bottom-full max-md:mb-4 h-max w-full font-mono text-white text-sm xl:text-lg"
       >
         <p v-if="promptSelection()">
-          {{ isTouchScreen() ? "Tap" : "Click" }} to select a match...
+          Double-{{ isTouchScreen() ? "tap" : "click" }} to select a match...
         </p>
       </div>
       <Field />
@@ -492,6 +492,7 @@ onMounted(() => {
       />
     </div>
 
+    <Teleport to="body">
     <div v-if="Object.keys(newYaku).length" id="yaku-modal">
       <NewYaku
         :show-modal="!!Object.keys(newYaku).length"
@@ -501,7 +502,9 @@ onMounted(() => {
         @koi-koi="async (bool, player) => await continueGame(bool, player)"
       />
     </div>
+    </Teleport>
 
+    <Teleport to="body">
     <div v-if="winner !== '' && (winningYaku || winningYaku === null)" id="end-screen">
       <ScoreSheet
         :player="winner"
@@ -515,6 +518,7 @@ onMounted(() => {
         @reset="(score: number) => newGame(score)"
       />
     </div>
+    </Teleport>
 
     <Shout v-if="SHOUT" :msg="SHOUT" class="z-30" />
   </div>
@@ -547,11 +551,15 @@ onMounted(() => {
   }
 
   @media (orientation: landscape) {
-    grid-template-rows: 70px 1fr 1fr;
+    grid-template-rows: 75px 1fr 1fr;
 
     & #p1-hand {
       /* padding-bottom: 80px; */
       padding-left: var(--left-shift);
+    }
+
+    & #p2-hand {
+      margin-bottom: 1.5rem;
     }
 
     & :is(#deck, #field) {

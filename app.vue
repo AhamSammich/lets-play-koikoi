@@ -35,18 +35,17 @@ body {
 
 dialog {
   background: rgba(14, 20, 34, 0.95);
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
+  top: 0;
+  left: 0;
   color: white;
   font-size: large;
   z-index: 25;
@@ -54,11 +53,13 @@ dialog {
 
   & .btn-bar {
     margin-top: 0.5rem;
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     gap: 2rem;
     justify-content: center;
     pointer-events: all;
+    position: fixed;
+    bottom: 10%;
 
     & button {
       outline: 1px solid yellow;
@@ -69,9 +70,9 @@ dialog {
       font-size: smaller;
 
       &:hover,
-      &:focus {
+      &:focus-visible {
         transform: translate3d(0, 5%, 0);
-        box-shadow: 0 0.1rem 0.3rem 0 lightgoldenrodyellow;
+        box-shadow: 0 0 0 0.5rem var(--tbl-black), 0 0 0 0.55rem gold;
       }
     }
   }
