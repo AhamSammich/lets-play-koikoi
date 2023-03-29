@@ -30,14 +30,14 @@ The currently available designs in the game are attributed to the following arti
 
 |Design|Artist|
 |---|---|
-|Modern Hanafuda|Sarah Thomas|
-|Moon Rabbit Hanafuda|Kelsey Cretcher|
-|Nishiki Fuda|Estudio Artes|
-|Pokemon Cards|SablingArt|
-|Hanami Hanafuda|IndianWolf Studios|
-|Koinobori Hanafuda|IndianWolf Studios|
-|Hanafuda|Parish Cherry|
+|[Modern Hanafuda](http://www.modernhanafuda.net)|Sarah Thomas|
+|Moon Rabbit Hanafuda|[Kelsey Cretcher](https://www.deviantart.com/kcretcher)|
+|[Nishiki Fuda](https://nishikie.stores.jp/)|Estudio Artes|
+|Pokemon Cards|[SablingArt](https://sablingart.tumblr.com/)|
+|[Koinobori & Hanami Hanafuda](https://indianwolfstudios.com/shop/)|IndianWolf Studios|
+|[Hanafuda](https://parishcherry.com/hanafuda)|Parish Cherry|
 
+**[Browse the designs here!](https://lets-play-koikoi.vercel.app/hanafuda-gallery)**
 
 ## Contribution
 Whether you're an artist, developer, or fellow hanafuda enthusiast, contributions are certainly welcome! Check our **[CONTRIBUTING](CONTRIBUTING.md)** page to see how you can contribute to this project!
