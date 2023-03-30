@@ -34,7 +34,7 @@ function allowedYaku(): YakuDetails[] {
         class="coin absolute"
       />
       <h2 class="yaku-points">
-        {{ yaku.points }} <span>{{ `${yaku.points === 1 ? " point" : " points"}` }}</span>
+        {{ yaku.points }} <span class="text-lg">{{ `${yaku.points === 1 ? " point" : " points"}` }}</span>
       </h2>
       <template v-if="yaku.description">
         <p v-for="line in yaku.description" :key="line" class="yaku-description">
@@ -59,7 +59,7 @@ function allowedYaku(): YakuDetails[] {
           restrictedSet.has(yaku.name) &&
           Object.keys(completedYaku).length === 0
         "
-        class="note mt-4 text-xs max-w-prose whitespace-nowrap font-mono"
+        class="note mt-4 text-xs max-w-prose whitespace-nowrap"
       >
         <Icon name="mdi:info-outline" class="pointer-events-none mr-1" />
         Requires at least one other<br /><span class="pl-6"
@@ -71,7 +71,7 @@ function allowedYaku(): YakuDetails[] {
     </div>
     <div
       id="legend"
-      class="font-mono text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center"
+      class="text-xs fixed bottom-4 right-4 flex flex-col gap-1 items-center"
     >
       <div>
         <StaticCard name="kiri-no-kasu-1" class="opacity-40 unavailable" />
@@ -123,6 +123,7 @@ function allowedYaku(): YakuDetails[] {
   --card-width: 35px;
   transform-origin: bottom right;
   transition: scale 0.3s;
+  letter-spacing: 0.05rem;
 
   &:hover {
     scale: 1.5;
@@ -163,6 +164,7 @@ function allowedYaku(): YakuDetails[] {
   grid-area: points;
   text-align: right;
   padding-right: 2rem;
+  font-size: large;
 }
 .yaku-description {
   grid-area: desc;
@@ -234,7 +236,7 @@ h1.complete {
 }
 
 h2 span {
-  font-size: x-small;
+  font-size: small;
   text-transform: lowercase;
 }
 
