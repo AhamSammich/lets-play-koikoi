@@ -251,7 +251,7 @@ onMounted(async () => {
 <style scoped lang="postcss">
 section {
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 fieldset {
@@ -327,7 +327,7 @@ fieldset {
     width: clamp(300px, 45%, 400px);
   }
 
-  form {
+  section {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

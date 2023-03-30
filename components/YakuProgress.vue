@@ -103,7 +103,7 @@ function allowedYaku(): YakuDetails[] {
   color: white;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 100px;
+  grid-template-columns: 1fr 120px;
   grid-template-areas:
     "name points"
     "desc desc"

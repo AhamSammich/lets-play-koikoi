@@ -109,7 +109,7 @@ function goToGallery() {
             @close-menu="showOptions = false"
           />
         </div>
-        <h3 class="py-1 underline underline-offset-1">Game Options</h3>
+        <h3 class="text-sm py-1 underline underline-offset-1">Game Options</h3>
         <MenuGameOptions />
       </section>
 
