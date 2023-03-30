@@ -122,7 +122,7 @@ onBeforeMount(() => {
   }
 
   & h2 {
-    font-family: "Potta One";
+    font-family: "Potta One", Verdana, sans-serif;
     letter-spacing: 0.05em;
   }
 }

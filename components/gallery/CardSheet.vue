@@ -43,10 +43,10 @@ function finishLoading() {
     <div v-if="initialLoading" class="absolute-center card down z-20"></div>
     <p
       v-else-if="!scrolling && !initialLoading"
-      :class="`${cardDesign} more-card flex flex-col items-center justify-center absolute w-max bottom-0 right-0 font-mono font-bold text-xl text-center bg-black bg-opacity-80 text-yellow-200`"
+      :class="`${cardDesign} more-card flex flex-col items-center justify-center absolute w-max bottom-0 right-0 font-bold text-xl text-center bg-black bg-opacity-80 text-yellow-200`"
     >
       MORE
-      <Icon class="text-3xl cursor-pointer" name="gg:more-vertical-r" @pointerdown="finishLoading()" />
+      <Icon class="text-3xl cursor-pointer" name="mdi:more-circle-outline" @pointerdown="finishLoading()" />
     </p>
     <!-- Initially load the first 12 cards in the deck. -->
     <StaticCard
@@ -105,7 +105,6 @@ function finishLoading() {
 .more-card {
   width: var(--card-width);
   aspect-ratio: var(--card-aspect);
-  border-radius: var(--card-radius);
   color: var(--link-color);
   font-weight: bold;
 
