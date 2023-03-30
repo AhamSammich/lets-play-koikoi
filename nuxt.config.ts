@@ -23,7 +23,13 @@ export default defineNuxtConfig({
         {
           rel: "preload",
           as: "style",
-          href: "https://fonts.googleapis.com/css2?family=Potta+One&family=Mochiy+Pop+One&family=Rubik:wght@300;400;600&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Potta+One&display=swap",
+          onload: "this.rel = 'stylesheet'",
+        },
+        {
+          rel: "preload",
+          as: "style",
+          href: "https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700&display=swap",
           onload: "this.rel = 'stylesheet'",
         },
       ],

@@ -153,7 +153,7 @@ article {
 }
 
 h1 {
-  font-family: "Mochiy Pop One";
+  font-weight: bold;
 }
 
 section {
