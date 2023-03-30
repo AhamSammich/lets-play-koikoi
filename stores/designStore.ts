@@ -14,6 +14,15 @@ type cardDesign = {
 };
 
 const CARD_DESIGNS: Record<string, cardDesign> = {
+  "cherry-version": {
+    name: "cherry-version",
+    title: "Cherry Version",
+    attribution:
+      "Design by Parish Cherry, an illustrator & graphic designer based in Honolulu, HI!",
+    urlDescription: "See more at ParishCherry.com!",
+    url: "https://parishcherry.com",
+    backImage: true,
+  },
   "modern": {
     name: "modern",
     title: "2012 Modern",
@@ -74,13 +83,6 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
       ],
     },
   },
-  "nishiki-fuda": {
-    name: "nishiki-fuda",
-    title: "Nishiki Fuda",
-    attribution: "Design by Hanako of Estudio Artes in Osaka, Japan!",
-    urlDescription: "Buy this deck and others from their online store!",
-    url: "https://nishikie.stores.jp",
-  },
   "sabling-art": {
     name: "sabling-art",
     title: "Sabling Art",
@@ -90,16 +92,16 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
     backImage: true,
     arrangement: { reversed: true },
   },
-  "hanami-hue": {
-    name: "hanami-hue",
+  "hanami": {
+    name: "hanami",
     title: "Hanami",
     attribution:
       "Hanami Hanafuda designed by Jason Johnson of IndianWolf Studios LLC and illustrated by Antonietta Fazio-Johnson of Inner Hue Art Studio LLC!",
     urlDescription: "Get this deck and more from IndianWolf Studios!",
     url: "https://indianwolfstudios.com/shop/",
   },
-  "kc-original": {
-    name: "kc-original",
+  "moon-rabbit": {
+    name: "moon-rabbit",
     title: "Moon Rabbit Original",
     attribution:
       "Moon Rabbit Handafuda cards designed and illustrated by Kelsey Cretcher!",
@@ -158,22 +160,20 @@ const CARD_DESIGNS: Record<string, cardDesign> = {
       ],
     },
   },
-  "nobori-blue": {
-    name: "nobori-blue",
+  "koinobori": {
+    name: "koinobori",
     title: "Koinobori",
     attribution:
       "Koinobori Handafuda brought to you by IndianWolf Studios LLC!",
     urlDescription: "Back their project on Kickstarter!",
     url: "https://www.kickstarter.com/projects/iws/koinobori-playing-cards-hanafuda-poker-plastic",
   },
-  "parish-cherry": {
-    name: "parish-cherry",
-    title: "Parish Cherry",
-    attribution:
-      "Design by Parish Cherry, an illustrator & graphic designer based in Honolulu, HI!",
-    urlDescription: "See more at ParishCherry.com!",
-    url: "https://parishcherry.com",
-    backImage: true,
+  "nishiki-fuda": {
+    name: "nishiki-fuda",
+    title: "Nishiki Fuda",
+    attribution: "Design by Hanako of Estudio Artes in Osaka, Japan!",
+    urlDescription: "Buy this deck and others from their online store!",
+    url: "https://nishikie.stores.jp",
   },
   "flash-black": {
     name: "flash-black",
