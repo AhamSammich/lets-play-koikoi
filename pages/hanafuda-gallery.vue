@@ -21,18 +21,26 @@ function applyDesign(designName: string) {
 </script>
 
 <template>
-  <div id="fuda-gallery" class="h-max w-screen overflow-y-scroll">
-    <div class="header min-h-16 flex flex-col justify-center px-4 pt-4 pb-8 gap-2">
+  <div id="fuda-gallery" class="h-max w-screen overflow-y-scroll flex flex-col gap-4">
+    <div class="header min-h-16 flex flex-col justify-center px-4 py-4 gap-4">
       <h1 class="text-2xl">🎴<span>Hanafuda Gallery</span></h1>
-      <div class="flex flex-col self-center gap-2 max-w-2xl">
-        <p class="text-lg">🎊 Welcome! 🎊</p>
+      <div
+        class="text-lg lg:text-xl flex flex-col self-center gap-4 max-w-2xl lg:max-w-4xl"
+      >
+        <p>Welcome! 👋🏽</p>
         <p>
           This collection features some awesome hanafuda designs by various artists!🔥
           Play Koi-Koi using your favorite design by clicking on <em>Play this deck!</em>
         </p>
         <p>
-          If there's a design you would like to have added,
-          <a href="https://www.twitter.com/hammons_dev" target="_blank" class="underline">let me know!💬</a>
+          If you are interested in submitting a design or otherwise contributing, follow
+          this project on
+          <a
+            href="https://www.github.com/ahamsammich/lets-play-koikoi"
+            target="_blank"
+            class="hover:underline"
+            >Github!</a
+          >⭐
         </p>
       </div>
     </div>
@@ -43,9 +51,9 @@ function applyDesign(designName: string) {
     >
       <section class="h-max w-full max-w-5xl grid gap-1 md:px-8 mb-4">
         <div class="flex justify-between w-full">
-          <h2>✨{{ design.title }}</h2>
+          <h2 class="ml-2 lg:text-xl">{{ design.title }}</h2>
           <NuxtLink
-            class="play text-yellow-200 text-xs w-max mr-4"
+            class="play text-yellow-200 text-xs lg:text-xl w-max mr-4 hover:underline"
             to="/"
             @click="applyDesign(key)"
           >
@@ -55,15 +63,23 @@ function applyDesign(designName: string) {
             />Play this deck!
           </NuxtLink>
         </div>
-        <div class="flex flex-col gap-1 md:max-w-2xl text-sm px-4">
+        <div class="flex flex-col gap-1 md:max-w-2xl lg:text-lg text-sm px-2">
           <p>{{ design.attribution }}</p>
-          <a class="text-yellow-200 max-w-full" :href="design.url" target="_blank"
-            >{{ design.urlDescription }}<Icon name="mi:external-link" class="ml-1 mb-1"
-          /></a>
+          <a
+            class="text-yellow-200 max-w-full hover:underline"
+            :href="design.url"
+            target="_blank"
+            >{{ design.urlDescription }}
+            <Icon name="material-symbols:arrow-right-alt-rounded" class="ml-1 mb-1" />
+          </a>
         </div>
       </section>
       <section class="w-full h-max flex justify-center">
-        <GalleryCardSheet :rows="3" :card-design="key" :arrangement="design.arrangement"/>
+        <GalleryCardSheet
+          :rows="3"
+          :card-design="key"
+          :arrangement="design.arrangement"
+        />
       </section>
     </article>
   </div>
@@ -75,27 +91,29 @@ function applyDesign(designName: string) {
   --color2: var(--menu-gray2);
   --text-color: white;
   --link-color: rgb(254 240 138);
-  font-family: Consolas, monospace, system-ui;
+  --hover-color: var(--tbl-black);
+  font-family: Rubik, Verdana, sans-serif;
   overflow-y: scroll;
   color: var(--text-color);
+  background-color: var(--color2);
 
   @media (prefers-color-scheme: light) {
-    --color1: whitesmoke;
-    --color2: white;
+    --color2: hsl(0, 0%, 90%);
+    --color1: white;
     --text-color: var(--tbl-black);
-    --link-color: red;
+    --link-color: #e30000;
+    --hover-color: white;
   }
 }
 
 h1,
 h2 {
-  font-family: "Potta One", cursive;
-  letter-spacing: 0.05rem;
+  font-family: "Potta One", sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
 }
 
 .header {
-  background-color: var(--color1);
-
   @media (prefers-color-scheme: dark) {
     & h1 span {
       color: transparent;
@@ -105,12 +123,15 @@ h2 {
   }
 }
 
-article:nth-child(2n + 1) {
-  background-color: var(--color1);
-}
+article {
+  background-color: transparent;
+  width: 90%;
+  margin: 1rem auto;
+  border-radius: 0.8rem;
 
-article:nth-child(2n) {
-  background-color: var(--color2);
+  &:is(:hover, :focus-within) {
+    background-color: var(--hover-color);
+  }
 }
 
 a {
@@ -118,11 +139,7 @@ a {
   color: var(--link-color);
 
   &.play {
-    font-family: "Potta One", cursive;
-  }
-
-  &:hover {
-    translate: 3% 0;
+    font-family: "Potta One", sans-serif;
   }
 }
 </style>

@@ -420,7 +420,7 @@ onMounted(() => {
     <div id="field" class="relative">
       <div
         v-show="gameStore.showHints || isFirstRound()"
-        class="help absolute bottom-full max-md:mb-4 h-max w-full font-mono text-white text-sm xl:text-lg"
+        class="help absolute bottom-full max-md:mb-4 h-max w-full text-white text-sm xl:text-lg"
       >
         <p v-if="promptSelection()">
           Double-{{ isTouchScreen() ? "tap" : "click" }} to select a match...
@@ -438,7 +438,7 @@ onMounted(() => {
       }"
     >
       <div
-        class="help xl:absolute xl:top-full xl:text-lg h-max w-full font-mono text-white text-xs ml-4 mb-2 self-start"
+        class="help xl:absolute xl:top-full xl:text-lg h-max w-full text-white text-xs ml-4 my-2 self-start"
       >
         <!-- Click light-bulb icon to toggle hints. -->
         <Icon

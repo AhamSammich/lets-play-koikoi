@@ -136,7 +136,7 @@ onMounted(() => {
 
     <!-- Footer -->
     <p
-      class="text-white text-xs font-mono text-center fixed bottom-0 w-screen mb-2 opacity-50"
+      class="text-white text-xs text-center fixed bottom-0 w-screen mb-2 opacity-50"
     >
       {{ new Date().getFullYear() }} | Andre L. Hammons
     </p>

@@ -8,7 +8,17 @@
   --card-glow-color: lightgoldenrodyellow;
 }
 
-.ramen-red {
+.cherry-version {
+  --card-radius: 0.1rem;
+  --card-aspect: 3/5;
+  --card-border-color: darkslategray;
+
+  & .down {
+    --card-bg-color: url("/cards/cherry-version/webp/card-back.webp");
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
 }
 
 .flash-black {
@@ -17,39 +27,14 @@
   --card-bg-color: #333;
 }
 
-.nobori-blue {
-  --card-bg-color: linear-gradient(225deg, skyblue, lightsteelblue);
-  --card-border-color: #333;
-  --card-radius: 0.5rem;
-
-  & .down {
-    background-image: url("/cards/nobori-blue/webp/card-back.webp") !important;
-    background-color: lightskyblue !important;
-    background-size: 60% !important;
-    background-repeat: no-repeat !important;
-    background-position: bottom 5% right 5% !important;
-  }
-}
-
-.sabling-art {
-  --card-radius: calc(0.2 * var(--card-width));
-  --card-glow-color: red;
-
-  & .down {
-    --card-bg-color: url("/cards/sabling-art/webp/card-back.webp");
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-  }
-}
-
-.hanami-hue {
+.hanami {
   --card-bg-color: linear-gradient(45deg, seagreen, palegreen);
   --card-border-color: #555;
   --card-radius: 0.5rem;
+  --card-aspect: 11/16;
 
   & .down {
-    background-image: url("/cards/nobori-blue/webp/card-back.webp") !important;
+    background-image: url("/cards/hanami/webp/card-back.webp") !important;
     background-color: lightgoldenrodyellow !important;
     background-size: 60% !important;
     background-repeat: no-repeat !important;
@@ -57,12 +42,45 @@
   }
 }
 
-.kc-original {
+.koinobori {
+  --card-bg-color: linear-gradient(225deg, skyblue, lightsteelblue);
+  --card-border-color: #333;
+  --card-radius: 0.5rem;
+
+  & .down {
+    background-image: url("/cards/koinobori/webp/card-back.webp") !important;
+    background-color: lightskyblue !important;
+    background-size: 60% !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom 5% right 5% !important;
+  }
+}
+
+.modern {
+  --card-aspect: 9/16;
+  --card-border-color: hsla(0 0% 100% / 0.3);
+  --card-glow-color: powderblue;
+
+  & .card {
+    background-color: var(--tbl-black);
+    object-fit: cover;
+  }
+
+  & .down {
+    --card-bg-color: url("/cards/modern/webp/card-back.webp");
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+}
+
+.moon-rabbit {
   --card-radius: 0.1rem;
+  --card-aspect: 39/64;
 
   & .down {
     --card-border-w: 2px;
-    background-image: url("/cards/kc-original/webp/card-back.webp") !important;
+    background-image: url("/cards/moon-rabbit/webp/card-back.webp") !important;
     background-color: lightgray !important;
     background-size: 40% !important;
     background-repeat: no-repeat !important;
@@ -84,30 +102,15 @@
   }
 }
 
-.parish-cherry {
-  --card-radius: 0.1rem;
-
-  & .down {
-    --card-bg-color: url("/cards/parish-cherry/webp/card-back.webp"),
-      linear-gradient(225deg, palevioletred, firebrick 50%);
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-  }
+.ramen-red {
 }
 
-.modern {
-  --card-aspect: 9/16;
-  --card-border-color: hsla(0 0% 100% / 0.3);
-  --card-glow-color: powderblue;
-
-  & .card {
-    background-color: var(--tbl-black);
-    object-fit: cover;
-  }
+.sabling-art {
+  --card-radius: calc(0.2 * var(--card-width));
+  --card-glow-color: red;
 
   & .down {
-    --card-bg-color: url("/cards/modern/webp/card-back.webp");
+    --card-bg-color: url("/cards/sabling-art/webp/card-back.webp");
     background-size: cover !important;
     background-repeat: no-repeat !important;
     background-position: center !important;

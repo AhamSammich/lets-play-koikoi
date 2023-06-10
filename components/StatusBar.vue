@@ -78,12 +78,12 @@ function pointToActive() {
 
 p {
   font-weight: bold;
-  font-size: smaller;
+  font-size: larger;
   text-align: center;
   text-shadow: 0 0 0.2rem var(--tbl-black);
 
   &:is(:first-child) {
-    font-size: x-small;
+    font-size: small;
   }
 }
 

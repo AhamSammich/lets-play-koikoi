@@ -29,7 +29,7 @@ body {
   background-color: var(--tbl-black);
   overflow-x: hidden;
   width: 100%;
-  font-family: "Mochiy Pop One", sans-serif;
+  font-family: Rubik, Verdana, sans-serif;
   user-select: none;
 }
 
@@ -53,7 +53,6 @@ dialog {
 
   & .btn-bar {
     margin-top: 0.5rem;
-    /* width: 100%; */
     display: flex;
     gap: 2rem;
     justify-content: center;
@@ -65,9 +64,9 @@ dialog {
       outline: 1px solid yellow;
       border-radius: 0.2rem;
       background: firebrick;
-      padding: 0.5em 1em;
+      padding: 0.3em 0.75em;
       font-weight: bold;
-      font-size: smaller;
+      /* font-size: smaller; */
 
       &:hover,
       &:focus-visible {
@@ -85,7 +84,7 @@ dialog {
   }
 
   & h1 {
-    font-family: "Potta One", cursive;
+    font-family: "Potta One", Verdana, sans-serif;
     letter-spacing: 0.05em;
   }
 
