@@ -123,8 +123,16 @@ onMounted(() => {
       autofocus
       tabindex="0"
     >
-      START
+      Start Game
     </button>
+    <NuxtLink to="/hanafuda-gallery"
+    :class="{
+        'w-max self-center text-lg md:text-2xl text-white text-center font-bold opacity-0': true,
+        ready,
+      }"
+    >
+      Gallery &rarr;
+    </NuxtLink>
 
     <!-- Footer -->
     <p
@@ -205,16 +213,21 @@ section {
   z-index: 1;
 }
 
-button {
+button, a {
+  letter-spacing: 0.05rem;
   outline: 1px solid gold;
   border-radius: 0.2rem;
   background: firebrick;
   padding: 0.5em 1em;
   z-index: 1;
 
-  &:is(#start-btn.ready) {
+  &:is(#start-btn.ready, a.ready) {
     transition: opacity 1s;
     opacity: 1;
+  }
+
+  &:is(a) {
+    background: transparent;
   }
 
   &:hover,
