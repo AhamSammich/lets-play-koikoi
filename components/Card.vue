@@ -80,9 +80,8 @@ function emitLoaded() {
         class="glow-line"
       ></rect>
     </svg>
-    <nuxt-img
+    <img
       placeholder
-      preset="card"
       :alt="name"
       :src="imgUrl"
       :loading="loading || 'lazy'"
@@ -91,6 +90,8 @@ function emitLoaded() {
       @load="emitLoaded"
       @pointerenter="handleHover"
       @pointerdown="handlePointerDown"
+      sizes="sm:80px md:120px lg:150px"
+      style="object-fit: cover;"
     />
   </div>
 </template>

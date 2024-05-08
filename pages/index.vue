@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Ref } from "vue";
 import { useDesignStore } from "~~/stores/designStore";
 import { useGameStore } from "~~/stores/gameStore";
 
@@ -145,10 +144,10 @@ onMounted(async () => {
       </dialog>
     </template>
 
-    <nuxt-img
+    <img
       id="hero"
       preload
-      src="bg/webp/grey-hills-1920.webp"
+      src="/bg/webp/grey-hills-1920.webp"
       sizes="sm:480px md:100vw"
       alt="Background image of the moon over silver grass."
       loading="eager"

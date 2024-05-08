@@ -21,16 +21,16 @@ async function randomCards() {
 }
 
 const cards = await randomCards();
-const imagesLoading = ref(cards.length);
-const ready = computed(() => !imagesLoading.value);
+const imagesLoading = false //ref(0);
+const ready = true //computed(() => !imagesLoading.value);
 
 // ready == true when all images loaded.
 function countLoaded() {
-  imagesLoading.value--;
+  // imagesLoading.value--;
 }
 
 async function startGame() {
-  await preloadCards(activeDesignName.value);
+  // await preloadCards(activeDesignName.value);
   gameStore.startGame();
 }
 
@@ -125,16 +125,29 @@ onMounted(() => {
     >
       Start Game
     </button>
-    <NuxtLink to="/hanafuda-gallery"
+    <!-- <NuxtLink to="/hanafuda-gallery"
     :class="{
         'w-max self-center text-lg md:text-2xl text-white text-center font-bold opacity-0': true,
         ready,
       }"
     >
       Gallery &rarr;
-    </NuxtLink>
+    </NuxtLink> -->
 
     <!-- Footer -->
+    <div
+      class="text-white text-center fixed bottom-16 w-screen mb-4"
+      >
+      <p class="text-xl mb-8 [text-wrap:balance]">Thank you for playing! Please try out the updated project!</p>
+    <NuxtLink external to="https://newhanafuda.art"
+    :class="{
+        'w-max self-center text-lg md:text-xl text-white text-center font-bold': true,
+        ready,
+      }"
+    >
+      More designs at <span class="text-yellow-200">newhanafuda.art</span> &rarr;
+    </NuxtLink>
+      </div>
     <p
       class="text-white text-xs text-center fixed bottom-0 w-screen mb-2 opacity-50"
     >
@@ -233,7 +246,7 @@ button, a {
   &:hover,
   &:focus-visible {
     transform: translate3d(0, 5%, 0);
-    box-shadow: 0 0 0 0.5rem var(--tbl-black), 0 0 0 0.55rem gold;
+    /* box-shadow: 0 0 0 0.5rem var(--tbl-black), 0 0 0 0.55rem gold; */
   }
 }
 

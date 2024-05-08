@@ -6,7 +6,7 @@ defineProps<{
 
 <template>
   <div id="shout">
-    <nuxt-img src="/images/webp/coin.webp" alt="Koi-Koi has been called." />
+    <img src="/images/webp/coin.webp" alt="Koi-Koi has been called." />
     <h1>{{ msg.toUpperCase() }}</h1>
   </div>
 </template>

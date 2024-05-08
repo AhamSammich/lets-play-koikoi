@@ -50,7 +50,7 @@ onBeforeMount(() => {
       >
         <p class="text-sm">KOI-KOI BONUS:</p>
         <div class="relative flex gap-1 w-max">
-          <nuxt-img
+          <img
             v-for="n in koikoi"
             src="/images/webp/coin.webp" 
             alt="coin for koikoi"

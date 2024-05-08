@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Ref } from "vue";
 import { useDesignStore } from "~~/stores/designStore";
 import { useGameStore } from "~~/stores/gameStore";
 

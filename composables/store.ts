@@ -1,5 +1,3 @@
-import { Ref } from "vue";
-
 export const STORE: Record<string, () => Ref> = {
     useRoundNum: () => useState("roundNum", () => 0),
     useCurrentOya: () => useState("currentOya", () => 1),

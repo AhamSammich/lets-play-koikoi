@@ -33,10 +33,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
         <p>Play a card from your hand to match the flower/suit with a card on the table.</p>
         <p>If none of your cards match, pick one to add to the table.</p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-play-a-card.gif"
+        src="/screenshots/gifs/lpk-how-to-play-a-card.gif"
         alt="GIF showing how to play a card"
       />
     </section>
@@ -46,10 +46,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
         <p>Match the revealed card with a card on the table.</p>
         <p>Again, if there's no match, just add the card to the table.</p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-finish-turn.gif"
+        src="/screenshots/gifs/lpk-how-to-finish-turn.gif"
         alt="GIF showing how to play a card"
       />
     </section>
@@ -59,10 +59,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
         <p>Any matches you've made will be added to your collection.</p>
         <p>Your collected cards are visible on the bottom-right corner of the screen.</p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-finish-turn.gif"
+        src="/screenshots/gifs/lpk-how-to-finish-turn.gif"
         alt="GIF showing how to play a card"
       />
     </section>
@@ -75,10 +75,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
         </p>
         <p>Check your progress toward possible yaku under the menu button.</p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-check-progress.gif"
+        src="/screenshots/gifs/lpk-how-to-check-progress.gif"
         alt="GIF showing how to play a card"
       />
     </section>
@@ -93,10 +93,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
           Take this chance to score more points by completing more yaku!
         </p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-call-koikoi.gif"
+        src="/screenshots/gifs/lpk-how-to-call-koikoi.gif"
         alt="GIF showing how to play a card"
       />
     </section>
@@ -106,10 +106,10 @@ onMounted(() => (sectionArr = [...document.querySelectorAll("#how-to-play sectio
         <p>Calling "Koi Koi" gives a bonus multiplier to ANY player that scores next.</p>
         <p>The player with the most points by the end of all rounds wins the game!</p>
       </div>
-      <nuxt-img
+      <img
         loading="lazy"
         preset="screenshot"
-        src="screenshots/gifs/lpk-how-to-get-wrecked.gif"
+        src="/screenshots/gifs/lpk-how-to-get-wrecked.gif"
         alt="GIF showing how to play a card"
       />
     </section>

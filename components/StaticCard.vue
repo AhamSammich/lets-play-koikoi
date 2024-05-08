@@ -27,14 +27,14 @@ const imgUrl = computed(
   <div :class="{ 'no-animation': noAnimation }">
     <div v-if="!name" class="down card"></div>
     <div v-else>
-      <nuxt-img
-        placeholder
-        preset="card"
+      <img
+        placeholder=""
         class="card"
         :loading="loading"
         :src="imgUrl"
         :alt="name"
         @load="$emit('img-loaded')"
+        sizes="sm:80px md:120px lg:150px"
       />
     </div>
   </div>

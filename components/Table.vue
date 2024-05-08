@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { Ref } from "vue";
 import { useGameStore } from "~~/stores/gameStore";
 import { usePlayerStore } from "~~/stores/playerStore";
 import { useTableStore } from "~~/stores/tableStore";

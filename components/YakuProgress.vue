@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Ref } from "vue";
 
 const collection1: Ref<string[]> = STORE.useCollection1();
 const collection2: Ref<string[]> = STORE.useCollection2();
@@ -26,7 +25,7 @@ function allowedYaku(): YakuDetails[] {
       <h1 :class="`yaku-name ${isComplete(yaku.name)} text-yellow-100`">
         {{ yaku.name }}
       </h1>
-      <nuxt-img
+      <img
         v-if="isComplete(yaku.name)"
         src="/images/webp/coin.webp"
         alt="coin for a completed yaku"

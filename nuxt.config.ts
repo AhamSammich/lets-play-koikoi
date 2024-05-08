@@ -45,28 +45,28 @@ export default defineNuxtConfig({
   devServer: {
     port: 43505,
   },
-  image: {
-    presets: {
-      card: {
-        modifiers: {
-          fit: "cover",
-          sizes: "sm:80px md:120px lg:150px",
-        },
-      },
-      screenshot: {
-        modifiers: {
-          width: 285,
-          height: 640,
-        },
-      },
-    },
-  },
+  // image: {
+  //   presets: {
+  //     card: {
+  //       modifiers: {
+  //         fit: "cover",
+  //         sizes: "sm:80px md:120px lg:150px",
+  //       },
+  //     },
+  //     screenshot: {
+  //       modifiers: {
+  //         width: 285,
+  //         height: 640,
+  //       },
+  //     },
+  //   },
+  // },
   modules: [
     "@nuxtjs/tailwindcss",
     "nuxt-icon",
     "@vueuse/nuxt",
     "@pinia/nuxt",
-    "@nuxt/image-edge",
+    // "@nuxt/image-edge",
     "@nuxt/devtools",
   ],
   pages: true,
@@ -90,7 +90,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  ssr: true,
+  ssr: false,
   tailwindcss: {
     viewer: false,
   },
